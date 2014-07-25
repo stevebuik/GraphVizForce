@@ -1,0 +1,19 @@
+<apex:page controller="ERDGeneratorController">
+    <apex:form >
+    	<apex:pageBlock title="ERD Generator">
+            <apex:pageBlockSection title="Setup" columns="2">
+                <apex:pageBlock title="Groups">
+                    <apex:commandButton id="btnCreateGroup" value="Add" action="{!addNewGroup}"/>
+                </apex:pageBlock>
+                <apex:pageBlock title="Groups">
+                    
+                    <apex:commandButton id="btnCreateGroup" value="Add" action="{!addNewGroup}"/>
+                	<apex:commandButton id="btnGenerateERD" value="Generate" action="{!generateERD}"/>
+                </apex:pageBlock>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="ERD Content" columns="1">
+                <apex:inputTextarea rows="10" style="width:100%;" />
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
