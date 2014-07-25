@@ -2,3 +2,8 @@ Referenced Packages
 .project
 salesforce.schema
 .settings/com.salesforce.ide.core.prefs
+src/classes
+src/components
+src/pages
+src/staticresources
+src/triggers
