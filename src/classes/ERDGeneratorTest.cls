@@ -14,7 +14,7 @@ private with sharing class ERDGeneratorTest
 	static void ERDGeneratorTests()
 	{
 		ERDGenerator generator = new ERDGenerator();
-		String erdOutput = generator.generateERD(true);
+		String erdOutput = generator.generateERD(null,null);
 		System.assert(erdOutput != '');
 	}
 }
