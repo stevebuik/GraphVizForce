@@ -7,7 +7,8 @@ public with sharing class ERDGenerator
 {
 	private Integer describeChildCount = 0;
 
-	private TemplateEngine templateEngine = new TemplateEngine(new TemplateEngine.StaticTemplateSource());
+	private TemplateEngine templateEngine = new TemplateEngine(
+		new TemplateEngine.StaticResourceTemplateSource('DefaultTemplate'));
 	
 	public String generateERD(Map<String,List<String>> standardGroupingMap, Map<String,List<String>> customGroupingMap)
 	{

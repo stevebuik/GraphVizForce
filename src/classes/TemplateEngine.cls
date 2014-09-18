@@ -48,21 +48,42 @@ public class TemplateEngine {
     	return applyBindings(templateStrings.get(template), data);
     }
 
-    public class StaticTemplateSource implements TemplateSource {
+    public class StaticResourceTemplateSource implements TemplateSource {
+
+    	private final List<String> extracted = new List<String>();
+
+    	public StaticResourceTemplateSource(String resourceName) {
+    		List<StaticResource> resources = [select id, name, body from StaticResource
+				where name = :resourceName];
+			if (resources.size() == 1) {
+				String templateStrings = resources.get(0).body.toString();
+				List<String> templates = templateStrings.split('==========');
+				System.debug(templates.size());
+				for(String t : templates) {
+					if (t.length() > 0) {
+						extracted.add(t.substringAfter('\n'));
+					}
+				}
+			} else {
+				throw new ApplicationException('Resource not found: '+resourceName);
+			}
+    	}
+
  		public String getMain() {
- 			return 'digraph G { splines=ortho; graph [rankdir = "LR";]; node [fontsize = "14";shape = "record";]; edge [arrowhead="crow";];\n {{content}}\n}\n';
+ 			return extracted.get(0);
  		}
 		public String getGroup() {
-			return '\nsubgraph cluster_{{sequence}} { label = "{{name}}"; \n{{content}}}\n';
+ 			return extracted.get(1);
  		}
 		public String getEntity() {
- 			return '{{name}} [label = " {{name}} "];\n';
+ 			return extracted.get(2);
  		}		   	
 		public String getField() {
- 			return '{{name}}';
+ 			return extracted.get(3);
  		}		   	
  		public String getRelationship() {
- 			return '{{from}} -> {{to}}\n';
+ 			return extracted.get(4);
  		}		   	
     }
+
 }

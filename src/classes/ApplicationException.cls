@@ -8,5 +8,5 @@ Version		Author			Date		Details				Feature
 */
 public with sharing class ApplicationException extends Exception
 {
-	
+ 
 }
