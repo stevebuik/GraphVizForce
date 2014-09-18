@@ -1,0 +1,1 @@
+public enum TemplateType {MAIN, CLUSTER, ENTITY, RELATIONSHIP, FIELD}

@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>ApplicationException</members>
-		<members>ERDEntity</members>
-		<members>ERDEntityRelationship</members>
-		<members>ERDGenerator</members>
-		<members>ERDGeneratorController</members>
-		<members>ERDGeneratorTest</members>
-		<members>ERDRendererController</members>
-		<members>ERDUtils</members>
-		<members>ListUtils</members>
+		<members>*</members>
 		<name>ApexClass</name>
 	</types>
 	<types>
-		<members>ERDGeneratorPage</members>
-		<members>ERDRenderer</members>
+		<members>*</members>
 		<name>ApexPage</name>
+	</types>
+	<types>
+		<members>*</members>
+		<name>StaticResource</name>
 	</types>
 	<version>31.0</version>
 </Package>
