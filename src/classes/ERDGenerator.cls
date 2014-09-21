@@ -113,6 +113,36 @@ public with sharing class ERDGenerator
 		
 		return erdTemplateStart + subgraphsContent + crossRelationshipContent + '}';
 	}
+	
+	public String generateERD(Map<String,List<String>> groupObjectMap)
+	{
+		String subgraphsContent = '';
+		Integer subgraphIndex = 0;
+		List<ERDEntityRelationship> allRelationships = new List<ERDEntityRelationship>();
+		String crossRelationshipContent = '';
+		
+		if(groupObjectMap != null)
+		{
+			for(String groupName : groupObjectMap.keySet())
+			{
+				List<String> objNames = groupObjectMap.get(groupName);
+				String standardSubgraph = generateSubgraph(subgraphIndex,groupName,objNames,allRelationships);
+				subgraphsContent += standardSubgraph;
+				subgraphIndex++;
+			}
+		}
+		
+		if(!allRelationships.isEmpty())
+            {
+                for(ERDEntityRelationship crossRelationship : allRelationships)
+                {
+                    crossRelationshipContent += crossRelationship.parentObjectName + ' -> ' + crossRelationship.childObjectName + ';\r';
+                }
+            }
+		
+		return erdTemplateStart + subgraphsContent + crossRelationshipContent + '}';
+	}
+	
 	/*
 	public String generateCustomObjectERD()
 	{
