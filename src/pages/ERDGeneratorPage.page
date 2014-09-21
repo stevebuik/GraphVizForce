@@ -1,19 +1,100 @@
 <apex:page controller="ERDGeneratorController">
+	<style type="text/css">
+        .textInput {width: 100%;}
+    </style>
     <apex:form >
     	<apex:pageBlock title="ERD Generator">
-            <apex:pageBlockSection title="Setup" columns="2">
+            <apex:pageBlockSection columns="2">
+	            <apex:facet name="header">
+			         <span style="color:#000000;">Setup</span>
+			    </apex:facet>
                 <apex:pageBlock title="Groups">
-                    <apex:commandButton id="btnCreateGroup" value="Add" action="{!addNewGroup}"/>
+                	<apex:pageBlockSection >
+                    	<apex:inputText id="inpGroupName" styleClass="textInput" value="{!newGroupName}" />
+                    	<apex:commandButton id="btnCreateGroup" value="Add" action="{!addNewGroupWithInput}" rerender="groupTable,selectedGroupPicklist">
+                    		<apex:param value="{!newGroupName}"/>
+                    	</apex:commandButton>
+                	</apex:pageBlockSection>
+                	<apex:pageBlockTable id="groupTable" value="{!ERDGroupList}" var="group">
+				    	<apex:column headerValue="Select Groups">
+				        	<apex:inputCheckbox id="groupCheckBox" value="{!group.selected}">
+					        	<apex:actionSupport event="onchange" rerender="selectedGroupPicklist"/>
+				        	</apex:inputCheckbox>
+				    		<apex:outputLabel value="{!group.groupName}" for="groupCheckBox" />
+				        </apex:column>
+				    </apex:pageBlockTable>
                 </apex:pageBlock>
-                <apex:pageBlock title="Groups">
-                    
-                    <apex:commandButton id="btnCreateGroup" value="Add" action="{!addNewGroup}"/>
+                <!-- 
+                <apex:pageBlock title="Objects">
+			        <apex:selectList value="{!selectedERDEntityList}" multiselect="true">
+			            <apex:selectOptions value="{!objectItems}"/>
+			        </apex:selectList>
+					
+			        <apex:commandButton value="Add" action="{!addObjects}" rerender="selectedObjectOutputPanel" status="status"/>
+			        
+			        <apex:outputPanel id="selectedObjectOutputPanel">
+				        <apex:actionstatus id="status" startText="adding...">
+				            <apex:facet name="stop">
+				                <apex:outputPanel>
+				                    <p>Selected ERD Entity List:</p>
+				                    <apex:dataList value="{!selectedERDEntityList}" var="c">{!c}</apex:dataList>
+				                </apex:outputPanel>
+				            </apex:facet>
+				        </apex:actionstatus>
+				    </apex:outputPanel>
+				    
                 	<apex:commandButton id="btnGenerateERD" value="Generate" action="{!generateERD}"/>
                 </apex:pageBlock>
+                -->
+                
+                <apex:pageBlock title="Select Entity Objects" id="selectionBlock">
+		            <apex:panelGrid columns="3">
+		            	<apex:panelGroup >
+		            		<div style="height:20px;">
+		            		<apex:outputText value="Available Objects" />
+		            		</div>
+		            		<br />
+		            		<apex:selectList id="unselected_list" required="false"
+			                    value="{!selected}" multiselect="true" size="20" style="width:300px;">
+			                    <apex:selectOptions value="{!unSelectedOptions}"/>
+			                </apex:selectList>
+		            	</apex:panelGroup>
+		                <apex:panelGroup >
+		                	<br />
+		                	<br />
+		                	<br />
+		                	<br />
+		                	<br />
+		                    <apex:commandButton value=">>" action="{!DoSelect}" 
+		                        reRender="selectionBlock"/>
+		                    <br/>
+		                    <apex:commandButton value="<<" action="{!DoUnselect}" 
+		                        reRender="selectionBlock"/>
+		                </apex:panelGroup>
+		                <apex:panelGroup >
+		                	<apex:panelGrid columns="2">
+			                	<apex:outputText value="Objects for Group" />
+			                	<apex:selectList id="selectedGroupPicklist" value="{!selectedGroup}" size="1" style="width:150px;">
+						            <apex:selectOptions value="{!groupSelectOptions}"/>
+						            <apex:actionSupport event="onchange" rerender="selected_list"/>
+						        </apex:selectList>
+		                	</apex:panelGrid>
+			                <apex:selectList id="selected_list" required="false"
+			                    value="{!unselected}" multiselect="true" size="20" style="width:300px;">
+			                    <apex:selectOptions value="{!selectedOptions}"/>
+			                </apex:selectList>
+		                </apex:panelGroup>
+		            </apex:panelGrid>
+		        </apex:pageBlock>
             </apex:pageBlockSection>
-            <apex:pageBlockSection title="ERD Content" columns="1">
-                <apex:inputTextarea rows="10" style="width:100%;" />
+            <apex:pageBlockSection columns="1">
+	            <apex:facet name="header">
+			         <span style="color:#000000;">ERD Content</span>
+			    </apex:facet>
+			    <apex:commandButton value="Generate ERD Content" action="{!generateERD}" rerender="contentTextArea" />
+                <apex:inputTextarea id="contentTextArea" value="{!generatedContent}" rows="20" style="width:100%;" />
             </apex:pageBlockSection>
         </apex:pageBlock>
     </apex:form>
+
 </apex:page>
