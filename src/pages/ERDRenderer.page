@@ -1,0 +1,7 @@
+<apex:page controller="ERDRendererController" 
+	contentType="text/plain; charset=utf-8#ERD.gv"
+	showHeader="false" 
+	sidebar="false">
+	<!-- contentType="text/plain; charset=utf-8#ERD.gv" -->
+	{!graph}
+</apex:page>
