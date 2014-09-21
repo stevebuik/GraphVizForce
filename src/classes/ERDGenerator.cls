@@ -56,6 +56,42 @@ public with sharing class ERDGenerator
 						'content' => subgraphsContent + crossRelationshipContent
 					});
 	}
+	
+	public String generateERD(Map<String,List<String>> groupObjectMap)
+	{
+		String subgraphsContent = '';
+		Integer subgraphIndex = 0;
+		List<ERDEntityRelationship> allRelationships = new List<ERDEntityRelationship>();
+		
+		if(groupObjectMap != null)
+		{
+			for(String groupName : groupObjectMap.keySet())
+			{
+				List<String> objNames = groupObjectMap.get(groupName);
+				String standardSubgraph = generateSubgraph(subgraphIndex,groupName,objNames,allRelationships);
+				subgraphsContent += standardSubgraph;
+				subgraphIndex++;
+			}
+		}
+        
+		String crossRelationshipContent = '';
+		if(!allRelationships.isEmpty())
+            {
+                for(ERDEntityRelationship crossRelationship : allRelationships)
+                {
+					crossRelationshipContent += templateEngine.render(TemplateType.RELATIONSHIP,
+										new Map<String, String>{
+											'from' => crossRelationship.parentObjectName,
+											'to' => crossRelationship.childObjectName
+										});                    
+                }
+            }
+		
+		return templateEngine.render(TemplateType.MAIN,
+					new Map<String, String>{
+						'content' => subgraphsContent + crossRelationshipContent
+					});
+	}
 
 	private List<Schema.SObjectType> getObjectTypes()
 	{
