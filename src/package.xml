@@ -6,6 +6,7 @@
         <members>ERDEntityRelationship</members>
         <members>ERDGenerator</members>
         <members>ERDGeneratorController</members>
+        <members>ERDGeneratorControllerTest</members>
         <members>ERDGeneratorTest</members>
         <members>ERDUtils</members>
         <members>ListUtils</members>
