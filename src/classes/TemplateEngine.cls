@@ -1,26 +1,29 @@
 public class TemplateEngine {
 	
 	public interface TemplateSource {
-		String getMain();
-		String getGroup();
-		String getEntity();
-		String getField();
-		String getRelationship();
+		String getTemplate();
 	}
 
 	public static final String BINDINGS = '\\{\\{([^}]*)\\}\\}';
 
-	private final TemplateSource source;
-
-	private final Map<TemplateType, String> templateStrings;
+	private final Map<TemplateType, String> templates;
 
 	public TemplateEngine(TemplateSource source) {
-		templateStrings = new Map<TemplateType, String>{
-			TemplateType.MAIN => source.getMain(),
-			TemplateType.CLUSTER => source.getGroup(),
-			TemplateType.ENTITY => source.getEntity(),
-			TemplateType.RELATIONSHIP => source.getRelationship(),
-			TemplateType.FIELD => source.getField()
+
+		List<String> templateSplit = source.getTemplate().split('==========');
+		List<String> extracted = new List<String>();
+		for(String t : templateSplit) {
+			if (t.length() > 0) {
+				extracted.add(t.substringAfter('\n'));
+			}
+		}
+
+		templates = new Map<TemplateType, String>{
+			TemplateType.MAIN => extracted.get(0),
+			TemplateType.CLUSTER => extracted.get(1),
+			TemplateType.ENTITY => extracted.get(2),
+			TemplateType.RELATIONSHIP => extracted.get(3),
+			TemplateType.FIELD => extracted.get(4)
 		};
 	}
 
@@ -45,45 +48,42 @@ public class TemplateEngine {
     }
 
     public String render(TemplateType template, Map<String, String> data) {
-    	return applyBindings(templateStrings.get(template), data);
+    	return applyBindings(templates.get(template), data);
+    }
+
+    public class CalloutTemplateSource implements TemplateSource {
+    	private final String url;
+    	public CalloutTemplateSource(String url) {
+    		this.url = url;
+    	}
+		public String getTemplate() {
+			Http http = new Http();
+			HttpRequest request = new HttpRequest();
+			request.setEndpoint(url);
+			request.setMethod('GET');
+			HttpResponse response = http.send(request);
+			return response.getBody();
+		}
     }
 
     public class StaticResourceTemplateSource implements TemplateSource {
 
-    	private final List<String> extracted = new List<String>();
+    	private final String resourceName;
 
     	public StaticResourceTemplateSource(String resourceName) {
-    		List<StaticResource> resources = [select id, name, body from StaticResource
+    		this.resourceName = resourceName;
+    	}
+
+		public String getTemplate() {
+
+			List<StaticResource> resources = [select id, name, body from StaticResource
 				where name = :resourceName];
 			if (resources.size() == 1) {
-				String templateStrings = resources.get(0).body.toString();
-				List<String> templates = templateStrings.split('==========');
-				System.debug(templates.size());
-				for(String t : templates) {
-					if (t.length() > 0) {
-						extracted.add(t.substringAfter('\n'));
-					}
-				}
+				return resources.get(0).body.toString();
 			} else {
 				throw new ApplicationException('Resource not found: '+resourceName);
 			}
-    	}
-
- 		public String getMain() {
- 			return extracted.get(0);
- 		}
-		public String getGroup() {
- 			return extracted.get(1);
- 		}
-		public String getEntity() {
- 			return extracted.get(2);
- 		}		   	
-		public String getField() {
- 			return extracted.get(3);
- 		}		   	
- 		public String getRelationship() {
- 			return extracted.get(4);
- 		}		   	
+		}
     }
 
 }
