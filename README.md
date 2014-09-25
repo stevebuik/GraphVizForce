@@ -3,7 +3,7 @@ ForceERD
 
 An automatic generator of Entity Relationship Diagrams in Graphviz format for Salesforce.com
 
-To install click https://githubsfdeploy.herokuapp.com/app/githubdeploy/stevebuik/ForceERD
+To install click https://githubsfdeploy.herokuapp.com/app/githubdeploy/stevebuik/GraphVizForce
 
 To run the generator navigate to /apex/ERDRenderer in your browser.
 
