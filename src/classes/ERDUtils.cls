@@ -1,10 +1,7 @@
-/*
+/**
 Name: ERDUtils
 Purpose: 
 This class is to provide utility functionalities for the ERD Generator
-
-Version		Author			Date		Details				Feature
-1.0			Jason Guan		14/06/2014	Initial Creation	
 */
 public with sharing class ERDUtils
 {
@@ -82,6 +79,18 @@ public with sharing class ERDUtils
 		return objectResults;
 	}
 	
+	public static list<Schema.DescribeSObjectResult> getObjectResultsByChildRelationships(list<Schema.Childrelationship> childRelationships)
+	{
+		List<Schema.DescribeSObjectResult> objectResults = new List<Schema.DescribeSObjectResult>();
+		for(Schema.Childrelationship childRelationship : childRelationships)
+		{
+			Schema.Sobjecttype objectType = childRelationship.getChildSObject();
+			Schema.DescribeSObjectResult objectResult = objectType.getDescribe();
+			objectResults.add(objectResult);
+		}
+		return objectResults;
+	}
+	
 	public static List<Schema.DescribeSObjectResult> getCustomObjectResultsByObjectTypes(List<Schema.SObjectType> objectTypes)
 	{
 		List<Schema.DescribeSObjectResult> objectResults = new List<Schema.DescribeSObjectResult>();
@@ -95,6 +104,14 @@ public with sharing class ERDUtils
 			}
 		}
 		return objectResults;
+	}
+	
+	public static list<String> getAllObjectNames()
+	{
+		Map<String, Schema.SObjectType> globalDescribe = Schema.getGlobalDescribe();
+		list<String> objectNames = new list<String>(globalDescribe.keySet());
+		objectNames.sort();
+		return objectNames;
 	}
 	
 	

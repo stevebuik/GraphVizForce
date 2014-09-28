@@ -10,6 +10,8 @@ public with sharing class ERDGenerator
 	private TemplateEngine templateEngine = new TemplateEngine(
 		new TemplateEngine.StaticResourceTemplateSource('DefaultTemplate'));
 	
+	
+	/*
 	public String generateERD(Map<String,List<String>> standardGroupingMap, Map<String,List<String>> customGroupingMap)
 	{
 		String subgraphsContent = '';
@@ -56,50 +58,166 @@ public with sharing class ERDGenerator
 						'content' => subgraphsContent + crossRelationshipContent
 					});
 	}
+	*/
 	
 	public String generateERD(Map<String,List<String>> groupObjectMap)
 	{
 		String subgraphsContent = '';
 		Integer subgraphIndex = 0;
-		List<ERDEntityRelationship> allRelationships = new List<ERDEntityRelationship>();
+		String crossRelationshipContent = '';
+		
+		list<String> allObjectNames = new list<String>();
+		map<String, ERDEntity> objectERDEntityMap = new map<String, ERDEntity>();
+		map<String, list<ERDEntityRelationship>> objectChildrenRelationshipMap = new map<String, list<ERDEntityRelationship>>();
+		list<ERDEntityRelationship> allObjectChildrenRelationships = new list<ERDEntityRelationship>();
+		list<Schema.DescribeSobjectResult> allObjectResults;
 		
 		if(groupObjectMap != null)
 		{
+			// Get all object results for the group map
+			for(list<String> namesList : groupObjectMap.values())
+			{
+				allObjectNames.addAll(namesList);
+			}
+			allObjectResults = Schema.describeSObjects(allObjectNames);
+			
+			for(String objectName : allObjectNames)
+			{
+				for(Schema.DescribeSobjectResult objectResult : allObjectResults)
+				{
+					// For each object
+					if(objectResult.getName() == objectName)
+					{
+						// Add ERDEntity to map
+						ERDEntity entity = new ERDEntity();
+						entity.objectName = objectName;
+						entity.isCustom = objectResult.isCustom();
+						objectERDEntityMap.put(objectName,entity);
+						
+						
+						// For all the child relationship of an object
+						list<Schema.ChildRelationship> childRelationshipForObject = objectResult.getChildRelationships();
+						list<ERDEntityRelationship> entityRleationshipListForObject = new list<ERDEntityRelationship>();
+						
+						for(Schema.ChildRelationship childRelationship : childRelationshipForObject)
+						{
+							// Get the child relationship object name
+							Schema.Sobjecttype childObjectType = childRelationship.getChildSObject();
+							Schema.DescribeSObjectResult childObjectResult = childObjectType.getDescribe();
+							String childName = childObjectResult.getName();
+							
+							// Ensure the child object is in the groupObjectMap, which is specified by user in the UI
+							if(ERDUtils.isValidObjectName(childName,allObjectNames))
+							{
+								// Add ERDEntityRelationship to list of relationsihp for an object
+								ERDEntityRelationship entityRelationship = new ERDEntityRelationship();
+								entityRelationship.parentObjectName = objectName;
+								entityRelationship.childObjectName = childName;
+								entityRleationshipListForObject.add(entityRelationship);
+							}
+						}
+						
+						// Add list of relationship for an object to the full list
+						allObjectChildrenRelationships.addAll(entityRleationshipListForObject);
+						// Add list of relationship for an object to the map
+						objectChildrenRelationshipMap.put(objectName, entityRleationshipListForObject);
+						
+						break;
+					}
+				}
+			}
+			
+			// For each group of objects specified by user in UI
 			for(String groupName : groupObjectMap.keySet())
 			{
-				List<String> objNames = groupObjectMap.get(groupName);
-				String standardSubgraph = generateSubgraph(subgraphIndex,groupName,objNames,allRelationships);
-				subgraphsContent += standardSubgraph;
+				// Prepare list of entities, list of relationships
+				list<ERDEntity> entities = new list<ERDEntity>();
+				list<ERDEntityRelationship> entityRelationships = new list<ERDEntityRelationship>();
+				list<String> objNames = groupObjectMap.get(groupName);
+				
+				for(String objName : objNames)
+				{
+					entities.add(objectERDEntityMap.get(objName));
+					entityRelationships.addAll(objectChildrenRelationshipMap.get(objName));
+				}
+				
+				// Generate the subgraph section with group index, groupname, object names for the group, entity list and relationship list
+				String groupSubGraph = generateSubgraph(subgraphIndex,groupName,allObjectNames,entities,entityRelationships);
+				subgraphsContent += groupSubGraph;
 				subgraphIndex++;
 			}
-		}
-        
-		String crossRelationshipContent = '';
-		if(!allRelationships.isEmpty())
-            {
-                for(ERDEntityRelationship crossRelationship : allRelationships)
-                {
+			
+			// Append cross-group relationship outside of sub graph blocks
+			if(!allObjectChildrenRelationships.isEmpty())
+	        {
+	            for(ERDEntityRelationship crossRelationship : allObjectChildrenRelationships)
+	            {
 					crossRelationshipContent += templateEngine.render(TemplateType.RELATIONSHIP,
 										new Map<String, String>{
 											'from' => crossRelationship.parentObjectName,
 											'to' => crossRelationship.childObjectName
 										});                    
-                }
-            }
-		
+	            }
+	        }
+		}
+        
+        // Render ERD graphviz content using template engine
 		return templateEngine.render(TemplateType.MAIN,
 					new Map<String, String>{
 						'content' => subgraphsContent + crossRelationshipContent
 					});
 	}
-
-	private List<Schema.SObjectType> getObjectTypes()
+	
+	
+	/*
+	public List<Schema.SObjectType> getAllObjectTypes()
 	{
 		Map<String, Schema.SObjectType> globalDescribe = Schema.getGlobalDescribe();
 		List<Schema.SObjectType> objectTypes = new List<Schema.SObjectType>(globalDescribe.values());
 		return objectTypes;
 	}
+	*/
 	
+	private String generateSubgraph(Integer subgraphIndex, String groupName, list<String> allObjectNames, list<ERDEntity> entities, list<ERDEntityRelationship> entityRelationships)
+	{
+		String entityOutput = '';
+		String entityRelationshipOutput = '';
+		
+		for(ERDEntity entity : entities)
+		{
+			//if(ERDUtils.isValidObjectName(entity.objectName, allObjectNames))
+			//{
+				entityOutput += templateEngine.render(TemplateType.ENTITY,
+					new Map<String, String>{
+						'name' => entity.objectName
+					});
+			//}
+		}
+		
+		for(ERDEntityRelationship relation : entityRelationships)
+		{
+			//if(ERDUtils.isValidObjectName(relation.parentObjectName, allObjectNames) 
+				//&& ERDUtils.isValidObjectName(relation.childObjectName, allObjectNames))
+			//{
+				entityRelationshipOutput += templateEngine.render(TemplateType.RELATIONSHIP,
+					new Map<String, String>{
+						'from' => relation.parentObjectName,
+						'to' => relation.childObjectName
+					});
+			//}
+		}
+		
+		return templateEngine.render(TemplateType.CLUSTER,
+					new Map<String, String>{
+						'sequence' => ''+subgraphIndex,
+						'name' => groupName,
+						'content' => entityOutput + entityRelationshipOutput
+					});
+		
+	}
+	
+	/* THIS VERSION IS DEPRECATED */
+	/*
 	private String generateSubgraph(
 		Integer subgraphIndex, 
 		String groupName, 
@@ -146,6 +264,7 @@ public with sharing class ERDGenerator
 					});
 	}
 	
+	
 	private void collectSchemaInfo(
 		List<Schema.DescribeSObjectResult> objectResults, 
 		List<ERDEntity> entities, 
@@ -166,12 +285,13 @@ public with sharing class ERDGenerator
 			
 			// Create ERDEntityRelationship and Recursively go through children objects
 			// Describe childrelationships
-			if(describeChildCount < 100)
-			{
+			//if(describeChildCount < 200)
+			//{
 				describeChildCount++;
 				List<Schema.ChildRelationship> childRelationships = objectResult.getChildRelationships();
-				List<Schema.Sobjecttype> childObjectTypes = ERDUtils.getObjectTypesByChildRelationships(childRelationships);
-				List<Schema.DescribeSObjectResult> childObjectResults = ERDUtils.getObjectResultsByObjectTypes(childObjectTypes, objectNames);
+				//List<Schema.Sobjecttype> childObjectTypes = ERDUtils.getObjectTypesByChildRelationships(childRelationships);
+				//List<Schema.DescribeSObjectResult> childObjectResults = ERDUtils.getObjectResultsByObjectTypes(childObjectTypes, objectNames);
+				List<Schema.DescribeSObjectResult> childObjectResults = ERDUtils.getObjectResultsByChildRelationships(childRelationships);
 				
 				// create ERDEntity Relationship
 				for(Schema.DescribeSObjectResult childObjectResult : childObjectResults)
@@ -189,10 +309,14 @@ public with sharing class ERDGenerator
 					}
 				}
 				
-				collectSchemaInfo(childObjectResults, entities, entityRelationships, allRelationships, objectNames);
-			}
+				if(!childObjectResults.isEmpty())
+				{
+					collectSchemaInfo(childObjectResults, entities, entityRelationships, allRelationships, objectNames);
+				}
+			//}
 		}
 	}
+	*/
 	
 	
 	
