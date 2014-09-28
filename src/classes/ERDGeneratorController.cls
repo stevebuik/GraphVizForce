@@ -1,7 +1,6 @@
 /**
 * @description ERDGeneratorController
 * This is the controller for visualforce page ERDGeneratorPage
-* @author Zhiren Guan
 * @date 21/09/2014
 */
 
@@ -136,10 +135,6 @@ public class ERDGeneratorController
         	{
         		sorted = selectedGroupObjectMap.get(selectedGroup);
         	}
-        	else
-        	{
-        		selectedGroupObjectMap.put(selectedGroup,sorted);
-        	}
         	
             sorted.sort();
             List<SelectOption> options = new List<SelectOption>();
@@ -156,7 +151,8 @@ public class ERDGeneratorController
         get
         {
         	List<SelectOption> options = new List<SelectOption>();
-        	Set<String> unSelectedObjects = new Set<String>(AVAILABLE_OBJECTS);
+        	list<String> objectNames = ERDUtils.getAllObjectNames();
+        	Set<String> unSelectedObjects = new Set<String>(objectNames);
         	Set<String> groupNameSet = selectedGroupObjectMap.keySet();
             
         	for(String groupName : groupNameSet)
@@ -168,10 +164,14 @@ public class ERDGeneratorController
         		}
         	}
         	
-        	for(String objName : unSelectedObjects)
+        	list<String> sorted = new list<String>(unSelectedObjects);
+        	sorted.sort();
+        	
+        	for(String objName : sorted)
         	{
             	options.add(new SelectOption(objName, objName));
             }
+            
             return options;
         }
     }

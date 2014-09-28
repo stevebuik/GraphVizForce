@@ -2,9 +2,6 @@
 Name: ListUtils
 Purpose: 
 This class is to provide utility functionalities for List Collection primitive
-
-Version		Author			Date		Details				Feature
-1.0			Jason Guan		14/06/2014	Initial Creation	
 */
 public with sharing class ListUtils
 {
