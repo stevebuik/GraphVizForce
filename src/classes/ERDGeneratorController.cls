@@ -66,6 +66,25 @@ public class ERDGeneratorController
     	}
     }
     
+    public map<String,list<String>> filteredSelectedGroupObjectMap
+    {
+    	get
+    	{
+    		map<String,list<String>> filteredMap = new map<String,list<String>>();
+    		for(String grp : selectedGroupObjectMap.keySet())
+    		{
+    			for(ERDGroup erdGroup : ERDGroupList)
+    			{
+    				if(erdGroup.groupName == grp && erdGroup.selected == true)
+    				{
+    					filteredMap.put(grp,selectedGroupObjectMap.get(grp));
+    				}
+    			}
+    		}
+    		
+    		return filteredMap;
+    	}
+    }
     
 	public ERDGeneratorController()
     {
@@ -89,11 +108,13 @@ public class ERDGeneratorController
     	}
     	*/
     	
-    	ERDGroup standardGroup = createERDGroup(ERDGeneratorController.GROUP_STANDARD,false);
+    	ERDGroup standardGroup = createERDGroup(ERDGeneratorController.GROUP_STANDARD,true);
     	ERDGroup customGroup = createERDGroup(ERDGeneratorController.GROUP_CUSTOM,true);
     	
         ERDGroupList.add(standardGroup);
         ERDGroupList.add(customGroup);
+        
+        selectedGroup = standardGroup.groupName;
         
         unSelectedGroupObjectMap = new map<String,list<String>>();
         selectedGroupObjectMap = new map<String,list<String>>();
@@ -242,7 +263,7 @@ public class ERDGeneratorController
     public void generateERD()
     {
         ERDGenerator generator = new ERDGenerator();
-		generatedContent = generator.generateERD(selectedGroupObjectMap);
+		generatedContent = generator.generateERD(filteredSelectedGroupObjectMap);
     }
     
     
