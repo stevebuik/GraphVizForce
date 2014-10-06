@@ -1,0 +1,25 @@
+<project name="Sample usage of Salesforce Ant tasks" default="deployAndTest" basedir="." xmlns:sf="antlib:com.salesforce">
+
+    <property environment="env"/>
+
+    <taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce">
+        <classpath>
+            <pathelement location="./salesforce_ant_31.0/ant-salesforce.jar" />
+        </classpath>
+    </taskdef>
+
+    <!-- Deploy and run tests -->
+    <target name="deployAndTest">
+      <echo message="User: ${env.sfdc_username}" />
+      <sf:deploy 
+        username="${env.sfdc_username}" 
+        password="${env.sfdc_pass_and_token}" 
+        serverurl="${env.sfdc_server_url}" 
+        maxPoll="200"
+        deployRoot=".." 
+        runAllTests="true"
+        logType="Debugonly"/>
+    </target>
+
+
+</project>
