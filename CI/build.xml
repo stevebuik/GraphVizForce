@@ -16,7 +16,7 @@
         password="${env.sfdc_pass_and_token}" 
         serverurl="${env.sfdc_server_url}" 
         maxPoll="200"
-        deployRoot=".." 
+        deployRoot="../src" 
         runAllTests="true"
         logType="Debugonly"/>
     </target>
