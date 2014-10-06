@@ -8,46 +8,29 @@
 	            <apex:facet name="header">
 			         <span style="color:#000000;">Setup</span>
 			    </apex:facet>
-                <apex:pageBlock title="Groups">
+                <apex:pageBlock title="Groups in GraphViz">
                 	<apex:pageBlockSection >
                     	<apex:inputText id="inpGroupName" styleClass="textInput" value="{!newGroupName}" />
-                    	<apex:commandButton id="btnCreateGroup" value="Add" action="{!addNewGroupWithInput}" rerender="groupTable,selectedGroupPicklist">
+                    	<apex:commandButton id="btnCreateGroup" value="Add" action="{!addNewGroupWithInput}" rerender="groupTable">
                     		<apex:param value="{!newGroupName}"/>
                     	</apex:commandButton>
                 	</apex:pageBlockSection>
                 	<apex:pageBlockTable id="groupTable" value="{!ERDGroupList}" var="group">
 				    	<apex:column headerValue="Select Groups">
 				        	<apex:inputCheckbox id="groupCheckBox" value="{!group.selected}">
-					        	<apex:actionSupport event="onchange" rerender="selectedGroupPicklist"/>
+					        	<!-- <apex:actionSupport event="onchange" rerender="selectedGroupPicklist"/> -->
 				        	</apex:inputCheckbox>
 				    		<apex:outputLabel value="{!group.groupName}" for="groupCheckBox" />
 				        </apex:column>
+				        <apex:column headerValue="Edit" width="30">
+				        	<apex:commandButton id="editGroupButton" value="Edit >>" rerender="selectionBlock">
+					        	<apex:param assignTo="{!selectedGroup}" value="{!group.groupName}" name="selectedERDGroup"/>
+				        	</apex:commandButton>
+				        </apex:column>
 				    </apex:pageBlockTable>
                 </apex:pageBlock>
-                <!-- 
-                <apex:pageBlock title="Objects">
-			        <apex:selectList value="{!selectedERDEntityList}" multiselect="true">
-			            <apex:selectOptions value="{!objectItems}"/>
-			        </apex:selectList>
-					
-			        <apex:commandButton value="Add" action="{!addObjects}" rerender="selectedObjectOutputPanel" status="status"/>
-			        
-			        <apex:outputPanel id="selectedObjectOutputPanel">
-				        <apex:actionstatus id="status" startText="adding...">
-				            <apex:facet name="stop">
-				                <apex:outputPanel>
-				                    <p>Selected ERD Entity List:</p>
-				                    <apex:dataList value="{!selectedERDEntityList}" var="c">{!c}</apex:dataList>
-				                </apex:outputPanel>
-				            </apex:facet>
-				        </apex:actionstatus>
-				    </apex:outputPanel>
-				    
-                	<apex:commandButton id="btnGenerateERD" value="Generate" action="{!generateERD}"/>
-                </apex:pageBlock>
-                -->
                 
-                <apex:pageBlock title="Select Entity Objects" id="selectionBlock">
+                <apex:pageBlock title="Edit Selected Group: {!selectedGroup}" id="selectionBlock">
 		            <apex:panelGrid columns="3">
 		            	<apex:panelGroup >
 		            		<div style="height:20px;">
@@ -72,13 +55,17 @@
 		                        reRender="selectionBlock"/>
 		                </apex:panelGroup>
 		                <apex:panelGroup >
-		                	<apex:panelGrid columns="2">
-			                	<apex:outputText value="Objects for Group" />
-			                	<apex:selectList id="selectedGroupPicklist" value="{!selectedGroup}" size="1" style="width:150px;">
-						            <apex:selectOptions value="{!groupSelectOptions}"/>
-						            <apex:actionSupport event="onchange" rerender="selected_list"/>
-						        </apex:selectList>
-		                	</apex:panelGrid>
+		            		<!-- 
+		                	<apex:outputText value="Objects for Group" />
+		                	<apex:selectList id="selectedGroupPicklist" value="{!selectedGroup}" size="1" style="width:150px;">
+					            <apex:selectOptions value="{!groupSelectOptions}"/>
+					            <apex:actionSupport event="onchange" rerender="selected_list"/>
+					        </apex:selectList>
+					        -->
+	                		<div style="height:20px;">
+		            		<apex:outputText value="Included Objects" />
+		            		</div>
+		            		<br />
 			                <apex:selectList id="selected_list" required="false"
 			                    value="{!unselected}" multiselect="true" size="20" style="width:300px;">
 			                    <apex:selectOptions value="{!selectedOptions}"/>
