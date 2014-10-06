@@ -36,13 +36,10 @@ public class ERDRendererController {
                 'User',
                 'UserLicense'}
 		};
-
-		// Create Custom Group Map
-		Map<String,List<String>> customMap = new Map<String,List<String>>{};
 		
 		// Generate ERD Graphviz content
 		ERDGenerator generator = new ERDGenerator();
-		return generator.generateERD(standardMap,customMap);
+		return generator.generateERD(standardMap);
 	
 	}
 
