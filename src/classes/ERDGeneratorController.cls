@@ -8,23 +8,6 @@ public class ERDGeneratorController
 {
 	public static final String GROUP_STANDARD = 'Standard';
     public static final String GROUP_CUSTOM = 'Custom';
-    public static final list<String> AVAILABLE_OBJECTS = new List<String>{'Salary__c',
-    													'Job_Application__c',
-    													'Offer__c',
-    													'Review__c',
-    													'Candidate_Snapshot__c',
-    													'Programming_Language__c',
-    													'Position_Programming_Language__c',
-    													'Zip_Code__c',
-    													'Job_Posting_Site__c',
-    													'Job_Posting__c',
-    													'Interviewer__c',
-    													'Position__c',
-    													'Search_Config__c',
-    													'Candidate__c',
-    													'Position_Approval_Matrix__c',
-    													'Error_Log__c'
-    													};
 	
     public String newGroupName{get;set;}
     
@@ -32,9 +15,6 @@ public class ERDGeneratorController
     
     public list<ERDEntity> selectedObjectList{get;set;}
     public String selectedGroup{get;set;}
-    
-    //private Set<String> unSelectedNames;
-    //private Set<String> selectedNames;
     
     private map<String,list<String>> unSelectedGroupObjectMap{get;set;}
     private map<String,list<String>> selectedGroupObjectMap{get;set;}
@@ -44,7 +24,7 @@ public class ERDGeneratorController
     
     public String generatedContent{get;set;}
     
-    public list<SelectOption> groupSelectOptions//{get;set;}
+    public list<SelectOption> groupSelectOptions
     {
     	get
     	{
@@ -82,13 +62,6 @@ public class ERDGeneratorController
     		ERDGroupList = new list<ERDGroup>();
     	}
     	
-    	/*
-    	if(groupSelectOptions == null)
-    	{
-    		groupSelectOptions = new list<SelectOption>();
-    	}
-    	*/
-    	
     	ERDGroup standardGroup = createERDGroup(ERDGeneratorController.GROUP_STANDARD,false);
     	ERDGroup customGroup = createERDGroup(ERDGeneratorController.GROUP_CUSTOM,true);
     	
@@ -104,9 +77,7 @@ public class ERDGeneratorController
     	if(String.isNotBlank(newGroupName))
     	{
     		addERDGroup(newGroupName);
-    	}
-    	
-    	//return null;
+    	}    	
     }
     
     public ERDGroup addERDGroup(String groupName)
@@ -179,13 +150,6 @@ public class ERDGeneratorController
 
     public void doSelect()
     {
-    	/*
-        for (String s: selected)
-        {
-            selectedNames.add(s);
-            unselectedNames.remove(s);
-        }
-        */
         
         if(!selected.isEmpty())
         {
@@ -209,13 +173,6 @@ public class ERDGeneratorController
 
     public void doUnSelect()
     {
-    	/*
-        for (String s: unselected)
-        {
-            unSelectedNames.add(s);
-            selectedNames.remove(s);
-        }
-        */
         
         if(!unselected.isEmpty())
         {
