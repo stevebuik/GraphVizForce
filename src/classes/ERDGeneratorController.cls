@@ -8,21 +8,24 @@ public class ERDGeneratorController
 {
 	public static final String GROUP_STANDARD = 'Standard';
     public static final String GROUP_CUSTOM = 'Custom';
+    public static final String FOLDER_ERD_SETTINGS = 'ERD Settings';
 	
     public String newGroupName{get;set;}
+    public String selectedGroup{get;set;}
+    public String newSettingName{get;set;}
+    public String selectedSetting{get;set;}
+    public String generatedContent{get;set;}
     
     public list<ERDGroup> ERDGroupList{get;set;}
-    
     public list<ERDEntity> selectedObjectList{get;set;}
-    public String selectedGroup{get;set;}
-    
-    private map<String,list<String>> unSelectedGroupObjectMap{get;set;}
-    private map<String,list<String>> selectedGroupObjectMap{get;set;}
     
     public List<String> selected { get; set; }
     public List<String> unselected { get; set; }
     
-    public String generatedContent{get;set;}
+    private map<String,list<String>> selectedGroupObjectMap{get;set;}
+    
+    private ERDPersister persister;
+    
     
     public list<SelectOption> groupSelectOptions
     {
@@ -39,6 +42,32 @@ public class ERDGeneratorController
     					SelectOption option = new SelectOption(gp.groupName,gp.groupName);
     					options.add(option);
     				}
+    			}
+    		}
+            
+            return options;
+    	}
+    }
+    
+    public list<SelectOption> settingSelectOptions
+    {
+    	get
+    	{
+            list<SelectOption> options = new list<SelectOption>();
+            list<String> settingNames;
+            
+            if(persister != null)
+            {
+            	settingNames = persister.getDiagramNameList();
+            }
+            
+            if(settingNames != null)
+    		{
+    			settingNames.sort();
+    			for(String setting : settingNames)
+    			{
+					SelectOption option = new SelectOption(setting,setting);
+					options.add(option);
     			}
     		}
             
@@ -84,13 +113,19 @@ public class ERDGeneratorController
     	ERDGroup standardGroup = createERDGroup(ERDGeneratorController.GROUP_STANDARD,true);
     	ERDGroup customGroup = createERDGroup(ERDGeneratorController.GROUP_CUSTOM,true);
     	
-        ERDGroupList.add(standardGroup);
         ERDGroupList.add(customGroup);
+        ERDGroupList.add(standardGroup);
         
-        selectedGroup = standardGroup.groupName;
+        selectedGroup = customGroup.groupName;
         
-        unSelectedGroupObjectMap = new map<String,list<String>>();
         selectedGroupObjectMap = new map<String,list<String>>();
+        
+        initERDPersister();
+    }
+    
+    private void initERDPersister()
+    {
+    	persister = new ERDPersister(FOLDER_ERD_SETTINGS);
     }
     
     public void addNewGroupWithInput()
@@ -112,6 +147,66 @@ public class ERDGeneratorController
         ERDGroupList.add(newGroup);
         
         return newGroup;
+    }
+    
+    public void loadSelectedSetting()
+    {
+    	if(String.isBlank(selectedSetting))
+    	{
+    		ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please select a setting'));
+    		return;
+    	}
+    	
+    	// Apply map to selectedGroupObjectMap
+    	selectedGroupObjectMap = persister.getDiagram(selectedSetting);
+    	
+    	// Apply map to ERDGroupList
+    	ERDGroupList = new list<ERDGroup>();
+    	list<String> groups = new list<String>(selectedGroupObjectMap.keySet());
+    	
+    	if(!groups.isEmpty())
+    	{
+	    	groups.sort();
+	    	for(String grp : groups)
+	    	{
+	    		ERDGroup erdGroup = createERDGroup(grp,true);
+		        ERDGroupList.add(erdGroup);
+	    	}
+	    	
+	    	selectedGroup = ERDGroupList[0].groupName;
+    	}
+    	else
+    	{
+    		selectedGroup = null;
+    	}
+    }
+    
+    public void saveSelectedSetting()
+    {
+    	if(String.isBlank(selectedSetting))
+    	{
+    		ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please select a setting'));
+    		return;
+    	}
+    	
+    	if(filteredSelectedGroupObjectMap.size() == 0)
+    	{
+    		ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please add objects to some groups'));
+    		return;
+    	}
+    	
+    	persister.saveDiagram(selectedSetting, filteredSelectedGroupObjectMap);
+    }
+    
+    public void saveAsNewSetting()
+    {
+    	if(String.isBlank(newSettingName))
+    	{
+    		ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please enter setting name'));
+    		return;
+    	}
+    	
+    	persister.saveDiagram(newSettingName, filteredSelectedGroupObjectMap);
     }
     
     /**
@@ -172,7 +267,7 @@ public class ERDGeneratorController
     public void doSelect()
     {
         
-        if(!selected.isEmpty())
+        if(!selected.isEmpty() && !String.isBlank(selectedGroup))
         {
 	        list<String> selectedNames = new list<String>();
 	        
@@ -195,7 +290,7 @@ public class ERDGeneratorController
     public void doUnSelect()
     {
         
-        if(!unselected.isEmpty())
+        if(!unselected.isEmpty() && !String.isBlank(selectedGroup))
         {
 	        Set<String> selectedNames;
 	        
@@ -216,7 +311,6 @@ public class ERDGeneratorController
         }
     }
     
-    /* TODO: Generate Content only for selected groups, currently picking up unselected groups */
     public void generateERD()
     {
         ERDGenerator generator = new ERDGenerator();

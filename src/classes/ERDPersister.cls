@@ -14,6 +14,27 @@ public with sharing class ERDPersister {
 			throw new ApplicationException('Too many folders found: '+folderName);
 		}
 	}
+	
+	public list<String> getDiagramNameList()
+	{
+		list<String> diagramList = new list<String>();
+		
+		if(folderId != null)
+		{
+			List<Document> ds = [SELECT Id, Name FROM Document 
+									WHERE folderId = :folderId];
+			
+			if(!ds.isEmpty())
+			{
+				for(Document doc : ds)
+				{
+					diagramList.add(doc.Name);
+				}
+			}
+		}
+		
+		return diagramList;
+	}
 
 	public Map<String,List<String>> getDiagram(String name) {
 		List<Document> ds = [select Id, Body from Document 

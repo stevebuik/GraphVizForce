@@ -1,18 +1,40 @@
 <apex:page controller="ERDGeneratorController">
 	<style type="text/css">
         .textInput {width: 100%;}
+	    .pbTitle {white-space: nowrap}
     </style>
+    
+   	<apex:messages />
+    
     <apex:form >
     	<apex:pageBlock title="ERD Generator">
-            <apex:pageBlockSection columns="2">
+            <apex:pageBlockSection columns="3">
 	            <apex:facet name="header">
 			         <span style="color:#000000;">Setup</span>
 			    </apex:facet>
-                <apex:pageBlock title="Groups in GraphViz">
+			    <apex:pageBlock title="Step 1 - ERD Settings" id="blockSetting">
+                	<apex:pageBlockSection >
+                		<apex:selectList id="settingPicklist" value="{!selectedSetting}" size="1" style="width:150px;">
+				            <apex:selectOptions value="{!settingSelectOptions}"/>
+				        </apex:selectList>
+				        <apex:panelGroup >
+                    	<apex:commandButton id="btnLoadSetting" value="Load" action="{!loadSelectedSetting}" rerender="blockGroup,blockSelection" style="width:40px;">
+                    	</apex:commandButton>
+                    	<apex:commandButton id="btnSaveSetting" value="Save" action="{!saveSelectedSetting}" style="width:40px;">
+                    	</apex:commandButton>
+                    	</apex:panelGroup>
+                		<apex:outputText value="OR" />
+                    	<br />
+                		<apex:inputText id="inpSettingName" styleClass="textInput" value="{!newSettingName}" />
+                    	<apex:commandButton id="btnSaveNewSetting" value="Save as New" action="{!saveAsNewSetting}" rerender="settingPicklist">
+                    		<apex:param value="{!newSettingName}"/>
+                    	</apex:commandButton>
+                	</apex:pageBlockSection>
+                </apex:pageBlock>
+                <apex:pageBlock title="Step 2 - Groups in GraphViz" id="blockGroup">
                 	<apex:pageBlockSection >
                     	<apex:inputText id="inpGroupName" styleClass="textInput" value="{!newGroupName}" />
                     	<apex:commandButton id="btnCreateGroup" value="Add" action="{!addNewGroupWithInput}" rerender="groupTable">
-                    		<apex:param value="{!newGroupName}"/>
                     	</apex:commandButton>
                 	</apex:pageBlockSection>
                 	<apex:pageBlockTable id="groupTable" value="{!ERDGroupList}" var="group">
@@ -23,14 +45,14 @@
 				    		<apex:outputLabel value="{!group.groupName}" for="groupCheckBox" />
 				        </apex:column>
 				        <apex:column headerValue="Edit" width="30">
-				        	<apex:commandButton id="editGroupButton" value="Edit >>" rerender="selectionBlock">
+				        	<apex:commandButton id="editGroupButton" value="Edit >>" rerender="blockSelection">
 					        	<apex:param assignTo="{!selectedGroup}" value="{!group.groupName}" name="selectedERDGroup"/>
 				        	</apex:commandButton>
 				        </apex:column>
 				    </apex:pageBlockTable>
                 </apex:pageBlock>
                 
-                <apex:pageBlock title="Edit Selected Group: {!selectedGroup}" id="selectionBlock">
+                <apex:pageBlock title="Step 3 - Edit Group: {!selectedGroup}" id="blockSelection">
 		            <apex:panelGrid columns="3">
 		            	<apex:panelGroup >
 		            		<div style="height:20px;">
@@ -38,7 +60,7 @@
 		            		</div>
 		            		<br />
 		            		<apex:selectList id="unselected_list" required="false"
-			                    value="{!selected}" multiselect="true" size="20" style="width:300px;">
+			                    value="{!selected}" multiselect="true" size="20" style="width:250px;">
 			                    <apex:selectOptions value="{!unSelectedOptions}"/>
 			                </apex:selectList>
 		            	</apex:panelGroup>
@@ -49,10 +71,10 @@
 		                	<br />
 		                	<br />
 		                    <apex:commandButton value=">>" action="{!DoSelect}" 
-		                        reRender="selectionBlock"/>
+		                        reRender="blockSelection"/>
 		                    <br/>
 		                    <apex:commandButton value="<<" action="{!DoUnselect}" 
-		                        reRender="selectionBlock"/>
+		                        reRender="blockSelection"/>
 		                </apex:panelGroup>
 		                <apex:panelGroup >
 		            		<!-- 
@@ -63,11 +85,11 @@
 					        </apex:selectList>
 					        -->
 	                		<div style="height:20px;">
-		            		<apex:outputText value="Included Objects" />
+		            		<apex:outputText value="Included objects in group" />
 		            		</div>
 		            		<br />
 			                <apex:selectList id="selected_list" required="false"
-			                    value="{!unselected}" multiselect="true" size="20" style="width:300px;">
+			                    value="{!unselected}" multiselect="true" size="20" style="width:250px;">
 			                    <apex:selectOptions value="{!selectedOptions}"/>
 			                </apex:selectList>
 		                </apex:panelGroup>
