@@ -12,6 +12,15 @@ public class ERDGeneratorController
 	
     public String newGroupName{get;set;}
     public String selectedGroup{get;set;}
+    
+    public String currentSetting{
+    	get {
+    		if (currentSetting == null) {
+    			currentSetting = '<New Diagram>';
+    		}
+    		return currentSetting;
+    	}
+    	set;}
     public String newSettingName{get;set;}
     public String selectedSetting{get;set;}
     public String generatedContent{get;set;}
@@ -157,6 +166,8 @@ public class ERDGeneratorController
     		return;
     	}
     	
+    	currentSetting = selectedSetting;
+    	
     	// Apply map to selectedGroupObjectMap
     	selectedGroupObjectMap = persister.getDiagram(selectedSetting);
     	
@@ -196,6 +207,8 @@ public class ERDGeneratorController
     	}
     	
     	persister.saveDiagram(selectedSetting, filteredSelectedGroupObjectMap);
+    	
+    	currentSetting = selectedSetting;
     }
     
     public void saveAsNewSetting()
@@ -207,6 +220,8 @@ public class ERDGeneratorController
     	}
     	
     	persister.saveDiagram(newSettingName, filteredSelectedGroupObjectMap);
+    	
+    	currentSetting = selectedSetting;
     }
     
     /**

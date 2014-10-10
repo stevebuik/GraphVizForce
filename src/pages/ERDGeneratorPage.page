@@ -2,31 +2,53 @@
 	<style type="text/css">
         .textInput {width: 100%;}
 	    .pbTitle {white-space: nowrap}
+	    #titleContainer {margin: 5px 0px;}
+	    #generatorTitle {margin-left: 22px; font-size:1.5em;}
+	    #workingLabel {
+	    	padding-left: 20px;
+	    	margin: 0 10px; 
+	    	font-size: 1.1em;
+	    	background: url("{!$Resource.WorkingImage}") no-repeat;}
     </style>
     
    	<apex:messages />
     
     <apex:form >
-    	<apex:pageBlock title="ERD Generator">
+    	<apex:pageBlock>
+    		<apex:facet name="header">
+    			<apex:outputPanel id="title">
+    				<div id="titleContainer">
+	    				<h2 id="generatorTitle">Diagram: {!currentSetting}</h2>
+	    				<apex:actionStatus id="working">
+	    					<apex:facet name="start">
+	    						<span id="workingLabel">Working..</span>
+	    					</apex:facet>
+	    				</apex:actionStatus>
+    				</div>
+    			</apex:outputPanel>
+    		</apex:facet>
             <apex:pageBlockSection columns="3">
-	            <apex:facet name="header">
-			         <span style="color:#000000;">Setup</span>
-			    </apex:facet>
 			    <apex:pageBlock title="Step 1 - ERD Settings" id="blockSetting">
                 	<apex:pageBlockSection >
-                		<apex:selectList id="settingPicklist" value="{!selectedSetting}" size="1" style="width:150px;">
+                		<apex:selectList id="settingPicklist" value="{!selectedSetting}" 
+                			size="1" style="width:150px;">
 				            <apex:selectOptions value="{!settingSelectOptions}"/>
 				        </apex:selectList>
 				        <apex:panelGroup >
-                    	<apex:commandButton id="btnLoadSetting" value="Load" action="{!loadSelectedSetting}" rerender="blockGroup,blockSelection" style="width:40px;">
+                    	<apex:commandButton id="btnLoadSetting" value="Load" 
+                    		action="{!loadSelectedSetting}" rerender="blockGroup,blockSelection,title" 
+                    		status="working" style="width:40px;">
                     	</apex:commandButton>
-                    	<apex:commandButton id="btnSaveSetting" value="Save" action="{!saveSelectedSetting}" style="width:40px;">
+                    	<apex:commandButton id="btnSaveSetting" value="Save" 
+                    		action="{!saveSelectedSetting}" rerender="title" 
+                    		status="working" style="width:40px;">
                     	</apex:commandButton>
                     	</apex:panelGroup>
                 		<apex:outputText value="OR" />
                     	<br />
                 		<apex:inputText id="inpSettingName" styleClass="textInput" value="{!newSettingName}" />
-                    	<apex:commandButton id="btnSaveNewSetting" value="Save as New" action="{!saveAsNewSetting}" rerender="settingPicklist">
+                    	<apex:commandButton id="btnSaveNewSetting" value="Save as New" 
+                    		action="{!saveAsNewSetting}" rerender="settingPicklist,title" status="working">
                     		<apex:param value="{!newSettingName}"/>
                     	</apex:commandButton>
                 	</apex:pageBlockSection>
@@ -34,7 +56,8 @@
                 <apex:pageBlock title="Step 2 - Groups in GraphViz" id="blockGroup">
                 	<apex:pageBlockSection >
                     	<apex:inputText id="inpGroupName" styleClass="textInput" value="{!newGroupName}" />
-                    	<apex:commandButton id="btnCreateGroup" value="Add" action="{!addNewGroupWithInput}" rerender="groupTable">
+                    	<apex:commandButton id="btnCreateGroup" value="Add" 
+                    		action="{!addNewGroupWithInput}" rerender="groupTable" status="working">
                     	</apex:commandButton>
                 	</apex:pageBlockSection>
                 	<apex:pageBlockTable id="groupTable" value="{!ERDGroupList}" var="group">
@@ -45,7 +68,7 @@
 				    		<apex:outputLabel value="{!group.groupName}" for="groupCheckBox" />
 				        </apex:column>
 				        <apex:column headerValue="Edit" width="30">
-				        	<apex:commandButton id="editGroupButton" value="Edit >>" rerender="blockSelection">
+				        	<apex:commandButton id="editGroupButton" value="Edit >>" rerender="blockSelection" status="working">
 					        	<apex:param assignTo="{!selectedGroup}" value="{!group.groupName}" name="selectedERDGroup"/>
 				        	</apex:commandButton>
 				        </apex:column>
@@ -71,10 +94,10 @@
 		                	<br />
 		                	<br />
 		                    <apex:commandButton value=">>" action="{!DoSelect}" 
-		                        reRender="blockSelection"/>
+		                        reRender="blockSelection" status="working"/>
 		                    <br/>
 		                    <apex:commandButton value="<<" action="{!DoUnselect}" 
-		                        reRender="blockSelection"/>
+		                        reRender="blockSelection" status="working"/>
 		                </apex:panelGroup>
 		                <apex:panelGroup >
 		            		<!-- 
@@ -100,7 +123,7 @@
 	            <apex:facet name="header">
 			         <span style="color:#000000;">ERD Content</span>
 			    </apex:facet>
-			    <apex:commandButton value="Generate ERD Content" action="{!generateERD}" rerender="contentTextArea" />
+			    <apex:commandButton value="Generate ERD Content" action="{!generateERD}" rerender="contentTextArea" status="working"/>
                 <apex:inputTextarea id="contentTextArea" value="{!generatedContent}" rows="20" style="width:100%;" />
             </apex:pageBlockSection>
         </apex:pageBlock>
