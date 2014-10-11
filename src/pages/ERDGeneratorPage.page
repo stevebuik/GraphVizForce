@@ -14,7 +14,7 @@
    	<apex:messages />
     
     <apex:form >
-    	<apex:pageBlock>
+    	<apex:pageBlock >
     		<apex:facet name="header">
     			<apex:outputPanel id="title">
     				<div id="titleContainer">
@@ -28,15 +28,16 @@
     			</apex:outputPanel>
     		</apex:facet>
             <apex:pageBlockSection columns="3">
-			    <apex:pageBlock title="Step 1 - ERD Settings" id="blockSetting">
+			    <apex:pageBlock title="Step 1 - ERD Diagram" id="blockSetting">
                 	<apex:pageBlockSection >
                 		<apex:selectList id="settingPicklist" value="{!selectedSetting}" 
                 			size="1" style="width:150px;">
+				            <apex:actionSupport event="onchange" action="{!loadSelectedSetting}" rerender="blockGroup,blockSelection,title" status="working" />
 				            <apex:selectOptions value="{!settingSelectOptions}"/>
 				        </apex:selectList>
 				        <apex:panelGroup >
-                    	<apex:commandButton id="btnLoadSetting" value="Load" 
-                    		action="{!loadSelectedSetting}" rerender="blockGroup,blockSelection,title" 
+                    	<apex:commandButton id="btnDeleteSetting" value="Delete" 
+                    		action="{!deleteSelectedSetting}" rerender="blockSetting,blockGroup,blockSelection,title" 
                     		status="working" style="width:40px;">
                     	</apex:commandButton>
                     	<apex:commandButton id="btnSaveSetting" value="Save" 
@@ -53,7 +54,7 @@
                     	</apex:commandButton>
                 	</apex:pageBlockSection>
                 </apex:pageBlock>
-                <apex:pageBlock title="Step 2 - Groups in GraphViz" id="blockGroup">
+                <apex:pageBlock title="Step 2 - Groups in Diagram" id="blockGroup">
                 	<apex:pageBlockSection >
                     	<apex:inputText id="inpGroupName" styleClass="textInput" value="{!newGroupName}" />
                     	<apex:commandButton id="btnCreateGroup" value="Add" 
@@ -72,13 +73,18 @@
 					        	<apex:param assignTo="{!selectedGroup}" value="{!group.groupName}" name="selectedERDGroup"/>
 				        	</apex:commandButton>
 				        </apex:column>
+				        <apex:column headerValue="Delete" width="30">
+				        	<apex:commandButton id="deleteGroupButton" value="Delete" action="{!deleteERDGroup}" rerender="blockGroup,blockSelection" status="working">
+				        		<apex:param assignTo="{!groupToDelete}" value="{!group.groupName}" name="ERDGroupToDelete"/>
+				        	</apex:commandButton>
+				        </apex:column>
 				    </apex:pageBlockTable>
                 </apex:pageBlock>
                 
                 <apex:pageBlock title="Step 3 - Edit Group: {!selectedGroup}" id="blockSelection">
 		            <apex:panelGrid columns="3">
 		            	<apex:panelGroup >
-		            		<div style="height:20px;">
+		            		<div style="height:12px;">
 		            		<apex:outputText value="Available Objects" />
 		            		</div>
 		            		<br />
@@ -100,15 +106,8 @@
 		                        reRender="blockSelection" status="working"/>
 		                </apex:panelGroup>
 		                <apex:panelGroup >
-		            		<!-- 
-		                	<apex:outputText value="Objects for Group" />
-		                	<apex:selectList id="selectedGroupPicklist" value="{!selectedGroup}" size="1" style="width:150px;">
-					            <apex:selectOptions value="{!groupSelectOptions}"/>
-					            <apex:actionSupport event="onchange" rerender="selected_list"/>
-					        </apex:selectList>
-					        -->
-	                		<div style="height:20px;">
-		            		<apex:outputText value="Included objects in group" />
+	                		<div style="height:12px;">
+		            		<apex:outputText value="Included Objects" />
 		            		</div>
 		            		<br />
 			                <apex:selectList id="selected_list" required="false"
