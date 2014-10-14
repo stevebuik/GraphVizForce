@@ -12,6 +12,7 @@ public class ERDGeneratorController
 	
     public String newGroupName{get;set;}
     public String selectedGroup{get;set;}
+    public String groupToDelete{get;set;}
     
     public String currentSetting{
     	get {
@@ -21,6 +22,8 @@ public class ERDGeneratorController
     		return currentSetting;
     	}
     	set;}
+    
+    	
     public String newSettingName{get;set;}
     public String selectedSetting{get;set;}
     public String generatedContent{get;set;}
@@ -34,46 +37,20 @@ public class ERDGeneratorController
     private map<String,list<String>> selectedGroupObjectMap{get;set;}
     
     private ERDPersister persister;
+    private list<String> settingNamesList;
     
     
-    public list<SelectOption> groupSelectOptions
-    {
-    	get
-    	{
-            List<SelectOption> options = new List<SelectOption>();
-            
-            if(ERDGroupList != null)
-    		{
-    			for(ERDGroup gp : ERDGroupList)
-    			{
-    				if(gp.selected)
-    				{
-    					SelectOption option = new SelectOption(gp.groupName,gp.groupName);
-    					options.add(option);
-    				}
-    			}
-    		}
-            
-            return options;
-    	}
-    }
     
     public list<SelectOption> settingSelectOptions
     {
     	get
     	{
             list<SelectOption> options = new list<SelectOption>();
-            list<String> settingNames;
             
-            if(persister != null)
+            if(settingNamesList != null && !settingNamesList.isEmpty())
             {
-            	settingNames = persister.getDiagramNameList();
-            }
-            
-            if(settingNames != null)
-    		{
-    			settingNames.sort();
-    			for(String setting : settingNames)
+    			settingNamesList.sort();
+    			for(String setting : settingNamesList)
     			{
 					SelectOption option = new SelectOption(setting,setting);
 					options.add(option);
@@ -135,6 +112,17 @@ public class ERDGeneratorController
     private void initERDPersister()
     {
     	persister = new ERDPersister(FOLDER_ERD_SETTINGS);
+    	
+    	// Load first setting if setting list is not empty
+    	settingNamesList = persister.getDiagramNameList();
+    	if(!settingNamesList.isEmpty())
+    	{
+    		settingNamesList.sort();
+    		selectedSetting = settingNamesList[0];
+    		currentSetting = selectedSetting;
+    		
+    		loadSelectedSetting();
+    	}
     }
     
     public void addNewGroupWithInput()
@@ -157,6 +145,34 @@ public class ERDGeneratorController
         
         return newGroup;
     }
+    
+    public void deleteERDGroup()
+    {
+    	Integer index = getERDGroupIndex(groupToDelete, ERDGroupList);
+    	if(index != -1)
+    	{
+    		ERDGroupList.remove(index);
+    		selectedGroupObjectMap.remove(selectedGroup);
+    		selectedGroup = null;
+    	}
+    }
+    
+    private Integer getERDGroupIndex(String groupName, list<ERDGroup> groups)
+	{
+		if(groups != null)
+		{
+			for(Integer i=0;i<groups.size();i++)
+			{
+				ERDGroup grp = groups[i];
+				if(grp.groupName == groupName)
+				{
+					return i;
+				}
+			}
+		}
+		
+		return -1;
+	}
     
     public void loadSelectedSetting()
     {
@@ -192,6 +208,30 @@ public class ERDGeneratorController
     	}
     }
     
+    public void deleteSelectedSetting()
+	{
+		if(String.isBlank(selectedSetting))
+    	{
+    		ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please select a setting'));
+    		return;
+    	}
+    	
+    	Integer index = ListUtils.getStringItemIndex(selectedSetting,settingNamesList);
+    	
+    	if(index != -1)
+    	{
+    		settingNamesList.remove(index);
+    		persister.deleteDiagram(selectedSetting);
+    	}
+    	
+    	selectedSetting = null;
+    	currentSetting = null;
+    	selectedGroup = null;
+    	ERDGroupList = null;
+    	
+    	
+	}
+	    
     public void saveSelectedSetting()
     {
     	if(String.isBlank(selectedSetting))
@@ -221,7 +261,13 @@ public class ERDGeneratorController
     	
     	persister.saveDiagram(newSettingName, filteredSelectedGroupObjectMap);
     	
+    	selectedSetting = newSettingName;
     	currentSetting = selectedSetting;
+    	
+    	if(ListUtils.getStringItemIndex(newSettingName,settingNamesList) == -1)
+    	{
+    		settingNamesList.add(newSettingName);
+    	}
     }
     
     /**
@@ -281,7 +327,6 @@ public class ERDGeneratorController
 
     public void doSelect()
     {
-        
         if(!selected.isEmpty() && !String.isBlank(selectedGroup))
         {
 	        list<String> selectedNames = new list<String>();

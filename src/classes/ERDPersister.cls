@@ -85,6 +85,23 @@ public with sharing class ERDPersister {
 		}
 
 	}
+	
+	public void deleteDiagram(String name)
+	{
+		list<Document> ds = [select Id from Document 
+			where Name = :name 
+			and FolderId = :folderId];
+			
+		if(ds.size() == 1)
+		{
+			Document d = ds.get(0);
+			delete d;
+		}
+		else
+		{
+			throw new ApplicationException('Document does not exist: ' + name);
+		}
+	}
 
 
 }
