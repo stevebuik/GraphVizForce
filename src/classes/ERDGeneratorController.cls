@@ -6,6 +6,8 @@
 
 public class ERDGeneratorController
 {
+	public static final String EXTERNAL_TEMPLATE = 'CalloutTemplate';
+	
 	public static final String GROUP_STANDARD = 'Standard';
     public static final String GROUP_CUSTOM = 'Custom';
     public static final String FOLDER_ERD_SETTINGS = 'ERD Settings';
@@ -27,6 +29,9 @@ public class ERDGeneratorController
     public String newSettingName{get;set;}
     public String selectedSetting{get;set;}
     public String generatedContent{get;set;}
+
+    public String template{get;set;}
+    public String fileURL{get;set;}
     
     public list<ERDGroup> ERDGroupList{get;set;}
     public list<ERDEntity> selectedObjectList{get;set;}
@@ -373,8 +378,28 @@ public class ERDGeneratorController
     
     public void generateERD()
     {
-        ERDGenerator generator = new ERDGenerator();
-		generatedContent = generator.generateERD(filteredSelectedGroupObjectMap);
+        ERDGenerator generator;
+        if (template == EXTERNAL_TEMPLATE) {   
+        	if (fileUrl == null || fileUrl == '') {
+	    		ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please choose an external file'));
+        	} else {  	
+        		generator = new ERDGenerator(new TemplateEngine.CalloutTemplateSource(fileUrl));
+        	}        	
+        } else {
+        	generator = new ERDGenerator(template);        	
+        }
+        if (generator != null) {
+			generatedContent = generator.generateERD(filteredSelectedGroupObjectMap);
+        }
+    }
+    
+    public List<SelectOption> getTemplates() {
+    	List<SelectOption> templates = new List<SelectOption>();
+    	for (String t : new List<String>{'DefaultTemplate'}) {
+    		templates.add(new SelectOption(t,t));
+    	}    	
+    	templates.add(new SelectOption(EXTERNAL_TEMPLATE, '<Use External Template>'));
+    	return templates;
     }
     
     

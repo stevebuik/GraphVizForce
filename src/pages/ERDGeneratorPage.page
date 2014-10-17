@@ -4,24 +4,35 @@
 	    .pbTitle {white-space: nowrap}
 	    #titleContainer {margin: 5px 0px;}
 	    #generatorTitle {margin-left: 22px; font-size:1.5em;}
-	    #workingLabel {
+	    .throbber {
 	    	padding-left: 20px;
 	    	margin: 0 10px; 
 	    	font-size: 1.1em;
 	    	background: url("{!$Resource.WorkingImage}") no-repeat;}
+	    #generatingLabel {
+	    	margin: 5px 5px;
+	    }
+	    #generateContainer > * {
+	    	float:left;
+	    	margin: 0 5px 2px 0;
+	    }
+	    #dropboxFileSelected {
+	    	padding: 2px 0 0 0;
+	    	font-weight: bold;
+	    }
     </style>
     
    	<apex:messages />
     
-    <apex:form >
-    	<apex:pageBlock >
-    		<apex:facet name="header">
+    <apex:form id="generatorForm">
+    	<apex:pageBlock id="generatorBlock">
+     		<apex:facet name="header">
     			<apex:outputPanel id="title">
     				<div id="titleContainer">
 	    				<h2 id="generatorTitle">Diagram: {!currentSetting}</h2>
 	    				<apex:actionStatus id="working">
 	    					<apex:facet name="start">
-	    						<span id="workingLabel">Working..</span>
+	    						<span id="workingLabel" class="throbber">Working..</span>
 	    					</apex:facet>
 	    				</apex:actionStatus>
     				</div>
@@ -118,14 +129,45 @@
 		            </apex:panelGrid>
 		        </apex:pageBlock>
             </apex:pageBlockSection>
-            <apex:pageBlockSection columns="1">
-	            <apex:facet name="header">
-			         <span style="color:#000000;">ERD Content</span>
-			    </apex:facet>
-			    <apex:commandButton value="Generate ERD Content" action="{!generateERD}" rerender="contentTextArea" status="working"/>
-                <apex:inputTextarea id="contentTextArea" value="{!generatedContent}" rows="20" style="width:100%;" />
-            </apex:pageBlockSection>
+            <div>
+				<h2>ERD Content</h2>
+			    <div id="generateContainer">
+		    		<apex:commandButton value="Generate" action="{!generateERD}" 
+		    			rerender="contentTextArea" status="generating"/>
+			    	<apex:selectList id="template" size="1" value="{!template}" 
+			    		onChange="adjustTemplateMode();">
+			    		<apex:selectOptions value="{!templates}"/>
+			    	</apex:selectList>
+			    	<span id="dropboxFileSelected"/>
+			    	<span id="pickDropboxContainer"/>
+		    		<apex:inputHidden id="fileURL" value="{!fileURL}" />
+			    </div>
+			    <div style="clear: both;"/>
+			    <div>
+				    <apex:actionStatus id="generating">
+	   					<apex:facet name="start">
+	   						<div id="generatingLabel" class="throbber">Generating..</div>
+	   					</apex:facet>
+	   				</apex:actionStatus>			    
+	   			</div>
+               	<apex:inputTextarea id="contentTextArea" value="{!generatedContent}" 
+               		rows="20" style="width:90%;" />
+            </div>
         </apex:pageBlock>
     </apex:form>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.js" 
+		type="text/javascript"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.js" 
+		type="text/javascript"></script>
+    <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" 
+    	id="dropboxjs" data-app-key="1nasijgpqxbicyu"></script>
+    <script type="text/javascript">
+    	var globals = {
+    		fileURL:  "{!$Component.generatorForm.generatorBlock.fileURL}",
+    		template: "{!$Component.generatorForm.generatorBlock.template}"
+    	};
+    </script>
+    <script type="text/javascript" src="{!$Resource.ERDGeneratorJS}"></script>
 
 </apex:page>

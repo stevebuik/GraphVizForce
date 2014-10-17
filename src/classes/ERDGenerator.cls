@@ -6,12 +6,17 @@ Purpose: generate an ERD that Graphviz can understand
 public with sharing class ERDGenerator
 {
 	private Integer describeChildCount = 0;
+	
+	private TemplateEngine templateEngine;
+	
+	public ERDGenerator(String resourceName) {
+		this(new TemplateEngine.StaticResourceTemplateSource(resourceName));	
+	}
 
-	private TemplateEngine.StaticResourceTemplateSource templateSource = new TemplateEngine.StaticResourceTemplateSource('DefaultTemplate');
-	//private TemplateEngine.CalloutTemplateSource templateSource = new TemplateEngine.CalloutTemplateSource('https://dl.dropboxusercontent.com/u/1270824/erd-templates/default.txt');
-	
-	private TemplateEngine templateEngine = new TemplateEngine(templateSource);
-	
+	public ERDGenerator(TemplateEngine.TemplateSource source) {
+		templateEngine = new TemplateEngine(source);
+	}
+		
 	public String generateERD(Map<String,List<String>> groupObjectMap){
 		String subgraphsContent = '';
 		Integer subgraphIndex = 0;
