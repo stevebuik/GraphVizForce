@@ -38,16 +38,23 @@ public class TemplateEngine {
     }
 
     public String applyBindings(String template, Map<String, String> data) {
+		System.debug(LoggingLevel.ERROR, '====> template:' + template);
     	List<String> binds = getBindExpressions(template);
+		System.debug(LoggingLevel.ERROR, '====> binds:' + binds);
 		for (String bind : binds) {
 			String key = bind.substring(2, bind.length()-2);
 			String val = data.get(key);
+			System.debug(LoggingLevel.ERROR, '====> key:' + key);
+			System.debug(LoggingLevel.ERROR, '====> val:' + val);
 		    template = template.replace(bind, val==null?'':val);
 		}
 		return template;
     }
 
     public String render(TemplateType template, Map<String, String> data) {
+    	
+		System.debug(LoggingLevel.ERROR, '====> template type:' + template);
+		System.debug(LoggingLevel.ERROR, '====> data:' + data);
     	return applyBindings(templates.get(template), data);
     }
 
