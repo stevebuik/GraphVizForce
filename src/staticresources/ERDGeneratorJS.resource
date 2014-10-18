@@ -4,7 +4,7 @@
 	var button = Dropbox.createChooseButton({
 		success: function(files) {
 				var file = files[0].link;
-				$c(globals.fileURL).val(file);
+				$c(globals.fields.fileURL).val(file);
 				$('#dropboxFileSelected').text(file);
 		    },
 	    linkType: 'direct',
@@ -12,13 +12,23 @@
 	    extensions: ['.gv']});
 	
 	document.getElementById("pickDropboxContainer").appendChild(button);
-	
-	adjustTemplateMode();
+		
+	templateChanged();
 
 }());
 
-function adjustTemplateMode() {
-	if ($c(globals.template).val() == 'CalloutTemplate') {
+function templateChanged() {
+	adjustGeneratorButtons();
+	setDownloadURL();
+}
+
+function setDownloadURL() {
+	var templateSelected = $c(globals.fields.template).val();
+	$("#download").attr("href", globals.templates[templateSelected]);
+}
+
+function adjustGeneratorButtons() {
+	if ($c(globals.fields.template).val() == 'CalloutTemplate') {
 		setTemplateMode('external');
 	} else {
 		setTemplateMode('resource');	

@@ -20,6 +20,9 @@
 	    	padding: 2px 0 0 0;
 	    	font-weight: bold;
 	    }
+	    #download {
+	    	float: right;
+	    }
     </style>
     
    	<apex:messages />
@@ -135,12 +138,13 @@
 		    		<apex:commandButton value="Generate" action="{!generateERD}" 
 		    			rerender="contentTextArea" status="generating"/>
 			    	<apex:selectList id="template" size="1" value="{!template}" 
-			    		onChange="adjustTemplateMode();">
+			    		onChange="templateChanged();">
 			    		<apex:selectOptions value="{!templates}"/>
 			    	</apex:selectList>
 			    	<span id="dropboxFileSelected"/>
 			    	<span id="pickDropboxContainer"/>
 		    		<apex:inputHidden id="fileURL" value="{!fileURL}" />
+			    	<a id="download" target="download">Download Template</a>
 			    </div>
 			    <div style="clear: both;"/>
 			    <div>
@@ -151,7 +155,7 @@
 	   				</apex:actionStatus>			    
 	   			</div>
                	<apex:inputTextarea id="contentTextArea" value="{!generatedContent}" 
-               		rows="20" style="width:90%;" />
+               		rows="20" style="width:100%;" />
             </div>
         </apex:pageBlock>
     </apex:form>
@@ -164,8 +168,13 @@
     	id="dropboxjs" data-app-key="1nasijgpqxbicyu"></script>
     <script type="text/javascript">
     	var globals = {
-    		fileURL:  "{!$Component.generatorForm.generatorBlock.fileURL}",
-    		template: "{!$Component.generatorForm.generatorBlock.template}"
+    		fields: {
+    			fileURL:  "{!$Component.generatorForm.generatorBlock.fileURL}",
+    			template: "{!$Component.generatorForm.generatorBlock.template}"
+    		},
+    		templates: {
+    			"DefaultTemplate" : "{!$Resource.DefaultTemplate}"
+    		}
     	};
     </script>
     <script type="text/javascript" src="{!$Resource.ERDGeneratorJS}"></script>
