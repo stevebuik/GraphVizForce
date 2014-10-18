@@ -16,12 +16,12 @@ public with sharing class ListUtils
 		
 		if(startIndex >= items.size() - 1)
 		{
-			throw new ApplicationException('start index can not be greater than the list size');
+			throw new ApplicationException('start index can not be greater than the List size');
 		}
 		
 		if(startIndex + numOfItems >= items.size() - 1)
 		{
-			throw new ApplicationException('subList is out of range of the list size');
+			throw new ApplicationException('subList is out of range of the List size');
 		}
 		
 		Integer itemCount = 0;

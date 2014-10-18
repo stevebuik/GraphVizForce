@@ -15,9 +15,9 @@ public with sharing class ERDPersister {
 		}
 	}
 	
-	public list<String> getDiagramNameList()
+	public List<String> getDiagramNameList()
 	{
-		list<String> diagramList = new list<String>();
+		List<String> diagramList = new List<String>();
 		
 		if(folderId != null)
 		{
@@ -88,7 +88,7 @@ public with sharing class ERDPersister {
 	
 	public void deleteDiagram(String name)
 	{
-		list<Document> ds = [select Id from Document 
+		List<Document> ds = [select Id from Document 
 			where Name = :name 
 			and FolderId = :folderId];
 			

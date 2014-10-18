@@ -33,24 +33,24 @@ public class ERDGeneratorController
     public String template{get;set;}
     public String fileURL{get;set;}
     
-    public list<ERDGroup> ERDGroupList{get;set;}
-    public list<ERDEntity> selectedObjectList{get;set;}
+    public List<ERDGroup> ERDGroupList{get;set;}
+    public List<ERDEntity> selectedObjectList{get;set;}
     
     public List<String> selected { get; set; }
     public List<String> unselected { get; set; }
     
-    private map<String,list<String>> selectedGroupObjectMap{get;set;}
+    private Map<String,List<String>> selectedGroupObjectMap{get;set;}
     
     private ERDPersister persister;
-    private list<String> settingNamesList;
+    private List<String> settingNamesList;
     
     
     
-    public list<SelectOption> settingSelectOptions
+    public List<SelectOption> settingSelectOptions
     {
     	get
     	{
-            list<SelectOption> options = new list<SelectOption>();
+            List<SelectOption> options = new List<SelectOption>();
             
             if(settingNamesList != null && !settingNamesList.isEmpty())
             {
@@ -66,11 +66,11 @@ public class ERDGeneratorController
     	}
     }
     
-    public map<String,list<String>> filteredSelectedGroupObjectMap
+    public Map<String,List<String>> filteredSelectedGroupObjectMap
     {
     	get
     	{
-    		map<String,list<String>> filteredMap = new map<String,list<String>>();
+    		Map<String,List<String>> filteredMap = new Map<String,List<String>>();
     		for(String grp : selectedGroupObjectMap.keySet())
     		{
     			for(ERDGroup erdGroup : ERDGroupList)
@@ -98,7 +98,7 @@ public class ERDGeneratorController
     {
     	if(ERDGroupList == null)
     	{
-    		ERDGroupList = new list<ERDGroup>();
+    		ERDGroupList = new List<ERDGroup>();
     	}
     	    	
     	ERDGroup standardGroup = createERDGroup(ERDGeneratorController.GROUP_STANDARD,true);
@@ -109,7 +109,7 @@ public class ERDGeneratorController
         
         selectedGroup = customGroup.groupName;
         
-        selectedGroupObjectMap = new map<String,list<String>>();
+        selectedGroupObjectMap = new Map<String,List<String>>();
         
         initERDPersister();
     }
@@ -118,7 +118,7 @@ public class ERDGeneratorController
     {
     	persister = new ERDPersister(FOLDER_ERD_SETTINGS);
     	
-    	// Load first setting if setting list is not empty
+    	// Load first setting if setting List is not empty
     	settingNamesList = persister.getDiagramNameList();
     	if(!settingNamesList.isEmpty())
     	{
@@ -142,7 +142,7 @@ public class ERDGeneratorController
     {
         if(ERDGroupList == null)
         {
-        	ERDGroupList = new list<ERDGroup>();
+        	ERDGroupList = new List<ERDGroup>();
         }
         
         ERDGroup newGroup = createERDGroup(groupName,true);
@@ -162,7 +162,7 @@ public class ERDGeneratorController
     	}
     }
     
-    private Integer getERDGroupIndex(String groupName, list<ERDGroup> groups)
+    private Integer getERDGroupIndex(String groupName, List<ERDGroup> groups)
 	{
 		if(groups != null)
 		{
@@ -189,12 +189,12 @@ public class ERDGeneratorController
     	
     	currentSetting = selectedSetting;
     	
-    	// Apply map to selectedGroupObjectMap
+    	// Apply Map to selectedGroupObjectMap
     	selectedGroupObjectMap = persister.getDiagram(selectedSetting);
     	
-    	// Apply map to ERDGroupList
-    	ERDGroupList = new list<ERDGroup>();
-    	list<String> groups = new list<String>(selectedGroupObjectMap.keySet());
+    	// Apply Map to ERDGroupList
+    	ERDGroupList = new List<ERDGroup>();
+    	List<String> groups = new List<String>(selectedGroupObjectMap.keySet());
     	
     	if(!groups.isEmpty())
     	{
@@ -276,13 +276,13 @@ public class ERDGeneratorController
     }
     
     /**
-    * Multi Picklist
+    * Multi PickList
     */
     public List<SelectOption> selectedOptions
     { 
         get
         {
-        	list<String> sorted = new list<String>();
+        	List<String> sorted = new List<String>();
         	
         	if(selectedGroupObjectMap.containsKey(selectedGroup))
         	{
@@ -304,20 +304,20 @@ public class ERDGeneratorController
         get
         {
         	List<SelectOption> options = new List<SelectOption>();
-        	list<String> objectNames = ERDUtils.getAllObjectNames();
+        	List<String> objectNames = ERDUtils.getAllObjectNames();
         	Set<String> unSelectedObjects = new Set<String>(objectNames);
         	Set<String> groupNameSet = selectedGroupObjectMap.keySet();
             
         	for(String groupName : groupNameSet)
         	{
-        		list<String> groupObjects = selectedGroupObjectMap.get(groupName);
+        		List<String> groupObjects = selectedGroupObjectMap.get(groupName);
         		for(String groupObjName : groupObjects)
         		{
         			unSelectedObjects.remove(groupObjName);
         		}
         	}
         	
-        	list<String> sorted = new list<String>(unSelectedObjects);
+        	List<String> sorted = new List<String>(unSelectedObjects);
         	sorted.sort();
         	
         	for(String objName : sorted)
@@ -334,7 +334,7 @@ public class ERDGeneratorController
     {
         if(!selected.isEmpty() && !String.isBlank(selectedGroup))
         {
-	        list<String> selectedNames = new list<String>();
+	        List<String> selectedNames = new List<String>();
 	        
 	        if(selectedGroupObjectMap.containsKey(selectedGroup))
 	    	{
@@ -372,7 +372,7 @@ public class ERDGeneratorController
 		        }
 			}
 			
-			selectedGroupObjectMap.put(selectedGroup,new list<String>(selectedNames));
+			selectedGroupObjectMap.put(selectedGroup,new List<String>(selectedNames));
         }
     }
     

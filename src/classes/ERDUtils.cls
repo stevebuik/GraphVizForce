@@ -79,7 +79,7 @@ public with sharing class ERDUtils
 		return objectResults;
 	}
 	
-	public static list<Schema.DescribeSObjectResult> getObjectResultsByChildRelationships(list<Schema.Childrelationship> childRelationships)
+	public static List<Schema.DescribeSObjectResult> getObjectResultsByChildRelationships(List<Schema.Childrelationship> childRelationships)
 	{
 		List<Schema.DescribeSObjectResult> objectResults = new List<Schema.DescribeSObjectResult>();
 		for(Schema.Childrelationship childRelationship : childRelationships)
@@ -106,10 +106,10 @@ public with sharing class ERDUtils
 		return objectResults;
 	}
 	
-	public static list<String> getAllObjectNames()
+	public static List<String> getAllObjectNames()
 	{
 		Map<String, Schema.SObjectType> globalDescribe = Schema.getGlobalDescribe();
-		list<String> objectNames = new list<String>(globalDescribe.keySet());
+		List<String> objectNames = new List<String>(globalDescribe.keySet());
 		objectNames.sort();
 		return objectNames;
 	}
