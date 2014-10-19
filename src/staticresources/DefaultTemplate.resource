@@ -16,7 +16,7 @@ subgraph cluster_{{sequence}} { label = "{{name}}";
       align="left"/></font><font color="#000000">{{name}}<br align="left"/></font></td></tr></table>>,
       style=dashed]
 
-========== FIELD
-{{name}}
 ========== RELATIONSHIP
 {{from}} -> {{to}}
+========== FIELD
+{{name}}

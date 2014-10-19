@@ -6,7 +6,7 @@ public class TemplateEngine {
 
 	public static final String BINDINGS = '\\{\\{([^}]*)\\}\\}';
 
-	private final Map<TemplateType, String> templates;
+	public final Map<TemplateType, String> templates;
 
 	public TemplateEngine(TemplateSource source) {
 
