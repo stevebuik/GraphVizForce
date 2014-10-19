@@ -12,6 +12,7 @@ public class ERDGeneratorController
     public static final String GROUP_CUSTOM = 'Custom';
     public static final String FOLDER_ERD_SETTINGS = 'ERD Settings';
 	
+	public List<String> allObjectNames{get;set;}
     public String newGroupName{get;set;}
     public String selectedGroup{get;set;}
     public String groupToDelete{get;set;}
@@ -303,9 +304,13 @@ public class ERDGeneratorController
     { 
         get
         {
+        	if(allObjectNames == null)
+        	{
+        		allObjectNames = ERDUtils.getAllObjectNames();
+        	}
+        	
         	List<SelectOption> options = new List<SelectOption>();
-        	List<String> objectNames = ERDUtils.getAllObjectNames();
-        	Set<String> unSelectedObjects = new Set<String>(objectNames);
+        	Set<String> unSelectedObjects = new Set<String>(allObjectNames);
         	Set<String> groupNameSet = selectedGroupObjectMap.keySet();
             
         	for(String groupName : groupNameSet)

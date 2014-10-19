@@ -108,8 +108,16 @@ public with sharing class ERDUtils
 	
 	public static List<String> getAllObjectNames()
 	{
+		List<String> objectNames = new List<String>();
+		
 		Map<String, Schema.SObjectType> globalDescribe = Schema.getGlobalDescribe();
-		List<String> objectNames = new List<String>(globalDescribe.keySet());
+		
+		for(Schema.SObjectType sObjectType : globalDescribe.values())
+		{
+			Schema.DescribeSObjectResult sObjectResult = sObjectType.getDescribe();
+			objectNames.add(sObjectResult.getName());
+		}
+		
 		objectNames.sort();
 		return objectNames;
 	}
