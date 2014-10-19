@@ -137,16 +137,17 @@
 			    <div id="generateContainer">
 		    		<apex:commandButton value="Generate" action="{!generateERD}" 
 		    			rerender="contentTextArea" status="generating"/>
+		    		<span id="templateLabel">Template:</span>
 			    	<apex:selectList id="template" size="1" value="{!template}" 
 			    		onChange="templateChanged();">
 			    		<apex:selectOptions value="{!templates}"/>
 			    	</apex:selectList>
-			    	<span id="dropboxFileSelected"/>
-			    	<span id="pickDropboxContainer"/>
+			    	<span id="dropboxFileSelected"></span>
+			    	<span id="pickDropboxContainer"></span>
 		    		<apex:inputHidden id="fileURL" value="{!fileURL}" />
 			    	<a id="download" target="download">Download Template</a>
 			    </div>
-			    <div style="clear: both;"/>
+			    <div style="clear: both;"></div>
 			    <div>
 				    <apex:actionStatus id="generating">
 	   					<apex:facet name="start">
