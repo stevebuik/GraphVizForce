@@ -41,7 +41,7 @@
     				</div>
     			</apex:outputPanel>
     		</apex:facet>
-            <apex:pageBlockSection columns="3">
+            <apex:pageBlockSection columns="4">
 			    <apex:pageBlock title="Step 1 - ERD Diagram" id="blockSetting">
                 	<apex:pageBlockSection >
                 		<apex:selectList id="settingPicklist" value="{!selectedSetting}" 
@@ -103,7 +103,7 @@
 		            		</div>
 		            		<br />
 		            		<apex:selectList id="unselected_list" required="false"
-			                    value="{!selected}" multiselect="true" size="20" style="width:250px;">
+			                    value="{!selected}" multiselect="true" size="20" style="width:150px;">
 			                    <apex:selectOptions value="{!unSelectedOptions}"/>
 			                </apex:selectList>
 		            	</apex:panelGroup>
@@ -125,13 +125,19 @@
 		            		</div>
 		            		<br />
 			                <apex:selectList id="selected_list" required="false"
-			                    value="{!unselected}" multiselect="true" size="20" style="width:250px;">
+			                    value="{!unselected}" multiselect="true" size="20" style="width:150px;">
 			                    <apex:selectOptions value="{!selectedOptions}"/>
 			                </apex:selectList>
 		                </apex:panelGroup>
 		            </apex:panelGrid>
 		        </apex:pageBlock>
+            
+	            <apex:pageBlock title="Step 4 - Edit Object Fields" id="blockFieldSelection">
+		            <apex:inputCheckbox id="fieldsCheckbox" value="{!includeFields}" />
+				    <apex:outputLabel value="Include Object Fields" for="fieldsCheckbox" />
+		        </apex:pageBlock>
             </apex:pageBlockSection>
+            
             <div>
 				<h2>ERD Content</h2>
 			    <div id="generateContainer">

@@ -16,6 +16,7 @@ public class ERDGeneratorController
     public String newGroupName{get;set;}
     public String selectedGroup{get;set;}
     public String groupToDelete{get;set;}
+    public Boolean includeFields{get;set;}
     
     public String currentSetting{
     	get {
@@ -394,7 +395,7 @@ public class ERDGeneratorController
         	generator = new ERDGenerator(template);        	
         }
         if (generator != null) {
-			generatedContent = generator.generateERD(filteredSelectedGroupObjectMap);
+			generatedContent = generator.generateERD(filteredSelectedGroupObjectMap,includeFields);
         }
     }
     
