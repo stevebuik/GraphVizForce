@@ -7,7 +7,7 @@ private with sharing class ERDGeneratorTest
 		ERDGenerator generator = new ERDGenerator('DefaultTemplate'); 
 		
 		Map<String,List<String>> basicEntities = new Map<String,List<String>>{
-			'Standard' => new List<String>{'Account', 'Contact'}
+			'Standard' => new List<String>{'account', 'contact'}
 		};
 		String erdOutput = generator.generateERD(basicEntities);
 		
