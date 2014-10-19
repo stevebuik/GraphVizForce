@@ -15,8 +15,8 @@ private with sharing class ERDGeneratorTest
 		};
 		
 		Test.startTest();
-			String validERDOutput = generator.generateERD(basicEntitiesWithValidAPINames);
-			String invalidERDOutput = generator.generateERD(basicEntitiesWithInvalidAPINames);
+			String validERDOutput = generator.generateERD(basicEntitiesWithValidAPINames,false);
+			String invalidERDOutput = generator.generateERD(basicEntitiesWithInvalidAPINames,false);
 		Test.stopTest();
 		
 		System.assertNotEquals(-1, validERDOutput.indexOf('->'), 
