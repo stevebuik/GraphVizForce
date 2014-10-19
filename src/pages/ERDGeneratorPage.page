@@ -3,6 +3,10 @@
         .textInput {width: 100%;}
 	    .pbTitle {white-space: nowrap}
 	    #titleContainer {margin: 5px 0px;}
+	    #helpLink {
+	    	float: right;
+	    	margin: 0 10px 0 0;
+	    }
 	    #generatorTitle {margin-left: 22px; font-size:1.5em;}
 	    .throbber {
 	    	padding-left: 20px;
@@ -38,6 +42,7 @@
 	    						<span id="workingLabel" class="throbber">Working..</span>
 	    					</apex:facet>
 	    				</apex:actionStatus>
+	    				<a id="helpLink" href="https://github.com/stevebuik/GraphVizForce">Help</a>
     				</div>
     			</apex:outputPanel>
     		</apex:facet>
