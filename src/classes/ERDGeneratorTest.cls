@@ -22,7 +22,7 @@ private with sharing class ERDGeneratorTest
 		System.assertNotEquals(-1, validERDOutput.indexOf('->'), 
 			'There should be at least one relationship between the two entities');
 		
-		System.assertEquals(-1, validERDOutput.indexOf('->'), 
+		System.assertEquals(-1, invalidERDOutput.indexOf('->'), 
 			'There should be NO relationship between the two entities because they have invalid API names');
 	}
 }
