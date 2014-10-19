@@ -1,5 +1,10 @@
 @isTest(seeAllData=true) // need seeAllData to query the Static Resources. Not best practice but making an exception for this test
 private class TemplateEngineTests {
+	
+	private static void checkTemplateContains(TemplateEngine engine, TemplateType templateType, String bind) {
+		System.assert(engine.templates.get(templateType).contains('{{'+bind+'}}'),
+			templateType+' template has bind expression for '+bind);       			
+	}
 
 	@IsTest
     static void testAllResourceTemplates() {
@@ -9,21 +14,13 @@ private class TemplateEngineTests {
 		    	TemplateEngine.TemplateSource src = 
 		    		new TemplateEngine.StaticResourceTemplateSource(r.Name);
 		    	TemplateEngine engine = new TemplateEngine(src);
-				System.assert(engine.templates.get(TemplateType.MAIN).contains('{{content}}'),
-					'main template has bind expression for content');       			
-				System.assert(engine.templates.get(TemplateType.CLUSTER).contains('{{content}}'),
-					'cluster template should have bind expression for content');       			
-				System.assert(engine.templates.get(TemplateType.ENTITY).contains('{{name}}'),
-					'cluster template should have bind expression for name');       			
-				System.assert(engine.templates.get(TemplateType.RELATIONSHIP).contains('{{from}}'),
-					'relationship template should have bind expression for from');       			
-				System.assert(engine.templates.get(TemplateType.RELATIONSHIP).contains('{{from}}'),
-					'relationship template should have bind expression for to');       			
-				System.assert(engine.templates.get(TemplateType.RELATIONSHIP).contains('{{from}}'),
-					'relationship template should have bind expression for to');       			
-				System.assert(engine.templates.get(TemplateType.FIELD).contains('{{name}}'),
-					'file template should have bind expression for name');       			
-       		}
+		    	checkTemplateContains(engine, TemplateType.MAIN, 'content');       			
+		    	checkTemplateContains(engine, TemplateType.ENTITY, 'name');       			
+		    	checkTemplateContains(engine, TemplateType.CLUSTER, 'content');       			
+		    	checkTemplateContains(engine, TemplateType.RELATIONSHIP, 'from');       			
+		    	checkTemplateContains(engine, TemplateType.RELATIONSHIP, 'to');       			
+		    	checkTemplateContains(engine, TemplateType.FIELD, 'name');       			
+			}
        }
     }
 
