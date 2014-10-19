@@ -7,4 +7,5 @@ public with sharing class ERDEntity
 {
 	public String objectName {get;set;}
 	public Boolean isCustom {get;set;}
+	public List<String> fieldNameList {get;set;}
 }
