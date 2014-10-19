@@ -7,7 +7,9 @@ digraph G {
 	{{content}}
 	}
 ========== CLUSTER
+
 subgraph cluster_{{sequence}} { label = "{{name}}";
+
 {{content}}}
 
 ========== ENTITY
