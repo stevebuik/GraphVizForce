@@ -3,7 +3,7 @@ ForceERD
 
 An automatic generator of Entity Relationship Diagrams in Graphviz format for Salesforce.com
 
-<a href="https://githubsfdeploy.herokuapp.com?owner=stevebuik&repo=GraphVizForce">
+<a href="https://githubsfdeploy.herokuapp.com/app/githubdeploy/stevebuik/GraphVizForce" target="deploy">
   <img alt="Deploy to Salesforce"
        src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/src/main/webapp/resources/img/deploy.png">
 </a>
