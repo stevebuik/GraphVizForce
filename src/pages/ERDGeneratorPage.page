@@ -42,7 +42,7 @@
 	    						<span id="workingLabel" class="throbber">Working..</span>
 	    					</apex:facet>
 	    				</apex:actionStatus>
-	    				<a id="helpLink" href="https://github.com/stevebuik/GraphVizForce">Help</a>
+	    				<a id="helpLink" target="help" href="https://github.com/stevebuik/GraphVizForce">Help</a>
     				</div>
     			</apex:outputPanel>
     		</apex:facet>
@@ -156,6 +156,8 @@
 			    	<span id="dropboxFileSelected"></span>
 			    	<span id="pickDropboxContainer"></span>
 		    		<apex:inputHidden id="fileURL" value="{!fileURL}" />
+			    	<a id="oauth" href="{!$Page.ERDOAuth}?start=true">Generate to Dropbox</a>
+		    		<apex:inputHidden id="oauthToken" value="{!oauthToken}" />
 			    	<a id="download" target="download">Download Template</a>
 			    </div>
 			    <div style="clear: both;"></div>
@@ -182,6 +184,7 @@
     	var globals = {
     		fields: {
     			fileURL:  "{!$Component.generatorForm.generatorBlock.fileURL}",
+    			token:	  "{!$Component.generatorForm.generatorBlock.oauthToken}",
     			template: "{!$Component.generatorForm.generatorBlock.template}"
     		},
     		templates: {

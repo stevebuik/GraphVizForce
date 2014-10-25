@@ -149,21 +149,7 @@ public with sharing class ERDGenerator
 					'fields' => entityFieldsOutput
 				});
 		}
-		
-		/*
-		for(ERDEntityRelationship relation : entityRelationships){
-			
-			String relationshipContent = templateEngine.render(TemplateType.RELATIONSHIP,
-				new Map<String, String>{
-					'from' => relation.parentObjectName,
-					'to' => relation.childObjectName
-				});
-			
-			
-			entityRelationshipOutput += relationshipContent;
-		}
-		*/
-		
+				
 		return templateEngine.render(TemplateType.CLUSTER,
 					new Map<String, String>{
 						'sequence' => ''+subgraphIndex,

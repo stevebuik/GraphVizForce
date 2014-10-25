@@ -3,5 +3,5 @@
     <apiVersion>31.0</apiVersion>
     <availableInTouch>false</availableInTouch>
     <confirmationTokenRequired>false</confirmationTokenRequired>
-    <label>ERDGeneratorPage</label>
+    <label>ERDOAuth</label>
 </ApexPage>

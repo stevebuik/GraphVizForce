@@ -14,8 +14,18 @@
 	document.getElementById("pickDropboxContainer").appendChild(button);
 		
 	templateChanged();
+		
+	$("#oauth").on("click", function(e) {
+		e.preventDefault();
+		var url = $(this).attr("href");
+        window.open(url, "oauth", "width=400,height=600");		
+	});
 
 }());
+
+function setDropboxToken(token) {
+	$c(globals.fields.token).val(token);
+}
 
 function templateChanged() {
 	adjustGeneratorButtons();

@@ -35,6 +35,8 @@ public class ERDGeneratorController
     public String template{get;set;}
     public String fileURL{get;set;}
     
+    public String oauthToken{get;set;}
+    
     public List<ERDGroup> ERDGroupList{get;set;}
     public List<ERDEntity> selectedObjectList{get;set;}
     
@@ -45,8 +47,6 @@ public class ERDGeneratorController
     
     private ERDPersister persister;
     private List<String> settingNamesList;
-    
-    
     
     public List<SelectOption> settingSelectOptions
     {
@@ -90,6 +90,7 @@ public class ERDGeneratorController
     
 	public ERDGeneratorController()
     {
+		System.debug('Initing');
     	init();
     }
     
@@ -395,7 +396,12 @@ public class ERDGeneratorController
         	generator = new ERDGenerator(template);        	
         }
         if (generator != null) {
-			generatedContent = generator.generateERD(filteredSelectedGroupObjectMap,includeFields);
+			generatedContent = generator.generateERD(filteredSelectedGroupObjectMap,includeFields);			
+			if (oauthToken != null) {
+				ERDDropboxAPI api = new ERDDropboxAPI();
+				api.oauthToken = oauthToken; 
+				System.debug(api.writeFile(currentSetting+'.gv', generatedContent));
+			}
         }
     }
     
