@@ -9,7 +9,7 @@
         <name>ApexPage</name>
     </types>
     <types>
-        <members>*</members>
+        <members>ERD__c</members>
         <name>CustomObject</name>
     </types>
     <types>
