@@ -2,8 +2,8 @@
 private with sharing class ERDGeneratorTest
 {
 	@isTest
-	static void ERDGeneratorTests()
-	{
+	static void testThatTemplatesGenerateExpectedOutput() {
+		
 		ERDGenerator generator = new ERDGenerator('DefaultTemplate'); 
 		
 		Map<String,List<String>> basicEntitiesWithValidAPINames = new Map<String,List<String>>{
