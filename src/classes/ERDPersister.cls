@@ -1,6 +1,6 @@
 public with sharing class ERDPersister {
 	
-	public static final Integer CURRENT_VERSION = 2;
+	public static final Integer CURRENT_VERSION = 3;
 	
 	public interface Versionable {
 		Integer getVersion();
