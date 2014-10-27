@@ -16,6 +16,9 @@
 	    #generatingLabel {
 	    	margin: 5px 5px;
 	    }
+	    #generateContainer {
+	    	margin: 10px 0 0 0;
+	    }
 	    #generateContainer > * {
 	    	float:left;
 	    	margin: 0 5px 2px 0;
@@ -26,6 +29,21 @@
 	    }
 	    #download {
 	    	float: right;
+	    }
+	    .tabLeftOne {
+	    	width: 500px;
+	    }
+	    .tabLeftTwo {
+	    	width: 800px;
+	    }
+	    .configHint {
+	    	margin: 0 0 0 20px;
+	    }
+	    #generator {
+	    	padding: 10px 0 0 0;
+	    }
+	    #generator h2 {
+	    	font-size: 1.2em;
 	    }
     </style>
     
@@ -46,104 +64,122 @@
     				</div>
     			</apex:outputPanel>
     		</apex:facet>
-            <apex:pageBlockSection columns="4">
-			    <apex:pageBlock title="Step 1 - ERD Diagram" id="blockSetting">
-                	<apex:pageBlockSection >
-                		<apex:selectList id="settingPicklist" value="{!selectedSetting}" 
-                			size="1" style="width:150px;">
-				            <apex:actionSupport event="onchange" action="{!loadSelectedSetting}" rerender="blockGroup,blockSelection,title" status="working" />
-				            <apex:selectOptions value="{!settingSelectOptions}"/>
-				        </apex:selectList>
-				        <apex:panelGroup >
-                    	<apex:commandButton id="btnDeleteSetting" value="Delete" 
-                    		action="{!deleteSelectedSetting}" rerender="blockSetting,blockGroup,blockSelection,title" 
-                    		status="working" style="width:40px;">
-                    	</apex:commandButton>
-                    	<apex:commandButton id="btnSaveSetting" value="Save" 
-                    		action="{!saveSelectedSetting}" rerender="title" 
-                    		status="working" style="width:40px;">
-                    	</apex:commandButton>
-                    	</apex:panelGroup>
-                		<apex:outputText value="OR" />
-                    	<br />
-                		<apex:inputText id="inpSettingName" styleClass="textInput" value="{!newSettingName}" />
-                    	<apex:commandButton id="btnSaveNewSetting" value="Save as New" 
-                    		action="{!saveAsNewSetting}" rerender="settingPicklist,title" status="working">
-                    		<apex:param value="{!newSettingName}"/>
-                    	</apex:commandButton>
-                	</apex:pageBlockSection>
-                </apex:pageBlock>
-                <apex:pageBlock title="Step 2 - Groups in Diagram" id="blockGroup">
-                	<apex:pageBlockSection >
-                    	<apex:inputText id="inpGroupName" styleClass="textInput" value="{!newGroupName}" />
-                    	<apex:commandButton id="btnCreateGroup" value="Add" 
-                    		action="{!addNewGroupWithInput}" rerender="groupTable" status="working">
-                    	</apex:commandButton>
-                	</apex:pageBlockSection>
-                	<apex:pageBlockTable id="groupTable" value="{!ERDGroupList}" var="group">
-				    	<apex:column headerValue="Select Groups">
-				        	<apex:inputCheckbox id="groupCheckBox" value="{!group.selected}">
-					        	<!-- <apex:actionSupport event="onchange" rerender="selectedGroupPicklist"/> -->
-				        	</apex:inputCheckbox>
-				    		<apex:outputLabel value="{!group.groupName}" for="groupCheckBox" />
-				        </apex:column>
-				        <apex:column headerValue="Edit" width="30">
-				        	<apex:commandButton id="editGroupButton" value="Edit >>" rerender="blockSelection" status="working">
-					        	<apex:param assignTo="{!selectedGroup}" value="{!group.groupName}" name="selectedERDGroup"/>
-				        	</apex:commandButton>
-				        </apex:column>
-				        <apex:column headerValue="Delete" width="30">
-				        	<apex:commandButton id="deleteGroupButton" value="Delete" action="{!deleteERDGroup}" rerender="blockGroup,blockSelection" status="working">
-				        		<apex:param assignTo="{!groupToDelete}" value="{!group.groupName}" name="ERDGroupToDelete"/>
-				        	</apex:commandButton>
-				        </apex:column>
-				    </apex:pageBlockTable>
-                </apex:pageBlock>
-                
-                <apex:pageBlock title="Step 3 - Edit Group: {!selectedGroup}" id="blockSelection">
-		            <apex:panelGrid columns="3">
-		            	<apex:panelGroup >
-		            		<div style="height:12px;">
-		            		<apex:outputText value="Available Objects" />
-		            		</div>
-		            		<br />
-		            		<apex:selectList id="unselected_list" required="false"
-			                    value="{!selected}" multiselect="true" size="20" style="width:150px;">
-			                    <apex:selectOptions value="{!unSelectedOptions}"/>
-			                </apex:selectList>
-		            	</apex:panelGroup>
-		                <apex:panelGroup >
-		                	<br />
-		                	<br />
-		                	<br />
-		                	<br />
-		                	<br />
-		                    <apex:commandButton value=">>" action="{!DoSelect}" 
-		                        reRender="blockSelection" status="working"/>
-		                    <br/>
-		                    <apex:commandButton value="<<" action="{!DoUnselect}" 
-		                        reRender="blockSelection" status="working"/>
-		                </apex:panelGroup>
-		                <apex:panelGroup >
-	                		<div style="height:12px;">
-		            		<apex:outputText value="Included Objects" />
-		            		</div>
-		            		<br />
-			                <apex:selectList id="selected_list" required="false"
-			                    value="{!unselected}" multiselect="true" size="20" style="width:150px;">
-			                    <apex:selectOptions value="{!selectedOptions}"/>
-			                </apex:selectList>
-		                </apex:panelGroup>
-		            </apex:panelGrid>
-		        </apex:pageBlock>
-            
-	            <apex:pageBlock title="Step 4 - Edit Object Fields" id="blockFieldSelection">
-		            <apex:inputCheckbox id="fieldsCheckbox" value="{!includeFields}" />
-				    <apex:outputLabel value="Include Object Fields" for="fieldsCheckbox" />
-		        </apex:pageBlock>
-            </apex:pageBlockSection>
-            
-            <div>
+    		
+    		<apex:tabPanel switchType="client" id="tabPanel">
+    			<apex:tab label="Load/Save Diagrams" id="tab1" name="tab1">
+    				<div class="tabLeftOne">
+					    <apex:pageBlock id="blockSetting">
+		                	<apex:pageBlockSection >
+		                		<apex:selectList id="settingPicklist" value="{!selectedSetting}" 
+		                			size="1" style="width:150px;">
+						            <apex:actionSupport event="onchange" action="{!loadSelectedSetting}" rerender="blockGroup,blockSelection,title" status="working" />
+						            <apex:selectOptions value="{!settingSelectOptions}"/>
+						        </apex:selectList>
+						        <apex:panelGroup >
+		                    	<apex:commandButton id="btnDeleteSetting" value="Delete" 
+		                    		action="{!deleteSelectedSetting}" rerender="blockSetting,blockGroup,blockSelection,title" 
+		                    		status="working" style="width:40px;">
+		                    	</apex:commandButton>
+		                    	<apex:commandButton id="btnSaveSetting" value="Save" 
+		                    		action="{!saveSelectedSetting}" rerender="title" 
+		                    		status="working" style="width:40px;">
+		                    	</apex:commandButton>
+		                    	</apex:panelGroup>
+		                		<apex:outputText value="OR" />
+		                    	<br />
+		                		<apex:inputText id="inpSettingName" styleClass="textInput" value="{!newSettingName}" />
+		                    	<apex:commandButton id="btnSaveNewSetting" value="Save as New" 
+		                    		action="{!saveAsNewSetting}" rerender="settingPicklist,title" status="working">
+		                    		<apex:param value="{!newSettingName}"/>
+		                    	</apex:commandButton>
+		                	</apex:pageBlockSection>
+		                </apex:pageBlock>
+					</div>
+    			</apex:tab>
+    			
+    			<apex:tab label="Configure Groups" id="tab2" name="tab2">
+	            	<div class="tabLeftTwo">
+			            <apex:pageBlockSection columns="2">
+			                <apex:pageBlock title="Groups" id="blockGroup">
+			                	<apex:pageBlockSection >
+			                    	<apex:inputText id="inpGroupName" styleClass="textInput" value="{!newGroupName}" />
+			                    	<apex:commandButton id="btnCreateGroup" value="Add" 
+			                    		action="{!addNewGroupWithInput}" rerender="groupTable" status="working">
+			                    	</apex:commandButton>
+			                	</apex:pageBlockSection>
+			                	<apex:pageBlockTable id="groupTable" value="{!ERDGroupList}" var="group">
+							    	<apex:column headerValue="Select Groups">
+							        	<apex:inputCheckbox id="groupCheckBox" value="{!group.selected}">
+								        	<!-- <apex:actionSupport event="onchange" rerender="selectedGroupPicklist"/> -->
+							        	</apex:inputCheckbox>
+							    		<apex:outputLabel value="{!group.groupName}" for="groupCheckBox" />
+							        </apex:column>
+							        <apex:column headerValue="Edit" width="30">
+							        	<apex:commandButton id="editGroupButton" value="Edit >>" rerender="blockSelection" status="working">
+								        	<apex:param assignTo="{!selectedGroup}" value="{!group.groupName}" name="selectedERDGroup"/>
+							        	</apex:commandButton>
+							        </apex:column>
+							        <apex:column headerValue="Delete" width="30">
+							        	<apex:commandButton id="deleteGroupButton" value="Delete" action="{!deleteERDGroup}" rerender="blockGroup,blockSelection" status="working">
+							        		<apex:param assignTo="{!groupToDelete}" value="{!group.groupName}" name="ERDGroupToDelete"/>
+							        	</apex:commandButton>
+							        </apex:column>
+							    </apex:pageBlockTable>
+			                </apex:pageBlock>
+		                
+			                <apex:pageBlock title="Objects in {!selectedGroup}" id="blockSelection">
+					            <apex:panelGrid columns="3">
+					            	<apex:panelGroup >
+					            		<div style="height:12px;">
+					            		<apex:outputText value="Available Objects" />
+					            		</div>
+					            		<br />
+					            		<apex:selectList id="unselected_list" required="false"
+						                    value="{!selected}" multiselect="true" size="20" style="width:150px;">
+						                    <apex:selectOptions value="{!unSelectedOptions}"/>
+						                </apex:selectList>
+					            	</apex:panelGroup>
+					                <apex:panelGroup >
+					                	<br />
+					                	<br />
+					                	<br />
+					                	<br />
+					                	<br />
+					                    <apex:commandButton value=">>" action="{!DoSelect}" 
+					                        reRender="blockSelection" status="working"/>
+					                    <br/>
+					                    <apex:commandButton value="<<" action="{!DoUnselect}" 
+					                        reRender="blockSelection" status="working"/>
+					                </apex:panelGroup>
+					                <apex:panelGroup >
+				                		<div style="height:12px;">
+					            		<apex:outputText value="Included Objects" />
+					            		</div>
+					            		<br />
+						                <apex:selectList id="selected_list" required="false"
+						                    value="{!unselected}" multiselect="true" size="20" style="width:150px;">
+						                    <apex:selectOptions value="{!selectedOptions}"/>
+						                </apex:selectList>
+					                </apex:panelGroup>
+					            </apex:panelGrid>
+					        </apex:pageBlock>   
+						</apex:pageBlockSection>
+					</div> 			
+		        </apex:tab>
+		        
+    			<apex:tab label="Options" id="tab3" name="tab3">
+	            	<div class="tabLeftOne">
+			            <apex:pageBlock id="blockFieldSelection">
+				            <apex:inputCheckbox id="fieldsCheckbox" value="{!includeFields}" />
+						    <apex:outputLabel value="Include Fields" for="fieldsCheckbox" />
+						    <span class="configHint">Show fields in the diagram. Does not affect your field selections.</span>
+				        </apex:pageBlock>
+					</div>
+    			</apex:tab>
+		        
+    		</apex:tabPanel>
+    		
+            <div id="generator">
 				<h2>ERD Content</h2>
 			    <div id="generateContainer">
 		    		<apex:commandButton value="Generate" action="{!generateERD}" 
@@ -181,6 +217,11 @@
     <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" 
     	id="dropboxjs" data-app-key="1nasijgpqxbicyu"></script>
     <script type="text/javascript">
+    
+		// need separate jquery because of the apex:tabpanel
+		// see http://salesforce.stackexchange.com/questions/21207/tab-panel-error
+		var $110 = jQuery.noConflict( false );
+    
     	var globals = {
     		fields: {
     			fileURL:  "{!$Component.generatorForm.generatorBlock.fileURL}",
