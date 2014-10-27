@@ -5,6 +5,10 @@
         <name>ApexClass</name>
     </types>
     <types>
+        <members>JQuerySelectable</members>
+        <name>ApexComponent</name>
+    </types>
+    <types>
         <members>*</members>
         <name>ApexPage</name>
     </types>

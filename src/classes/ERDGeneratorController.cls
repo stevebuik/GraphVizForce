@@ -12,11 +12,27 @@ public class ERDGeneratorController
     public static final String GROUP_CUSTOM = 'Custom';
     public static final String FOLDER_ERD_SETTINGS = 'ERD Settings';
     
-    public List<String> allObjectNames{get;set;}
+    public List<String> allObjectNames {
+    	get {
+            if(allObjectNames == null) {
+                allObjectNames = ERDUtils.getAllObjectNames();
+            }
+            return allObjectNames;
+    	}
+    	set;
+    }
     public String newGroupName{get;set;}
     public String selectedGroup{get;set;}
     public String groupToDelete{get;set;}
-    public Boolean includeFields{get;set;}
+    public Boolean includeFields{
+    	get {
+    		if (includeFields == null) {
+    			includeFields = false;
+    		}
+    		return includeFields;
+    	}    	
+    	set;
+    }
     
     public String currentSetting{
         get {
@@ -39,10 +55,7 @@ public class ERDGeneratorController
     
     public List<ERDGroup> ERDGroupList{get;set;}
     public List<ERDEntity> selectedObjectList{get;set;}
-    
-    public List<String> selected { get; set; }
-    public List<String> unselected { get; set; }
-    
+        
     private ERDSettingsV2 settings{get;set;}
     
     private ERDPersister persister;
@@ -268,109 +281,28 @@ public class ERDGeneratorController
         }
     }
     
-    /**
-    * Multi PickList
-    */
-    public List<SelectOption> selectedOptions
-    { 
-        get
-        {
-            List<String> sorted = new List<String>();
-            
-            if(settings.groups.containsKey(selectedGroup))
-            {
-                sorted = settings.groups.get(selectedGroup);
-            }
-            
-            sorted.sort();
-            List<SelectOption> options = new List<SelectOption>();
-            for (String s: sorted)
-            {
-                options.add(new SelectOption(s, s));
-            }
-            return options;
-        }
+    // JQuery Selectable / VF Hidden Input Interop
+    private String getCSV(List<String> options) {
+    	String result = '';
+    	for (String o : options) {
+    		if (result.length() > 0) {
+    		result += ',';
+    		}
+    		result += o;
+    	}
+    	return result;
+    }
+        
+    public String getAllObjects() {
+    	return getCSV(allObjectNames);
     }
     
-    public List<SelectOption> unSelectedOptions
-    { 
-        get
-        {
-            if(allObjectNames == null)
-            {
-                allObjectNames = ERDUtils.getAllObjectNames();
-            }
-            
-            List<SelectOption> options = new List<SelectOption>();
-            Set<String> unSelectedObjects = new Set<String>(allObjectNames);
-            Set<String> groupNameSet = settings.groups.keySet();
-            
-            for(String groupName : groupNameSet)
-            {
-                List<String> groupObjects = settings.groups.get(groupName);
-                for(String groupObjName : groupObjects)
-                {
-                    unSelectedObjects.remove(groupObjName);
-                }
-            }
-            
-            List<String> sorted = new List<String>(unSelectedObjects);
-            sorted.sort();
-            
-            for(String objName : sorted)
-            {
-                options.add(new SelectOption(objName, objName));
-            }
-            
-            return options;
-        }
+    public String getSelectedObjects() {
+    	return getCSV(settings.groups.get(selectedGroup));
     }
-
-
-    public void doSelect()
-    {
-        if(!selected.isEmpty() && !String.isBlank(selectedGroup))
-        {
-            List<String> selectedNames = new List<String>();
-            
-            if(settings.groups.containsKey(selectedGroup))
-            {
-                selectedNames = settings.groups.get(selectedGroup);
-            }
-            else
-            {
-                settings.groups.put(selectedGroup,selectedNames);
-            }
-            
-            for(String s: selected)
-            {
-                selectedNames.add(s);
-            }
-        }
-    }
-
-    public void doUnSelect()
-    {
-        
-        if(!unselected.isEmpty() && !String.isBlank(selectedGroup))
-        {
-            Set<String> selectedNames;
-            
-            if(settings.groups.containsKey(selectedGroup))
-            {
-                selectedNames = new Set<String>(settings.groups.get(selectedGroup));
-            }
-            
-            if(selectedNames != null)
-            {
-                for(String s: unselected)
-                {
-                    selectedNames.remove(s);
-                }
-            }
-            
-            settings.groups.put(selectedGroup,new List<String>(selectedNames));
-        }
+    
+    public void setSelectedObjects(String csv) {
+    	settings.groups.put(selectedGroup, csv.split(','));
     }
     
     public void generateERD()
@@ -386,7 +318,7 @@ public class ERDGeneratorController
             generator = new ERDGenerator(template);         
         }
         if (generator != null) {
-            generatedContent = generator.generateERD(filteredSelectedGroupObjectMap,includeFields);         
+            generatedContent = generator.generateERD(settings.groups,settings.includeFields);         
             if (oauthToken != null) {
                 ERDDropboxAPI api = new ERDDropboxAPI();
                 api.oauthToken = oauthToken; 

@@ -134,12 +134,9 @@ public with sharing class ERDGenerator
 		
 		for(ERDEntity entity : entities){
 			
-			if(includeFields)
-			{
+			if(includeFields) {
 				entityFieldsOutput = generateFields(entity.fieldNameList);
-			}
-			else
-			{
+			} else {
 				entityFieldsOutput = '';
 			}
 			

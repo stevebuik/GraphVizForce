@@ -1,4 +1,27 @@
 <apex:page controller="ERDGeneratorController">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.js" 
+		type="text/javascript"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.js" 
+		type="text/javascript"></script>
+    <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" 
+    	id="dropboxjs" data-app-key="1nasijgpqxbicyu"></script>
+    <script type="text/javascript">    
+		// need separate jquery because of the apex:tabpanel
+		// see http://salesforce.stackexchange.com/questions/21207/tab-panel-error
+		var $110 = jQuery.noConflict( false );
+    	var globals = {
+    		fields: {
+    			fileURL:  "{!$Component.generatorForm.generatorBlock.fileURL}",
+    			token:	  "{!$Component.generatorForm.generatorBlock.oauthToken}",
+    			template: "{!$Component.generatorForm.generatorBlock.template}"
+    		},
+    		templates: {
+    			"DefaultTemplate" : "{!$Resource.DefaultTemplate}"
+    		}
+    	};
+	</script>
+
 	<style type="text/css">
         .textInput {width: 100%;}
 	    .pbTitle {white-space: nowrap}
@@ -36,6 +59,14 @@
 	    .tabLeftTwo {
 	    	width: 800px;
 	    }
+	    #groupsLeft {
+	    	width: 300px;
+	    	float:left;
+	    	margin: 0 20px 0 0;
+	    }
+	    #groupsRight {
+	    	float:left;
+	    }
 	    .configHint {
 	    	margin: 0 0 0 20px;
 	    }
@@ -45,7 +76,9 @@
 	    #generator h2 {
 	    	font-size: 1.2em;
 	    }
+	    .clearfix {clear: both;}
     </style>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"></link>
     
    	<apex:messages />
     
@@ -65,7 +98,7 @@
     			</apex:outputPanel>
     		</apex:facet>
     		
-    		<apex:tabPanel switchType="client" id="tabPanel">
+    		<apex:tabPanel switchType="client" id="tabPanel" selectedTab="tab2">
     			<apex:tab label="Load/Save Diagrams" id="tab1" name="tab1">
     				<div class="tabLeftOne">
 					    <apex:pageBlock id="blockSetting">
@@ -98,73 +131,46 @@
     			</apex:tab>
     			
     			<apex:tab label="Configure Groups" id="tab2" name="tab2">
-	            	<div class="tabLeftTwo">
-			            <apex:pageBlockSection columns="2">
-			                <apex:pageBlock title="Groups" id="blockGroup">
-			                	<apex:pageBlockSection >
-			                    	<apex:inputText id="inpGroupName" styleClass="textInput" value="{!newGroupName}" />
-			                    	<apex:commandButton id="btnCreateGroup" value="Add" 
-			                    		action="{!addNewGroupWithInput}" rerender="groupTable" status="working">
-			                    	</apex:commandButton>
-			                	</apex:pageBlockSection>
-			                	<apex:pageBlockTable id="groupTable" value="{!ERDGroupList}" var="group">
-							    	<apex:column headerValue="Select Groups">
-							        	<apex:inputCheckbox id="groupCheckBox" value="{!group.selected}">
-								        	<!-- <apex:actionSupport event="onchange" rerender="selectedGroupPicklist"/> -->
-							        	</apex:inputCheckbox>
-							    		<apex:outputLabel value="{!group.groupName}" for="groupCheckBox" />
-							        </apex:column>
-							        <apex:column headerValue="Edit" width="30">
-							        	<apex:commandButton id="editGroupButton" value="Edit >>" rerender="blockSelection" status="working">
-								        	<apex:param assignTo="{!selectedGroup}" value="{!group.groupName}" name="selectedERDGroup"/>
-							        	</apex:commandButton>
-							        </apex:column>
-							        <apex:column headerValue="Delete" width="30">
-							        	<apex:commandButton id="deleteGroupButton" value="Delete" action="{!deleteERDGroup}" rerender="blockGroup,blockSelection" status="working">
-							        		<apex:param assignTo="{!groupToDelete}" value="{!group.groupName}" name="ERDGroupToDelete"/>
-							        	</apex:commandButton>
-							        </apex:column>
-							    </apex:pageBlockTable>
-			                </apex:pageBlock>
-		                
-			                <apex:pageBlock title="Objects in {!selectedGroup}" id="blockSelection">
-					            <apex:panelGrid columns="3">
-					            	<apex:panelGroup >
-					            		<div style="height:12px;">
-					            		<apex:outputText value="Available Objects" />
-					            		</div>
-					            		<br />
-					            		<apex:selectList id="unselected_list" required="false"
-						                    value="{!selected}" multiselect="true" size="20" style="width:150px;">
-						                    <apex:selectOptions value="{!unSelectedOptions}"/>
-						                </apex:selectList>
-					            	</apex:panelGroup>
-					                <apex:panelGroup >
-					                	<br />
-					                	<br />
-					                	<br />
-					                	<br />
-					                	<br />
-					                    <apex:commandButton value=">>" action="{!DoSelect}" 
-					                        reRender="blockSelection" status="working"/>
-					                    <br/>
-					                    <apex:commandButton value="<<" action="{!DoUnselect}" 
-					                        reRender="blockSelection" status="working"/>
-					                </apex:panelGroup>
-					                <apex:panelGroup >
-				                		<div style="height:12px;">
-					            		<apex:outputText value="Included Objects" />
-					            		</div>
-					            		<br />
-						                <apex:selectList id="selected_list" required="false"
-						                    value="{!unselected}" multiselect="true" size="20" style="width:150px;">
-						                    <apex:selectOptions value="{!selectedOptions}"/>
-						                </apex:selectList>
-					                </apex:panelGroup>
-					            </apex:panelGrid>
-					        </apex:pageBlock>   
-						</apex:pageBlockSection>
-					</div> 			
+    				<div id="groupsLeft">
+		                <apex:pageBlock title="Groups" id="blockGroup">
+		                	<apex:pageBlockSection >
+		                    	<apex:inputText id="inpGroupName" styleClass="textInput" value="{!newGroupName}" />
+		                    	<apex:commandButton id="btnCreateGroup" value="Add" 
+		                    		action="{!addNewGroupWithInput}" rerender="groupTable" status="working">
+		                    	</apex:commandButton>
+		                	</apex:pageBlockSection>
+		                	<apex:pageBlockTable id="groupTable" value="{!ERDGroupList}" var="group">
+						    	<apex:column headerValue="Select Groups">
+						        	<apex:inputCheckbox id="groupCheckBox" value="{!group.selected}">
+							        	<!-- <apex:actionSupport event="onchange" rerender="selectedGroupPicklist"/> -->
+						        	</apex:inputCheckbox>
+						    		<apex:outputLabel value="{!group.groupName}" for="groupCheckBox" />
+						        </apex:column>
+						        <apex:column headerValue="Edit" width="30">
+						        	<apex:commandButton id="editGroupButton" value="Edit >>" rerender="blockSelection" status="working">
+							        	<apex:param assignTo="{!selectedGroup}" value="{!group.groupName}" name="selectedERDGroup"/>
+						        	</apex:commandButton>
+						        </apex:column>
+						        <apex:column headerValue="Delete" width="30">
+						        	<apex:commandButton id="deleteGroupButton" value="Delete" action="{!deleteERDGroup}" rerender="blockGroup,blockSelection" status="working">
+						        		<apex:param assignTo="{!groupToDelete}" value="{!group.groupName}" name="ERDGroupToDelete"/>
+						        	</apex:commandButton>
+						        </apex:column>
+						    </apex:pageBlockTable>
+		                </apex:pageBlock>
+			      	</div>
+			      	   
+    				<div id="groupsRight">
+		                <apex:outputPanel id="blockSelection">
+							<div id="allObjects" style="display:none;">{!allObjects}</div>
+							<apex:inputHidden id="selectedObjects" value="{!selectedObjects}"/>
+			                <apex:pageBlock title="Group: {!selectedGroup}">
+								<c:JQuerySelectable selectableId="objectSelector" 
+									optionsFieldId="allObjects" 
+									selectedFieldId="{!$Component.selectedObjects}"/> 
+		                	</apex:pageBlock>
+		                </apex:outputPanel>
+					</div>		                	
 		        </apex:tab>
 		        
     			<apex:tab label="Options" id="tab3" name="tab3">
@@ -210,29 +216,6 @@
         </apex:pageBlock>
     </apex:form>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.js" 
-		type="text/javascript"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.js" 
-		type="text/javascript"></script>
-    <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" 
-    	id="dropboxjs" data-app-key="1nasijgpqxbicyu"></script>
-    <script type="text/javascript">
-    
-		// need separate jquery because of the apex:tabpanel
-		// see http://salesforce.stackexchange.com/questions/21207/tab-panel-error
-		var $110 = jQuery.noConflict( false );
-    
-    	var globals = {
-    		fields: {
-    			fileURL:  "{!$Component.generatorForm.generatorBlock.fileURL}",
-    			token:	  "{!$Component.generatorForm.generatorBlock.oauthToken}",
-    			template: "{!$Component.generatorForm.generatorBlock.template}"
-    		},
-    		templates: {
-    			"DefaultTemplate" : "{!$Resource.DefaultTemplate}"
-    		}
-    	};
-    </script>
     <script type="text/javascript" src="{!$Resource.ERDGeneratorJS}"></script>
 
 </apex:page>

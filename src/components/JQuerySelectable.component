@@ -1,0 +1,61 @@
+<apex:component>
+
+	<apex:attribute name="selectableId" description="A unique id for the selectable widget within the page" 
+		type="String" required="true"/>
+	<apex:attribute name="optionsFieldId" description="The DOM id of the node in the host page that contains the possible" 
+		type="String" required="true"/>
+	<apex:attribute name="selectedFieldId" description="The DOM id of the field in the host page that binds the selected values" 
+		type="String" required="true"/>
+
+	<style>
+	#selectable .ui-selecting { background: #FECA40; }
+	#selectable .ui-selected { background: #F39814; color: white; }
+	#selectable { list-style-type: none; margin: 0; padding: 0; width: 500px;}
+	#selectable li { margin: 4px; padding: 5px; float: left; font-size: 1.3em; text-align: center; }
+	.clearfix {clear: both;}
+	#container{!selectableId} {
+		height: 300px;
+		overflow: scroll;
+	}
+	</style>
+
+	<div id="container{!selectableId}">
+		<ol id="selectable"></ol>		
+		<div class="clearfix"/>
+	</div>
+	
+	<script type="text/javascript">
+	$110(function() {
+		// locally make $ = v1.10 of jquery
+		var $ = $110;
+		
+		var selectedOptions = {};
+    	var selectedField = document.getElementById('{!selectedFieldId}');
+		$.each($(selectedField).val().split(','), function(i, s) {
+			selectedOptions[s] = 1;			
+	    });
+    	
+    	var optionsField = $(document.getElementById('{!optionsFieldId}'));
+		$.each(optionsField.html().split(','), function(i, s) {			
+			var extras = (selectedOptions[s])?'ui-selected':'';
+			$("#selectable").append($("<li class='ui-state-default "+extras+"'>"+s+"</li>"));
+		});
+    	
+    	$("#selectable").selectable({
+    		stop: function(event, ui) {
+    			var csv = '';
+        		$(".ui-selected", this).each(function() {
+          			var index = $("#selectable li").index(this);
+          			if (csv.length > 0) {
+          				csv+=',';
+          			}
+					csv+=$(this).html();
+        		});
+        		$(selectedField).val(csv);
+        	}
+    	});
+    	    	
+	});
+	</script>
+	
+</apex:component>
