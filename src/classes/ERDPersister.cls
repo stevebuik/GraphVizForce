@@ -37,9 +37,19 @@ public with sharing class ERDPersister {
 		return diagramList;
 	}
 	
+	public Versionable getSettings(String name)
+	{
+		return getSettingsByNameVersion(name,CURRENT_VERSION);
+	}
+	
+	public Versionable getSettings(String name, Integer version)
+	{
+		return getSettingsByNameVersion(name,version);
+	}
+	
 	/* returns the settings upgraded to the latest version expected by the code base.
 	This provides a way for existing settings to be automatically upgraded when they are read */
-	public Versionable getSettings(String name) {
+	private Versionable getSettingsByNameVersion(String name, Integer version) {
 		List<Document> ds = [select Id, Body from Document 
 			where Name = :name 
 			and FolderId = :folderId];
@@ -48,7 +58,7 @@ public with sharing class ERDPersister {
 			return null;
 		} else if (ds.size() == 1) {
 			String settingJSON = ds.get(0).Body.toString();
-			Versionable v = upgrade(CURRENT_VERSION, settingJSON);
+			Versionable v = upgrade(version, settingJSON);
 			return v;
 		} else {
 			throw new ApplicationException('Too many documents found: '+name);

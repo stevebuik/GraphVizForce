@@ -63,8 +63,7 @@ public with sharing class ERDPersisterTests {
 			Body = Blob.valueOf(JSON.serialize(v0)));
 	
 		// Test ERDSettingsV2
-		/*
-		ERDSettingsV2 v2Retrieved = (ERDSettingsV2) persister.getSettings(name1);		
+		ERDSettingsV2 v2Retrieved = (ERDSettingsV2) persister.getSettings(name1,2);		
 		System.assertEquals(v0, v2Retrieved.groups,
 			'Groups survive the upgrade and are copied into the latest version');
 		
@@ -73,19 +72,19 @@ public with sharing class ERDPersisterTests {
 		
 		persister.saveSettings(name1, v2Retrieved);
 
-		ERDSettingsV2 v2RetrievedAgain = (ERDSettingsV2) persister.getSettings(name1);		
+		ERDSettingsV2 v2RetrievedAgain = (ERDSettingsV2) persister.getSettings(name1,2);		
 		System.assertEquals(v2Retrieved.groups, v2RetrievedAgain.groups,
 			'An updated diagram retrieved later matches the original');
 		System.assertEquals(v2Retrieved.includeFields, v2RetrievedAgain.includeFields,
 			'An updated diagram retrieved later matches the original');
-		*/
 		
 		// Test ERDSettingsV3
 		Map<String,Map<String,List<String>>> v3Map = new Map<String,Map<String,List<String>>>{
 			'Sales' => new Map<String, List<String>>
 						{
 							'Account' => new List<String>(),
-							'Contact' => new List<String>()
+							'Contact' => new List<String>(),
+							'Opportunity' => new List<String>()
 						},
 			'Marketing' => new Map<String, List<String>>
 						{
@@ -97,7 +96,7 @@ public with sharing class ERDPersisterTests {
 		ERDSettingsV3 v3Retrieved = (ERDSettingsV3) persister.getSettings(name1);
 		System.assertEquals(v3Map, v3Retrieved.groupToObjectsToFieldsMap,'Groups survive the upgrade and are copied into the latest version');
 		v3Retrieved.groupToObjectsToFieldsMap.put('Finance', new Map<String, List<String>>());
-		v3Retrieved.groupToObjectsToFieldsMap.get('Sales').put('Opportunity',new List<String>());
+		v3Retrieved.groupToObjectsToFieldsMap.get('Sales').put('Lead',new List<String>());
 		v3Retrieved.groupToObjectsToFieldsMap.get('Sales').get('Account').add('Name');
 		v3Retrieved.includedGroups.add('Finance');
 		v3Retrieved.includeFields = true;
