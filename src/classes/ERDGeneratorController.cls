@@ -194,7 +194,7 @@ public class ERDGeneratorController
         currentSetting = selectedSetting;
         
         // Apply Map to selectedGroupObjectMap
-        settings = (ERDSettingsV2) persister.getSettings(selectedSetting);
+        settings = (ERDSettingsV2) persister.getSettings(selectedSetting,2);
         
         // Apply Map to ERDGroupList
         ERDGroupList = new List<ERDGroup>();
