@@ -5,7 +5,13 @@ public class ERDSettingsV2 implements ERDPersister.Versionable {
 	public Integer getVersion() { return version; }
 	
 	// any other fields persisted are here
-	public Map<String,List<String>> groups {get;set;}
+	public Map<String,List<String>> groups {
+		get {
+			if (groups == null) groups = new Map<String,List<String>>();
+			return groups; 
+		}
+		set;
+	}
 	public Boolean includeFields {get;set;}
 	
 	public void upgrade(ERDPersister.Versionable old) {

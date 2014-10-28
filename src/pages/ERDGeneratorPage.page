@@ -80,7 +80,9 @@
     </style>
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"></link>
     
-   	<apex:messages />
+    <apex:outputPanel id="messages">
+   		<apex:messages />
+   	</apex:outputPanel>
     
     <apex:form id="generatorForm">
     	<apex:pageBlock id="generatorBlock">
@@ -114,15 +116,15 @@
 		                    		status="working" style="width:40px;">
 		                    	</apex:commandButton>
 		                    	<apex:commandButton id="btnSaveSetting" value="Save" 
-		                    		action="{!saveSelectedSetting}" rerender="title" 
+		                    		action="{!saveSelectedSetting}" rerender="messages,title" 
 		                    		status="working" style="width:40px;">
 		                    	</apex:commandButton>
 		                    	</apex:panelGroup>
 		                		<apex:outputText value="OR" />
 		                    	<br />
 		                		<apex:inputText id="inpSettingName" styleClass="textInput" value="{!newSettingName}" />
-		                    	<apex:commandButton id="btnSaveNewSetting" value="Save as New" 
-		                    		action="{!saveAsNewSetting}" rerender="settingPicklist,title" status="working">
+		                    	<apex:commandButton id="btnSaveNewSetting" value="Save As" 
+		                    		action="{!saveAsNewSetting}" rerender="messages,settingPicklist,title" status="working">
 		                    		<apex:param value="{!newSettingName}"/>
 		                    	</apex:commandButton>
 		                	</apex:pageBlockSection>
@@ -136,10 +138,10 @@
 		                	<apex:pageBlockSection >
 		                    	<apex:inputText id="inpGroupName" styleClass="textInput" value="{!newGroupName}" />
 		                    	<apex:commandButton id="btnCreateGroup" value="Add" 
-		                    		action="{!addNewGroupWithInput}" rerender="groupTable" status="working">
+		                    		action="{!addNewGroupWithInput}" rerender="messages,groupTable" status="working">
 		                    	</apex:commandButton>
 		                	</apex:pageBlockSection>
-		                	<apex:pageBlockTable id="groupTable" value="{!ERDGroupList}" var="group">
+		                	<apex:pageBlockTable id="groupTable" value="{!groups}" var="group">
 						    	<apex:column headerValue="Select Groups">
 						        	<apex:inputCheckbox id="groupCheckBox" value="{!group.selected}">
 							        	<!-- <apex:actionSupport event="onchange" rerender="selectedGroupPicklist"/> -->
@@ -189,7 +191,7 @@
 				<h2>ERD Content</h2>
 			    <div id="generateContainer">
 		    		<apex:commandButton value="Generate" action="{!generateERD}" 
-		    			rerender="contentTextArea" status="generating"/>
+		    			rerender="messages,contentTextArea" status="generating"/>
 		    		<span id="templateLabel">Template:</span>
 			    	<apex:selectList id="template" size="1" value="{!template}" 
 			    		onChange="templateChanged();">

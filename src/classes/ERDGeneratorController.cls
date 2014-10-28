@@ -24,15 +24,6 @@ public class ERDGeneratorController
     public String newGroupName{get;set;}
     public String selectedGroup{get;set;}
     public String groupToDelete{get;set;}
-    public Boolean includeFields{
-    	get {
-    		if (includeFields == null) {
-    			includeFields = false;
-    		}
-    		return includeFields;
-    	}    	
-    	set;
-    }
     
     public String currentSetting{
         get {
@@ -41,8 +32,8 @@ public class ERDGeneratorController
             }
             return currentSetting;
         }
-        set;}
-    
+        set;
+    }    
         
     public String newSettingName{get;set;}
     public String selectedSetting{get;set;}
@@ -53,10 +44,15 @@ public class ERDGeneratorController
     
     public String oauthToken{get;set;}
     
-    public List<ERDGroup> ERDGroupList{get;set;}
     public List<ERDEntity> selectedObjectList{get;set;}
         
-    private ERDSettingsV2 settings{get;set;}
+    private ERDSettingsV2 settings{
+    	get {
+    		if (settings == null) settings = new ERDSettingsV2(); 
+    		return settings;
+    	}
+    	set;
+    }
     
     private ERDPersister persister;
     private List<String> settingNamesList;
@@ -80,41 +76,8 @@ public class ERDGeneratorController
             return options;
         }
     }
-    
-    public Map<String,List<String>> filteredSelectedGroupObjectMap
-    {
-        get
-        {
-            Map<String,List<String>> filteredMap = new Map<String,List<String>>();
-            for(String grp : settings.groups.keySet())
-            {
-                for(ERDGroup erdGroup : ERDGroupList)
-                {
-                    if(erdGroup.groupName == grp && erdGroup.selected == true)
-                    {
-                        filteredMap.put(grp,settings.groups.get(grp));
-                    }
-                }
-            }
-            
-            return filteredMap;
-        }
-    }
-    
+        
     public ERDGeneratorController() {
-        if(ERDGroupList == null)
-        {
-            ERDGroupList = new List<ERDGroup>();
-        }
-                
-        ERDGroup standardGroup = createERDGroup(ERDGeneratorController.GROUP_STANDARD,true);
-        ERDGroup customGroup = createERDGroup(ERDGeneratorController.GROUP_CUSTOM,true);
-        
-        ERDGroupList.add(customGroup);
-        ERDGroupList.add(standardGroup);
-        
-        selectedGroup = customGroup.groupName;
-                
         initERDPersister();    
     }
         
@@ -134,55 +97,26 @@ public class ERDGeneratorController
         }
     }
     
-    public void addNewGroupWithInput()
-    {
-        if(String.isNotBlank(newGroupName))
-        {
-            addERDGroup(newGroupName);
-        }       
+    public List<ERDGroup> getGroups() {
+    	List<ERDGroup> groups = new List<ERDGroup>();
+    	for (String g : settings.groups.keyset()) {
+    		ERDGroup grp = new ERDGroup(); 
+    		grp.groupName = g;
+    		grp.selected = true;
+    		groups.add(grp);
+    	}
+    	return groups;
     }
     
-    public ERDGroup addERDGroup(String groupName)
-    {
-        if(ERDGroupList == null)
-        {
-            ERDGroupList = new List<ERDGroup>();
-        }
+    public void addNewGroupWithInput() {
+    	if (newGroupName != null)
+    		settings.groups.put(newGroupName, new List<String>());
+    }
         
-        ERDGroup newGroup = createERDGroup(groupName,true);
-        ERDGroupList.add(newGroup);
+    public void deleteERDGroup() {
+    	settings.groups.remove(groupToDelete);
+    }
         
-        return newGroup;
-    }
-    
-    public void deleteERDGroup()
-    {
-        Integer index = getERDGroupIndex(groupToDelete, ERDGroupList);
-        if(index != -1)
-        {
-            ERDGroupList.remove(index);
-            settings.groups.remove(selectedGroup);
-            selectedGroup = null;
-        }
-    }
-    
-    private Integer getERDGroupIndex(String groupName, List<ERDGroup> groups)
-    {
-        if(groups != null)
-        {
-            for(Integer i=0;i<groups.size();i++)
-            {
-                ERDGroup grp = groups[i];
-                if(grp.groupName == groupName)
-                {
-                    return i;
-                }
-            }
-        }
-        
-        return -1;
-    }
-    
     public void loadSelectedSetting()
     {
         if(String.isBlank(selectedSetting))
@@ -193,28 +127,8 @@ public class ERDGeneratorController
         
         currentSetting = selectedSetting;
         
-        // Apply Map to selectedGroupObjectMap
         settings = (ERDSettingsV2) persister.getSettings(selectedSetting,2);
         
-        // Apply Map to ERDGroupList
-        ERDGroupList = new List<ERDGroup>();
-        List<String> groups = new List<String>(settings.groups.keySet());
-        
-        if(!groups.isEmpty())
-        {
-            groups.sort();
-            for(String grp : groups)
-            {
-                ERDGroup erdGroup = createERDGroup(grp,true);
-                ERDGroupList.add(erdGroup);
-            }
-            
-            selectedGroup = ERDGroupList[0].groupName;
-        }
-        else
-        {
-            selectedGroup = null;
-        }
     }
     
     public void deleteSelectedSetting()
@@ -236,8 +150,6 @@ public class ERDGeneratorController
         selectedSetting = null;
         currentSetting = null;
         selectedGroup = null;
-        ERDGroupList = null;
-        
         
     }
         
@@ -249,13 +161,13 @@ public class ERDGeneratorController
             return;
         }
         
-        if(filteredSelectedGroupObjectMap.size() == 0)
+        if(settings.groups.size() == 0)
         {
-            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please add objects to some groups'));
+            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please add some groups'));
             return;
         }
         
-        settings.groups = filteredSelectedGroupObjectMap;
+		System.debug('before settings: '+settings);        
         persister.saveSettings(selectedSetting, settings);
         
         currentSetting = selectedSetting;
@@ -269,7 +181,6 @@ public class ERDGeneratorController
             return;
         }
         
-        settings.groups = filteredSelectedGroupObjectMap;
         persister.saveSettings(newSettingName, settings);
         
         selectedSetting = newSettingName;
@@ -283,6 +194,7 @@ public class ERDGeneratorController
     
     // JQuery Selectable / VF Hidden Input Interop
     private String getCSV(List<String> options) {
+    	if (options == null) return '';
     	String result = '';
     	for (String o : options) {
     		if (result.length() > 0) {
@@ -298,11 +210,21 @@ public class ERDGeneratorController
     }
     
     public String getSelectedObjects() {
+    	if (settings == null) return null;
     	return getCSV(settings.groups.get(selectedGroup));
     }
     
     public void setSelectedObjects(String csv) {
+    	if (settings == null || selectedGroup == null) return;
     	settings.groups.put(selectedGroup, csv.split(','));
+    }
+    
+    public Boolean getIncludeFields() {
+    	return settings.includeFields;
+    }
+    
+    public void setIncludeFields(Boolean include) {
+    	settings.includeFields = include;
     }
     
     public void generateERD()
@@ -334,16 +256,6 @@ public class ERDGeneratorController
         }       
         templates.add(new SelectOption(EXTERNAL_TEMPLATE, '<Use External Template>'));
         return templates;
-    }
-    
-    
-    public static ERDGroup createERDGroup(String groupName, Boolean selected)
-    {
-        ERDGroup newGroup = new ERDGroup();
-        newGroup.groupName = groupName;
-        newGroup.selected = selected;
-        
-        return newGroup;
     }
     
     /**
