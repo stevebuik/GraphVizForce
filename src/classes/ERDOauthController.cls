@@ -7,7 +7,7 @@ public with sharing class ERDOauthController {
     		api.updateTokenFromCode();
     		ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'callback'));    			
     		return null;
-    	} else if (api.errorMessages.size() == 0) {
+    	} else if (api.areOAuthCredsPresent()) {
     		return new PageReference(api.getAuthoriseURL());
     	} else {
     		for (String e : api.errorMessages) {

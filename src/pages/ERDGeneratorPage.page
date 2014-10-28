@@ -200,8 +200,10 @@
 			    	<span id="dropboxFileSelected"></span>
 			    	<span id="pickDropboxContainer"></span>
 		    		<apex:inputHidden id="fileURL" value="{!fileURL}" />
-			    	<a id="oauth" href="{!$Page.ERDOAuth}?start=true">Generate to Dropbox</a>
-		    		<apex:inputHidden id="oauthToken" value="{!oauthToken}" />
+		    		<apex:outputPanel rendered="{!isDropboxEnabled}">
+				    	<a id="oauth" href="{!$Page.ERDOAuth}?start=true">Generate to Dropbox</a>
+			    		<apex:inputHidden id="oauthToken" value="{!oauthToken}" />
+		    		</apex:outputPanel>
 			    	<a id="download" target="download">Download Template</a>
 			    </div>
 			    <div style="clear: both;"></div>

@@ -13,7 +13,7 @@ public class ERDDropboxAPI {
 		}
 		set;
 	}
-
+	
 	public ERDDropboxAPI() {
     	ERD__c oauthKey = ERD__c.getInstance('DropboxClientKey');
     	ERD__c oauthSecret = ERD__c.getInstance('DropboxClientSecret');
@@ -31,6 +31,10 @@ public class ERDDropboxAPI {
 			this.secret = oauthSecret.Value__c;
     	}
 	}
+	
+	public Boolean areOAuthCredsPresent() {
+		return errorMessages.size() == 0;
+	}	
 	
 	public Boolean isCallbackRequest() {
 		return !ApexPages.currentPage().getParameters().containsKey('start');

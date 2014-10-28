@@ -227,6 +227,10 @@ public class ERDGeneratorController
     	settings.includeFields = include;
     }
     
+    public Boolean getIsDropboxEnabled() {
+    	return new ERDDropboxAPI().areOAuthCredsPresent();
+    }
+    
     public void generateERD()
     {
         ERDGenerator generator;
