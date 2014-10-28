@@ -29,8 +29,21 @@
 	    #helpLink {
 	    	float: right;
 	    	margin: 0 10px 0 0;
-	    }
+	    }	    
 	    #generatorTitle {margin-left: 22px; font-size:1.5em;}
+	    .activeTab {
+	    	font-size: 1.2em;
+	    	background-color: #027c6f; 
+	    	color:white !important; 
+	    	background-image:none
+	    }
+    	.inactiveTab {
+    		cursor: pointer;
+	    	font-size: 1.2em;
+    		background-color: lightgrey; 
+	    	color:#555555 !important; 
+    		background-image:none
+    	}
 	    .throbber {
 	    	padding-left: 20px;
 	    	margin: 0 10px; 
@@ -54,12 +67,15 @@
 	    	float: right;
 	    }
 	    .tabLeftOne {
+    		min-height: 300px;
 	    	width: 500px;
 	    }
 	    .tabLeftTwo {
+    		min-height: 300px;
 	    	width: 800px;
 	    }
 	    #groupsLeft {
+    		min-height: 300px;
 	    	width: 300px;
 	    	float:left;
 	    	margin: 0 20px 0 0;
@@ -100,7 +116,8 @@
     			</apex:outputPanel>
     		</apex:facet>
     		
-    		<apex:tabPanel switchType="client" id="tabPanel" selectedTab="tab2">
+    		<apex:tabPanel switchType="client" id="tabPanel" selectedTab="tab1"
+    			tabClass="activeTab" inactiveTabClass="inactiveTab">
     			<apex:tab label="Load/Save Diagrams" id="tab1" name="tab1">
     				<div class="tabLeftOne">
 					    <apex:pageBlock id="blockSetting">
