@@ -1,25 +1,28 @@
 ========== MAIN
 digraph G {
-	size ="8.5,11!";
-	graph [rankdir = "LR";]; 
-	node [fontsize = "14";]; 
-	edge [arrowhead="crow";];
+	graph [rankdir=LR,nodesep=1.0]; 
+	node  [shape=plaintext,fontsize=14]; 
+	edge  [arrowhead=crow];
 	{{content}}
 }
 ========== CLUSTER
 
 subgraph cluster_{{sequence}} { label = "{{name}}";
+	style=filled; 
+	color=lightgrey;
+	node [style=filled,color=white];
 
 {{content}}
 	}
 
 ========== ENTITY
-	{{name}} [shape=box, label=<<table cellspacing="0" cellpadding="5" cellborder="0" border="0"><tr><td 
-		align="left" port="header" bgcolor="#ffffff"><font align="left" color="#000000" point-size="10">@{{name}}<br
-		align="left"/></font><font color="#000000">{{name}}<br align="left"/></font></td></tr>{{fields}}</table>>,
-		style=dashed]
+
+{{name}} [label=<<table border="0" cellborder="1" cellspacing="0" color="#808080" port="{{name}}">
+			<tr><td bgcolor="gray">{{name}}</td></tr>
+		{{fields}}
+		</table>>]
 
 ========== RELATIONSHIP
 	{{from}} -> {{to}}
 ========== FIELD
-	<tr><td align="left" port="header" bgcolor="#eeeeee"><font align="left" color="#000000" point-size="10">{{name}}<br align="left"/></font></td></tr>
+	<tr><td>{{name}}</td></tr>
