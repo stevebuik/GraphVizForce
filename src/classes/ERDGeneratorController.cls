@@ -255,8 +255,9 @@ public class ERDGeneratorController
     
     public List<SelectOption> getTemplates() {
         List<SelectOption> templates = new List<SelectOption>();
-        for (String t : new List<String>{'DefaultTemplate'}) {
-            templates.add(new SelectOption(t,t));
+        for (StaticResource sr : [Select s.Name From StaticResource s
+						 where s.Description like '#graphviztemplate%']) {
+            templates.add(new SelectOption(sr.Name,sr.Name));
         }       
         templates.add(new SelectOption(EXTERNAL_TEMPLATE, '<Use External Template>'));
         return templates;
