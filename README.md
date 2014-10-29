@@ -12,26 +12,29 @@ An Entity Relationship Diagram generator in Graphviz format for Salesforce.com
 
 To run the generator, navigate to the ERD Generator tab. You may need to make the tab visible in your Profile.
 
-You can configure which objects are included in the diagram by creating *Groups* in the *Configure Groups* tab.
+You can configure which objects are included in the diagram by creating groups in the *Configure Groups* tab.
 
 Then just click the *Generate* button and you will see the generated content. 
 This content needs to be saved to a file on your computer with a .gv extension. 
 Then you can open the file using [Graphviz](http://www.graphviz.org) and export to a pdf or image file if required.
 
-If you don't want to manually save the .gv file then you can enabled the *Generate to Dropbox* feature by:
+If you don't want to manually save the .gv file then you can enable the *Generate to Dropbox* feature by:
 
-1. Go to https://www.dropbox.com/developers/apps and click *Create App*
-2. Choose these options 
+1. Add 2 new *Remote Site Settings* in Salesforce Setup
+    - https://api-content.dropbox.com
+    - https://api.dropbox.com
+2. Go to https://www.dropbox.com/developers/apps and click *Create App*
+3. Choose these options 
     - Dropbox API app
     - Files and datastores
     - Yes My app only needs access to files it creates.
-3. Enter any App Name
-4. Enter https://c.ap1.visual.force.com/apex/erdoauth into the *Redirect URIs* filed and click add. 
+4. Enter any App Name
+5. Enter https://c.ap1.visual.force.com/apex/erdoauth into the *Redirect URIs* filed and click add. 
 Note that you need to change the ap1 in the url to be your Salesforce server name
-5. In Salesforce Setup, go to *Develop/Custom Settings* and click on the *manage* link for ERD
-6. Add a setting named *DropboxClientKey* with a value copied from the *App key* in your Dropbox API App 
-7. Add a setting named *DropboxClientSecret* with a value copied from the *App secret* in your Dropbox API App 
-8. Go back to the ERD Generator tab and you will now see a *Generate to Dropbox* link in the generate section. 
+6. In Salesforce Setup, go to *Develop/Custom Settings* and click on the *manage* link for ERD
+7. Add a setting named *DropboxClientKey* with a value copied from the *App key* in your Dropbox API App 
+8. Add a setting named *DropboxClientSecret* with a value copied from the *App secret* in your Dropbox API App 
+9. Go back to the ERD Generator tab and you will now see a *Generate to Dropbox* link in the generate section. 
 If you click this link and re-generate you should see a file being saved to your Dropbox folder.
 
 ###Templates
@@ -40,6 +43,8 @@ Diagrams are generated using a template system. Templates are *Static Resources*
 You can also use a template that is in a public Dropbox folder. The file must have a .gv extension. 
 This is useful when changing templates because you can edit the file locally and Dropbox will automatically save it to the cloud.
 If you are a developer you can use Eclipse or any other meta-data editor to create/edit Static Resources instead of using Dropbox.
+
+Note: to use a Dropbox template, you must add a *Remote Site Setting* in Salesforce for https://dl.dropboxusercontent.com
 
 This means you can create custom templates if you want or you can just use the basic included template(s).
 If you create a nice template, please send us a sample - we'd like to include it for everyone to use. 
