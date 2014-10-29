@@ -44,11 +44,10 @@ public class ERDGeneratorController
     
     public String oauthToken{get;set;}
     
-    public List<ERDEntity> selectedObjectList{get;set;}
         
-    private ERDSettingsV2 settings{
+    private ERDSettingsV3 settings{
     	get {
-    		if (settings == null) settings = new ERDSettingsV2(); 
+    		if (settings == null) settings = new ERDSettingsV3(); 
     		return settings;
     	}
     	set;
@@ -99,10 +98,11 @@ public class ERDGeneratorController
     
     public List<ERDGroup> getGroups() {
     	List<ERDGroup> groups = new List<ERDGroup>();
-    	for (String g : settings.groups.keyset()) {
-    		ERDGroup grp = new ERDGroup(); 
+    	for(String g : settings.groupToObjectsToFieldsMap.keySet())
+    	{
+    		ERDGroup grp = new ERDGroup();
     		grp.groupName = g;
-    		grp.selected = true;
+    		grp.selected = settings.includedGroups.contains(g);
     		groups.add(grp);
     	}
     	return groups;
@@ -110,11 +110,15 @@ public class ERDGeneratorController
     
     public void addNewGroupWithInput() {
     	if (newGroupName != null)
-    		settings.groups.put(newGroupName, new List<String>());
+    		settings.groupToObjectsToFieldsMap.put(newGroupName, new Map<String, List<String>>());
     }
         
     public void deleteERDGroup() {
-    	settings.groups.remove(groupToDelete);
+    	settings.groupToObjectsToFieldsMap.remove(groupToDelete);
+    	if(settings.includedGroups.contains(groupToDelete))
+    	{
+    		settings.includedGroups.remove(groupToDelete);
+    	}
     }
         
     public void loadSelectedSetting()
@@ -127,7 +131,7 @@ public class ERDGeneratorController
         
         currentSetting = selectedSetting;
         
-        settings = (ERDSettingsV2) persister.getSettings(selectedSetting,2);
+        settings = (ERDSettingsV3) persister.getSettings(selectedSetting);
         
     }
     
@@ -161,7 +165,7 @@ public class ERDGeneratorController
             return;
         }
         
-        if(settings.groups.size() == 0)
+        if(settings.groupToObjectsToFieldsMap.size() == 0)
         {
             ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please add some groups'));
             return;
@@ -210,13 +214,18 @@ public class ERDGeneratorController
     }
     
     public String getSelectedObjects() {
-    	if (settings == null) return null;
-    	return getCSV(settings.groups.get(selectedGroup));
+    	if (settings == null || selectedGroup == null) return null;
+    	return getCSV(new List<String>(settings.groupToObjectsToFieldsMap.get(selectedGroup).keySet()));
     }
     
     public void setSelectedObjects(String csv) {
     	if (settings == null || selectedGroup == null) return;
-    	settings.groups.put(selectedGroup, csv.split(','));
+    	Map<String, List<String>> objectToFieldsMap = new Map<String, List<String>>();
+    	for(String selectedObj : csv.split(','))
+    	{
+    		objectToFieldsMap.put(selectedObj, new List<String>());
+    	}
+    	settings.groupToObjectsToFieldsMap.put(selectedGroup, objectToFieldsMap);
     }
     
     public Boolean getIncludeFields() {
@@ -234,6 +243,8 @@ public class ERDGeneratorController
     public void generateERD()
     {
         ERDGenerator generator;
+        System.debug(LoggingLevel.ERROR,'====>template:' + template);
+        System.debug(LoggingLevel.ERROR,'====>fileUrl:' + fileUrl);
         if (template == EXTERNAL_TEMPLATE) {   
             if (fileUrl == null || fileUrl == '') {
                 ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please choose an external file'));
@@ -244,7 +255,8 @@ public class ERDGeneratorController
             generator = new ERDGenerator(template);         
         }
         if (generator != null) {
-            generatedContent = generator.generateERD(settings.groups,settings.includeFields);         
+        	System.debug(LoggingLevel.ERROR,'====>generator:' + generator);
+            generatedContent = generator.generateERD(settings);         
             if (oauthToken != null) {
                 ERDDropboxAPI api = new ERDDropboxAPI();
                 api.oauthToken = oauthToken; 

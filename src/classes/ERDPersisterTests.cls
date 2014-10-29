@@ -37,7 +37,7 @@ public with sharing class ERDPersisterTests {
 						}
 		};
 		
-		List<String> v3IncludedGroups = new List<String>(v2.groups.keySet());
+		Set<String> v3IncludedGroups = v2.groups.keySet();
 		
 		ERDSettingsv3 v3 = (ERDSettingsV3) persister.upgrade(3, JSON.serialize(v2));	
 		System.assertEquals(v3Map, v3.groupToObjectsToFieldsMap, 'groupToObjectsToFieldsMap should be constructed from v2.groups');

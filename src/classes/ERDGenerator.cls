@@ -17,6 +17,45 @@ public with sharing class ERDGenerator
 		templateEngine = new TemplateEngine(source);
 	}
 	
+	public String generateERD(ERDSettingsV3 settings)
+	{
+		ERDInterpreter interpreter = new ERDInterpreter();
+		Boolean includeFields = settings.includeFields;
+		
+		// This is temporary, to prepare groupObjectMap for existing generator logic
+		// TODO: modify generator to take the selectedGroupToObjectsToFieldsMap
+		Map<String,List<String>> groupObjectMap = new Map<String,List<String>>();
+		for(String grp : settings.groupToObjectsToFieldsMap.keySet())
+		{
+			groupObjectMap.put(grp, new List<String>(settings.groupToObjectsToFieldsMap.get(grp).keySet()));
+		}
+		
+		System.debug(LoggingLevel.ERROR, '====>groupObjectMap:' + groupObjectMap);
+		
+		List<String> objectNameList = interpreter.getObjectNameList(groupObjectMap);
+		Map<String,Schema.DescribeSobjectResult> objectNameSObjectResultMap = interpreter.getObjectNameSObjectResultMap(objectNameList);
+		
+		Map<String, ERDEntity> objectERDEntityMap = new Map<String, ERDEntity>();
+		List<ERDEntityRelationship> allObjectRelationshipList = new List<ERDEntityRelationship>();
+		
+		interpreter.setupERDMaps(objectNameList,
+								objectNameSObjectResultMap,
+								objectERDEntityMap,
+								allObjectRelationshipList
+								);
+								
+		String subgraphContent = generateSubgraphContent(groupObjectMap,
+														objectERDEntityMap,
+														includeFields
+														);
+		String crossGroupRelationshipContent = generateCrossGroupRelationshipContent(allObjectRelationshipList);
+		
+		System.debug(LoggingLevel.ERROR, '====>subgraphContent:' + subgraphContent);
+		System.debug(LoggingLevel.ERROR, '====>crossGroupRelationshipContent:' + crossGroupRelationshipContent);
+		return renderERDGraphvizContent(subgraphContent, crossGroupRelationshipContent);
+	}
+	
+	/*
 	public String generateERD(Map<String,List<String>> groupObjectMap, Boolean includeFields)
 	{
 		ERDInterpreter interpreter = new ERDInterpreter();
@@ -45,6 +84,7 @@ public with sharing class ERDGenerator
 		return renderERDGraphvizContent(subgraphContent, crossGroupRelationshipContent);
 		
 	}
+	*/
 	
 	private String generateSubgraphContent(Map<String,List<String>> groupObjectMap,
 											Map<String, ERDEntity> objectERDEntityMap, 

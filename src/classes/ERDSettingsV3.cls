@@ -6,8 +6,28 @@ public class ERDSettingsV3 implements ERDPersister.Versionable {
 	
 	// any other fields persisted are here
 	public Map<String,Map<String,List<String>>> groupToObjectsToFieldsMap {get;set;}
-	public List<String> includedGroups {get;set;}
+	public Set<String> includedGroups {get;set;}
 	public Boolean includeFields {get;set;}
+	
+	public Map<String,Map<String,List<String>>> selectedGroupToObjectsToFieldsMap
+	{
+		get
+		{
+			Map<String,Map<String,List<String>>> returnMap = new Map<String,Map<String,List<String>>>();
+			if(groupToObjectsToFieldsMap != null)
+			{
+				for(String grp : groupToObjectsToFieldsMap.keySet())
+				{
+					if(includedGroups.contains(grp))
+					{
+						returnMap.put(grp, groupToObjectsToFieldsMap.get(grp));
+					}
+				}
+			}
+			
+			return returnMap;
+		}
+	}
 	
 	public void upgrade(ERDPersister.Versionable old) {
 		// old version is always the current - 1
@@ -30,7 +50,7 @@ public class ERDSettingsV3 implements ERDPersister.Versionable {
 		
 		// set sensible defaults for new data
 		includeFields = v2.includeFields; 
-		includedGroups = new List<String>(v2.groups.keySet());
+		includedGroups = v2.groups.keySet();
 	}
 
 }

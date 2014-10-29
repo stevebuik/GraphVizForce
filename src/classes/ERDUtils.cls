@@ -52,7 +52,7 @@ public with sharing class ERDUtils
 		
 		return false;
 	}
-	
+	/*
 	public static List<Schema.SObjectType> getObjectTypesByChildRelationships(List<Schema.Childrelationship> childRelationships)
 	{
 		List<Schema.Sobjecttype> objectTypes = new List<Schema.Sobjecttype>();
@@ -105,6 +105,7 @@ public with sharing class ERDUtils
 		}
 		return objectResults;
 	}
+	*/
 	
 	public static List<String> getAllObjectNames()
 	{
