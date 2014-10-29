@@ -183,7 +183,8 @@
 		                <apex:outputPanel id="blockSelection">
 							<div id="allObjects" style="display:none;">{!allObjects}</div>
 							<apex:inputHidden id="selectedObjects" value="{!selectedObjects}"/>
-			                <apex:pageBlock title="Group: {!selectedGroup}">
+			                <apex:pageBlock rendered="{!NOT(ISNULL(selectedGroup))}" 
+			                	title="Group: {!selectedGroup}">
 								<c:JQuerySelectable selectableId="objectSelector" 
 									optionsFieldId="allObjects" 
 									selectedFieldId="{!$Component.selectedObjects}"/> 
