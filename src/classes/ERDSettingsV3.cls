@@ -29,6 +29,21 @@ public class ERDSettingsV3 implements ERDPersister.Versionable {
 		}
 	}
 	
+	public Set<String> objectNameSet
+	{
+		get
+		{
+			Set<String> objectNameSet = new Set<String>();
+			
+			for(Map<String,List<String>> objectToFieldsMap : this.selectedGroupToObjectsToFieldsMap.values())
+			{
+				objectNameSet.addAll(objectToFieldsMap.keySet());
+			}
+			
+			return objectNameSet;
+		}
+	}
+	
 	public void upgrade(ERDPersister.Versionable old) {
 		// old version is always the current - 1
 		ERDSettingsV2 v2 = (ERDSettingsV2) old; 
