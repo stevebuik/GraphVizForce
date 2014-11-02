@@ -21,6 +21,7 @@ public class ERDGeneratorController
     	}
     	set;
     }
+    
     public String newGroupName{get;set;}
     public String selectedGroup{get;set;}
     public String groupToDelete{get;set;}
@@ -55,6 +56,7 @@ public class ERDGeneratorController
     
     private ERDPersister persister;
     private List<String> settingNamesList;
+    private String selectedSingleObject{get;set;}
     
     public List<SelectOption> settingSelectOptions
     {
@@ -213,6 +215,22 @@ public class ERDGeneratorController
     	return getCSV(allObjectNames);
     }
     
+    public String getAllObjectsForFieldSelection()
+    {
+    	return getCSV(allObjectNames);
+    }
+    
+    public String getAllFieldsForSelectedObject()
+    {
+    	List<String> fieldNames;
+    	if(!String.isBlank(selectedSingleObject))
+    	{
+    		ERDInspector inspector = new ERDInspector();
+    		fieldNames = inspector.getFieldNamesByObjectName(selectedSingleObject);
+    	}
+    	return getCSV(fieldNames);
+    }
+    
     public String getSelectedObjects() {
     	if (settings == null || selectedGroup == null) return null;
     	return getCSV(new List<String>(settings.groupToObjectsToFieldsMap.get(selectedGroup).keySet()));
@@ -226,6 +244,28 @@ public class ERDGeneratorController
     		objectToFieldsMap.put(selectedObj, new List<String>());
     	}
     	settings.groupToObjectsToFieldsMap.put(selectedGroup, objectToFieldsMap);
+    }
+    
+    public String getSelectedSingleObject()
+    {
+    	return this.selectedSingleObject;
+    }
+    
+    public void setSelectedSingleObject(String csv)
+    {
+    	this.selectedSingleObject = csv.split(',')[0];
+    }
+    
+    public String getSelectedObjectFields()
+    {
+    	if(settings == null || selectedGroup == null || selectedSingleObject == null) return null;
+    	return getCSV(settings.groupToObjectsToFieldsMap.get(selectedGroup).get(selectedSingleObject));
+    }
+    
+    public void setSelectedObjectFields(String csv)
+    {
+    	if (settings == null || selectedGroup == null || selectedSingleObject == null) return;
+    	settings.groupToObjectsToFieldsMap.get(selectedGroup).put(selectedSingleObject,csv.split(','));
     }
     
     public Boolean getIncludeFields() {

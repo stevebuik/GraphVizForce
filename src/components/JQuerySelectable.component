@@ -1,4 +1,4 @@
-<apex:component>
+<apex:component >
 
 	<apex:attribute name="selectableId" description="A unique id for the selectable widget within the page" 
 		type="String" required="true"/>
@@ -31,11 +31,13 @@
 		
 		var selectedOptions = {};
     	var selectedField = document.getElementById('{!selectedFieldId}');
+    	alert(selectedField.innerHtml);
 		$.each($(selectedField).val().split(','), function(i, s) {
 			selectedOptions[s] = 1;			
 	    });
     	
     	var optionsField = $(document.getElementById('{!optionsFieldId}'));
+    	alert(optionsField.innerHtml);
 		$.each(optionsField.html().split(','), function(i, s) {			
 			var extras = (selectedOptions[s])?'ui-selected':'';
 			$("#selectable").append($("<li class='ui-state-default "+extras+"'>"+s+"</li>"));

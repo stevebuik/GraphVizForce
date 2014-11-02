@@ -75,4 +75,25 @@ public with sharing class ERDInspector
 		
 		return objectNameSObjectResultMap;
 	}
+	
+	public List<String> getFieldNamesByObjectName(String objectName)
+	{
+		List<String> fieldNames = new List<String>();
+		List<Schema.DescribeSobjectResult> objectResults = Schema.describeSObjects(new List<String>{objectName});
+		if(!objectResults.isEmpty())
+		{
+			Map<String, Schema.SObjectField> objectFieldMap = objectResults[0].fields.getMap();
+			List<Schema.SObjectField> fieldValues = objectFieldMap.values();
+			
+			for(Schema.SObjectField field : fieldValues)
+			{
+				Schema.DescribeFieldResult fieldResult = field.getDescribe();
+				fieldNames.add(fieldResult.getName());
+			}
+			
+			return fieldNames;
+		}
+		return fieldNames;
+	}
+
 }
