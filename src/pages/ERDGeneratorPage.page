@@ -83,6 +83,18 @@
 	    #groupsRight {
 	    	float:left;
 	    }
+	    #groupsObjectsLeft {
+    		min-height: 300px;
+	    	width: 45%;
+	    	float:left;
+	    	margin: 0 20px 0 0;
+	    }
+	    #groupsObjectsRight {
+	    	width: 45%;
+	    	float:left;
+	    }
+	    
+	    
 	    .configHint {
 	    	margin: 0 0 0 20px;
 	    }
@@ -193,9 +205,37 @@
 					</div>		                	
 		        </apex:tab>
 		        
-    			<apex:tab label="Options" id="tab3" name="tab3">
+		        <apex:tab label="Configure Objects" id="tab3" name="tab3">
+		        
+    				<div id="groupsObjectsLeft">
+		                <apex:outputPanel id="blockObjectSelection">
+							<div id="allObjectForFields" style="display:none;">{!allObjectsForFieldSelection}</div>
+							<apex:inputHidden id="selectedSingleObject" value="{!selectedSingleObject}"/>
+			                <apex:pageBlock title="Objects">
+								<c:JQuerySelectable selectableId="singleObjectSelector" 
+									optionsFieldId="allObjectsForFieldSelection" 
+									selectedFieldId="{!$Component.selectedSingleObject}"/> 
+		                	</apex:pageBlock>
+		                </apex:outputPanel>
+			      	</div>
+			      	 <!-- 
+    				<div id="groupsObjectsRight">
+		                <apex:outputPanel id="blockFieldSelection">
+							<div id="allFields" style="display:none;">{!allFieldsForSelectedObject}</div>
+							<apex:inputHidden id="selectedObjectFields" value="{!selectedObjectFields}"/>
+			                <apex:pageBlock title="Object: {!selectedSingleObject}" rendered="{!NOT(ISNULL(selectedSingleObject))}">
+								<c:JQuerySelectable selectableId="fieldSelector" 
+									optionsFieldId="allFieldsForSelectedObject" 
+									selectedFieldId="{!$Component.selectedObjectFields}"/> 
+		                	</apex:pageBlock>
+		                </apex:outputPanel>
+					</div>	
+					 	-->                	
+		        </apex:tab>
+		        
+    			<apex:tab label="Options" id="tab4" name="tab4">
 	            	<div class="tabLeftOne">
-			            <apex:pageBlock id="blockFieldSelection">
+			            <apex:pageBlock id="blockIncludeFields">
 				            <apex:inputCheckbox id="fieldsCheckbox" value="{!includeFields}" />
 						    <apex:outputLabel value="Include Fields" for="fieldsCheckbox" />
 						    <span class="configHint">Show fields in the diagram. Does not affect your field selections.</span>
