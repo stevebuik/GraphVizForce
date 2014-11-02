@@ -5,8 +5,22 @@ public class ERDSettingsV3 implements ERDPersister.Versionable {
 	public Integer getVersion() { return version; }
 	
 	// any other fields persisted are here
-	public Map<String,Map<String,List<String>>> groupToObjectsToFieldsMap {get;set;}
-	public Set<String> includedGroups {get;set;}
+	public Map<String,Map<String,List<String>>> groupToObjectsToFieldsMap
+	{
+		get {
+			if (groupToObjectsToFieldsMap == null) groupToObjectsToFieldsMap = new Map<String,Map<String,List<String>>>();
+			return groupToObjectsToFieldsMap; 
+		}
+		set;
+	}
+	public Set<String> includedGroups 
+	{
+		get {
+			if (includedGroups == null) includedGroups = new Set<String>();
+			return includedGroups; 
+		}
+		set;
+	}
 	public Boolean includeFields {get;set;}
 	
 	public Map<String,Map<String,List<String>>> selectedGroupToObjectsToFieldsMap
@@ -51,21 +65,29 @@ public class ERDSettingsV3 implements ERDPersister.Versionable {
 		// copy shared data
 		Map<String, List<String>> v2Map = v2.groups;
 		Map<String,Map<String,List<String>>> v3Map = new Map<String,Map<String,List<String>>>();
-		for(String groupName : v2Map.keySet())
+		Set<String> v3IncludedGroups = new Set<String>();
+		
+		if(v2Map != null)
 		{
-			Map<String,List<String>> objectToFieldsMap = new Map<String,List<String>>();
-			
-			for(String objectName : v2Map.get(groupName))
+			for(String groupName : v2Map.keySet())
 			{
-				objectToFieldsMap.put(objectName, new List<String>());
+				Map<String,List<String>> objectToFieldsMap = new Map<String,List<String>>();
+				
+				for(String objectName : v2Map.get(groupName))
+				{
+					objectToFieldsMap.put(objectName, new List<String>());
+				}
+				v3Map.put(groupName,objectToFieldsMap);
 			}
-			v3Map.put(groupName,objectToFieldsMap);
+			
+			v3IncludedGroups = v2Map.keySet();
 		}
+		
 		groupToObjectsToFieldsMap = v3Map;
+		includedGroups = v3IncludedGroups;
 		
 		// set sensible defaults for new data
 		includeFields = v2.includeFields; 
-		includedGroups = v2.groups.keySet();
 	}
 
 }
