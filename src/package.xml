@@ -6,8 +6,6 @@
     </types>
     <types>
         <members>JQuerySelectable</members>
-        <members>JQuerySelectable2</members>
-        <members>JquerySelectableForObject</members>
         <name>ApexComponent</name>
     </types>
     <types>
