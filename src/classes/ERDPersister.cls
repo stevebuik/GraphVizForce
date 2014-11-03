@@ -70,14 +70,18 @@ public with sharing class ERDPersister {
 		Map<String, Object> persistedMap = (Map<String, Object>) JSON.deserializeUntyped(persisted);
 		Integer persistedVersion = (Integer) persistedMap.get('version');
 		
+		System.debug(LoggingLevel.ERROR, '====>persistedVersion:' + persistedVersion);
+		System.debug(LoggingLevel.ERROR, '====>persisted:' + persisted);
 		if (persistedVersion == null) {// prior to versionable, only the groups were saved
 			
 			Versionable setting;
 			
 			if(persistedMap != null && !persistedMap.isEmpty())
 			{
-				if(persistedMap.values()[0] instanceof List<String>)
+				System.debug(LoggingLevel.ERROR, '====>persisted:' + persisted);
+				if(persistedMap.values()[0] instanceof List<Object>)
 				{
+					System.debug(LoggingLevel.ERROR, '====>old version');
 					ERDSettingsV1 v1 = new ERDSettingsV1();		
 					v1.groups = new Map<String,List<String>>();
 					for (String g : persistedMap.keySet()) {
@@ -92,23 +96,27 @@ public with sharing class ERDPersister {
 				}
 				else
 				{
+					System.debug(LoggingLevel.ERROR, '====>new version');
 					ERDSettingsV3 v3 = new ERDSettingsV3();		
 					v3.groupToObjectsToFieldsMap = new Map<String,Map<String,List<String>>>();
 					for(String g : persistedMap.keySet())
 					{
+						System.debug(LoggingLevel.ERROR, '====>g:' + g);
 						v3.groupToObjectsToFieldsMap.put(g, new Map<String, List<String>>());
 						Map<String,Object> objectToFieldsMap = (Map<String,Object>)persistedMap.get(g);
+						System.debug(LoggingLevel.ERROR, '====>objectToFieldsMap:' + objectToFieldsMap);
 						
 						for(String objectName : objectToFieldsMap.keySet())
 						{
 							v3.groupToObjectsToFieldsMap.get(g).put(objectName, new List<String>());
 							
 							List<Object> objects = (List<Object>) objectToFieldsMap.get(objectName);
+							
+							System.debug(LoggingLevel.ERROR, '====>objects:' + objects);
 							for (Object o : objects)
 							{
 								v3.groupToObjectsToFieldsMap.get(g).get(objectName).add((String) o);
 							}
-							objectToFieldsMap.put(objectName, new List<String>());
 						}
 					}
 					
