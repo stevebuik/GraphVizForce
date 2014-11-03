@@ -56,7 +56,13 @@ public class ERDGeneratorController
     
     private ERDPersister persister;
     private List<String> settingNamesList;
-    private String selectedSingleObject{get;set;}
+    private String selectedSingleObject{
+    	// TODO set this back to normal String once object sector is built
+    	get {    		
+    		return 'Account';
+    	}
+    	set;
+    	}
     
     public List<SelectOption> settingSelectOptions
     {

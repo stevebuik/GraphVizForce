@@ -207,6 +207,7 @@
 		        
 		        <apex:tab label="Configure Objects" id="tab3" name="tab3">
 		        
+			      	 <!-- 
     				<div id="groupsObjectsLeft">
 		                <apex:outputPanel id="blockObjectSelection">
 							<div id="allObjectForFields" style="display:none;">{!allObjectsForFieldSelection}</div>
@@ -218,19 +219,18 @@
 		                	</apex:pageBlock>
 		                </apex:outputPanel>
 			      	</div>
-			      	 <!-- 
+					 	-->                	
     				<div id="groupsObjectsRight">
 		                <apex:outputPanel id="blockFieldSelection">
 							<div id="allFields" style="display:none;">{!allFieldsForSelectedObject}</div>
 							<apex:inputHidden id="selectedObjectFields" value="{!selectedObjectFields}"/>
 			                <apex:pageBlock title="Object: {!selectedSingleObject}" rendered="{!NOT(ISNULL(selectedSingleObject))}">
 								<c:JQuerySelectable selectableId="fieldSelector" 
-									optionsFieldId="allFieldsForSelectedObject" 
+									optionsFieldId="allFields" 
 									selectedFieldId="{!$Component.selectedObjectFields}"/> 
 		                	</apex:pageBlock>
 		                </apex:outputPanel>
 					</div>	
-					 	-->                	
 		        </apex:tab>
 		        
     			<apex:tab label="Options" id="tab4" name="tab4">
