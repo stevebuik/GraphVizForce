@@ -71,16 +71,53 @@ public with sharing class ERDPersister {
 		Integer persistedVersion = (Integer) persistedMap.get('version');
 		
 		if (persistedVersion == null) {// prior to versionable, only the groups were saved
-			ERDSettingsV1 v1 = new ERDSettingsV1();		
-			v1.groups = new Map<String,List<String>>();
-			for (String g : persistedMap.keySet()) {
-				v1.groups.put(g, new List<String>());
-				List<Object> objects = (List<Object>) persistedMap.get(g);
-				for (Object o : objects) {
-					v1.groups.get(g).add((String) o);
+			
+			Versionable setting;
+			
+			if(persistedMap != null && !persistedMap.isEmpty())
+			{
+				if(persistedMap.values()[0] instanceof List<String>)
+				{
+					ERDSettingsV1 v1 = new ERDSettingsV1();		
+					v1.groups = new Map<String,List<String>>();
+					for (String g : persistedMap.keySet()) {
+						v1.groups.put(g, new List<String>());
+						List<Object> objects = (List<Object>) persistedMap.get(g);
+						for (Object o : objects) {
+							v1.groups.get(g).add((String) o);
+						}
+					}
+					
+					setting = v1;
+				}
+				else
+				{
+					ERDSettingsV3 v3 = new ERDSettingsV3();		
+					v3.groupToObjectsToFieldsMap = new Map<String,Map<String,List<String>>>();
+					for(String g : persistedMap.keySet())
+					{
+						v3.groupToObjectsToFieldsMap.put(g, new Map<String, List<String>>());
+						Map<String,Object> objectToFieldsMap = (Map<String,Object>)persistedMap.get(g);
+						
+						for(String objectName : objectToFieldsMap.keySet())
+						{
+							v3.groupToObjectsToFieldsMap.get(g).put(objectName, new List<String>());
+							
+							List<Object> objects = (List<Object>) objectToFieldsMap.get(objectName);
+							for (Object o : objects)
+							{
+								v3.groupToObjectsToFieldsMap.get(g).get(objectName).add((String) o);
+							}
+							objectToFieldsMap.put(objectName, new List<String>());
+						}
+					}
+					
+					setting = v3;
 				}
 			}
-			return upgrade(targetVersion, v1); 	
+			
+			
+			return upgrade(targetVersion, setting); 	
 		} else {
 			Type persistedType = Type.forName('ERDSettingsV'+persistedVersion);
 			Versionable hydrated = (Versionable) JSON.deserialize(persisted, persistedType);

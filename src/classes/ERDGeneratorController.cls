@@ -103,6 +103,20 @@ public class ERDGeneratorController
             loadSelectedSetting();
         }
     }
+        
+    public void loadSelectedSetting()
+    {
+        if(String.isBlank(selectedSetting))
+        {
+            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please select a setting'));
+            return;
+        }
+        
+        currentSetting = selectedSetting;
+        
+        settings = (ERDSettingsV3) persister.getSettings(selectedSetting);
+        
+    }
     
     public List<ERDGroup> getGroups() {
     	List<ERDGroup> groups = new List<ERDGroup>();
@@ -127,20 +141,6 @@ public class ERDGeneratorController
     	{
     		settings.includedGroups.remove(groupToDelete);
     	}
-    }
-        
-    public void loadSelectedSetting()
-    {
-        if(String.isBlank(selectedSetting))
-        {
-            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please select a setting'));
-            return;
-        }
-        
-        currentSetting = selectedSetting;
-        
-        settings = (ERDSettingsV3) persister.getSettings(selectedSetting);
-        
     }
     
     public void deleteSelectedSetting()
