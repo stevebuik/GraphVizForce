@@ -83,15 +83,13 @@
 	    #groupsRight {
 	    	float:left;
 	    }
-	    #groupsObjectsLeft {
-    		min-height: 300px;
-	    	width: 45%;
-	    	float:left;
-	    	margin: 0 20px 0 0;
+	    .tabPageBlock
+	    {
+	    	height:400px;
 	    }
-	    #groupsObjectsRight {
-	    	width: 45%;
-	    	float:left;
+	    .dataTable
+	    {
+	    	max-height:300px;
 	    }
 	    
 	    
@@ -136,12 +134,12 @@
 		                	<apex:pageBlockSection >
 		                		<apex:selectList id="settingPicklist" value="{!selectedSetting}" 
 		                			size="1" style="width:150px;">
-						            <apex:actionSupport event="onchange" action="{!loadSelectedSetting}" rerender="blockGroup,blockSelection,title" status="working" />
+						            <apex:actionSupport event="onchange" action="{!loadSelectedSetting}" rerender="blockGroup,blockSelection,blockSingleObjectSelection,blockFieldSelection,title" status="working" />
 						            <apex:selectOptions value="{!settingSelectOptions}"/>
 						        </apex:selectList>
 						        <apex:panelGroup >
 		                    	<apex:commandButton id="btnDeleteSetting" value="Delete" 
-		                    		action="{!deleteSelectedSetting}" rerender="blockSetting,blockGroup,blockSelection,title" 
+		                    		action="{!deleteSelectedSetting}" rerender="blockSetting,blockGroup,blockSelection,blockSingleObjectSelection,blockFieldSelection,title" 
 		                    		status="working" style="width:40px;">
 		                    	</apex:commandButton>
 		                    	<apex:commandButton id="btnSaveSetting" value="Save" 
@@ -170,20 +168,20 @@
 		                    		action="{!addNewGroupWithInput}" rerender="messages,groupTable" status="working">
 		                    	</apex:commandButton>
 		                	</apex:pageBlockSection>
-		                	<apex:pageBlockTable id="groupTable" value="{!groups}" var="group">
+	                		<apex:pageBlockTable id="groupTable" value="{!groups}" var="group">
 						    	<apex:column headerValue="Select Groups">
 						        	<apex:inputCheckbox id="groupCheckBox" value="{!group.selected}">
-							        	<!-- <apex:actionSupport event="onchange" rerender="selectedGroupPicklist"/> -->
+						        		<apex:actionSupport event="onchange" action="{!updateERDGroupSelection}" />
 						        	</apex:inputCheckbox>
 						    		<apex:outputLabel value="{!group.groupName}" for="groupCheckBox" />
 						        </apex:column>
 						        <apex:column headerValue="Edit" width="30">
-						        	<apex:commandButton id="editGroupButton" value="Edit >>" rerender="blockSelection" status="working">
+						        	<apex:commandButton id="editGroupButton" value="Edit >>" rerender="blockSelection,blockSingleObjectSelection,blockFieldSelection" status="working">
 							        	<apex:param assignTo="{!selectedGroup}" value="{!group.groupName}" name="selectedERDGroup"/>
 						        	</apex:commandButton>
 						        </apex:column>
 						        <apex:column headerValue="Delete" width="30">
-						        	<apex:commandButton id="deleteGroupButton" value="Delete" action="{!deleteERDGroup}" rerender="blockGroup,blockSelection" status="working">
+						        	<apex:commandButton id="deleteGroupButton" value="Delete" action="{!deleteERDGroup}" rerender="blockGroup,blockSelection,blockSingleObjectSelection,blockFieldSelection" status="working">
 						        		<apex:param assignTo="{!groupToDelete}" value="{!group.groupName}" name="ERDGroupToDelete"/>
 						        	</apex:commandButton>
 						        </apex:column>
@@ -193,12 +191,13 @@
 			      	   
     				<div id="groupsRight">
 		                <apex:outputPanel id="blockSelection">
-							<div id="allObjects" style="display:none;">{!allObjects}</div>
-							<apex:inputHidden id="selectedObjects" value="{!selectedObjects}"/>
+							<div id="objectsForSelectedGroup" style="display:none;">{!objectsForSelectedGroup}</div>
+							<apex:inputHidden id="selectedObjects" value="{!selectedObjects}">
+							</apex:inputHidden>
 			                <apex:pageBlock rendered="{!NOT(ISNULL(selectedGroup))}" 
 			                	title="Group: {!selectedGroup}">
 								<c:JQuerySelectable selectableId="objectSelector" 
-									optionsFieldId="allObjects" 
+									optionsFieldId="objectsForSelectedGroup" 
 									selectedFieldId="{!$Component.selectedObjects}"/> 
 		                	</apex:pageBlock>
 		                </apex:outputPanel>
@@ -206,33 +205,38 @@
 		        </apex:tab>
 		        
 		        <apex:tab label="Configure Objects" id="tab3" name="tab3">
-		        
-			      	 <!-- 
-    				<div id="groupsObjectsLeft">
-		                <apex:outputPanel id="blockObjectSelection">
-							<div id="allObjectForFields" style="display:none;">{!allObjectsForFieldSelection}</div>
-							<apex:inputHidden id="selectedSingleObject" value="{!selectedSingleObject}"/>
-			                <apex:pageBlock title="Objects">
-								<c:JQuerySelectable selectableId="singleObjectSelector" 
-									optionsFieldId="allObjectsForFieldSelection" 
-									selectedFieldId="{!$Component.selectedSingleObject}"/> 
-		                	</apex:pageBlock>
-		                </apex:outputPanel>
-			      	</div>
-					 	-->                	
-    				<div id="groupsObjectsRight">
+		        	<div style="width:100%">
+		        		<apex:commandButton value="Refresh" action="{!refreshObjectFieldSelection}" reRender="blockSingleObjectSelection,blockFieldSelection" status="working" />
+		        	</div>
+					<div id="groupsLeft">
+						<apex:pageBlock id="blockSingleObjectSelection" title="Select Object to Edit">
+							<apex:pageBlockTable id="objectTable" value="{!allSelectedObjects}" var="selectedObj">
+						    	<apex:column headerValue="Object Name">
+						    		<apex:outputLabel value="{!selectedObj}" />
+						        </apex:column>
+						        <apex:column headerValue="Edit" width="30">
+						        	<apex:commandButton id="editObjectButton" value="Edit >>" rerender="blockFieldSelection" status="working">
+							        	<apex:param assignTo="{!selectedSingleObject}" value="{!selectedObj}" name="selectedSingleObjecToEditFields"/>
+						        	</apex:commandButton>
+						        </apex:column>
+						    </apex:pageBlockTable>
+							
+						</apex:pageBlock>
+					</div>
+					
+    				<div id="groupsRight">
 		                <apex:outputPanel id="blockFieldSelection">
-							<div id="allFields" style="display:none;">{!allFieldsForSelectedObject}</div>
+							<div id="allFieldsForSelectedObject" style="display:none;">{!allFieldsForSelectedObject}</div>
 							<apex:inputHidden id="selectedObjectFields" value="{!selectedObjectFields}"/>
 			                <apex:pageBlock title="Object: {!selectedSingleObject}" rendered="{!NOT(ISNULL(selectedSingleObject))}">
 								<c:JQuerySelectable selectableId="fieldSelector" 
-									optionsFieldId="allFields" 
+									optionsFieldId="allFieldsForSelectedObject" 
 									selectedFieldId="{!$Component.selectedObjectFields}"/> 
 		                	</apex:pageBlock>
 		                </apex:outputPanel>
 					</div>	
+		         	
 		        </apex:tab>
-		        
     			<apex:tab label="Options" id="tab4" name="tab4">
 	            	<div class="tabLeftOne">
 			            <apex:pageBlock id="blockIncludeFields">
