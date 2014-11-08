@@ -3,6 +3,7 @@ public class ERDSettingsV3 implements ERDPersister.Versionable {
 	// this field should always be present. It is used to hydrate/upgrade automatically
 	public Integer version = 3;
 	public Integer getVersion() { return version; }
+	//public Set<String> objectNameSet;
 	
 	// any other fields persisted are here
 	public Map<String,Map<String,List<String>>> groupToObjectsToFieldsMap
@@ -21,37 +22,22 @@ public class ERDSettingsV3 implements ERDPersister.Versionable {
 		}
 		set;
 	}
+	
 	public Boolean includeFields {get;set;}
 	
-	public Map<String,Map<String,List<String>>> selectedGroupToObjectsToFieldsMap
+	public Set<String> allSelectedObjects
 	{
 		get
 		{
-			Map<String,Map<String,List<String>>> returnMap = new Map<String,Map<String,List<String>>>();
-			if(groupToObjectsToFieldsMap != null)
-			{
-				for(String grp : groupToObjectsToFieldsMap.keySet())
-				{
-					if(includedGroups.contains(grp))
-					{
-						returnMap.put(grp, groupToObjectsToFieldsMap.get(grp));
-					}
-				}
-			}
-			
-			return returnMap;
-		}
-	}
-	
-	public Set<String> objectNameSet
-	{
-		get
-		{
+			System.debug(LoggingLevel.ERROR, '@@@@@@@@objectNameSet is called');
 			Set<String> objectNameSet = new Set<String>();
 			
-			for(Map<String,List<String>> objectToFieldsMap : this.selectedGroupToObjectsToFieldsMap.values())
+			for(String grp : groupToObjectsToFieldsMap.keySet())
 			{
-				objectNameSet.addAll(objectToFieldsMap.keySet());
+				if(includedGroups.contains(grp))
+				{
+					objectNameSet.addAll(groupToObjectsToFieldsMap.get(grp).keySet());
+				}
 			}
 			
 			return objectNameSet;

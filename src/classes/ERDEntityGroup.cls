@@ -1,0 +1,4 @@
+public with sharing class ERDEntityGroup {
+	public String groupName {get;set;}
+    public Boolean selected {get;set;}
+}
