@@ -21,13 +21,20 @@ public with sharing class ERDGenerator
 	{
 		ERDInspector inspector = new ERDInspector();
 		Boolean includeFields = settings.includeFields;
-		Map<String,Map<String,List<String>>> erdMap = settings.selectedGroupToObjectsToFieldsMap;
-		Set<String> objectNameSet = settings.objectNameSet;
-		
+		Map<String,Map<String,List<String>>> erdMap = new Map<String,Map<String,List<String>>>();
+		Set<String> allSelectedObjects = settings.allSelectedObjects;
 		List<ERDEntityRelationship> allObjectRelationshipList = new List<ERDEntityRelationship>();
 		Map<String, List<ERDEntity>> groupToERDEntityListMap = new Map<String, List<ERDEntity>>(); 
 		
-		inspector.inspectERDSchema(objectNameSet,
+		for(String grp : settings.groupToObjectsToFieldsMap.keySet())
+		{
+			if(settings.includedGroups.contains(grp))
+			{
+				erdMap.put(grp,settings.groupToObjectsToFieldsMap.get(grp));
+			}
+		}
+		
+		inspector.inspectERDSchema(allSelectedObjects,
 								erdMap,
 								groupToERDEntityListMap,
 								allObjectRelationshipList
