@@ -52,60 +52,6 @@ public with sharing class ERDUtils
 		
 		return false;
 	}
-	/*
-	public static List<Schema.SObjectType> getObjectTypesByChildRelationships(List<Schema.Childrelationship> childRelationships)
-	{
-		List<Schema.Sobjecttype> objectTypes = new List<Schema.Sobjecttype>();
-		for(Schema.Childrelationship childRelationship : childRelationships)
-		{
-			Schema.Sobjecttype objectType = childRelationship.getChildSObject();
-			objectTypes.add(objectType);
-		}
-		return objectTypes;
-	}
-	
-	public static List<Schema.DescribeSObjectResult> getObjectResultsByObjectTypes(List<Schema.SObjectType> objectTypes, List<String> objectNames)
-	{
-		List<Schema.DescribeSObjectResult> objectResults = new List<Schema.DescribeSObjectResult>();
-		for(Schema.SObjectType objectType : objectTypes)
-		{
-			Schema.DescribeSObjectResult objectResult = objectType.getDescribe();
-			
-			if(ListUtils.getStringItemIndex(objectResult.getName(), objectNames) != -1)
-			{
-				objectResults.add(objectResult);
-			}
-		}
-		return objectResults;
-	}
-	
-	public static List<Schema.DescribeSObjectResult> getObjectResultsByChildRelationships(List<Schema.Childrelationship> childRelationships)
-	{
-		List<Schema.DescribeSObjectResult> objectResults = new List<Schema.DescribeSObjectResult>();
-		for(Schema.Childrelationship childRelationship : childRelationships)
-		{
-			Schema.Sobjecttype objectType = childRelationship.getChildSObject();
-			Schema.DescribeSObjectResult objectResult = objectType.getDescribe();
-			objectResults.add(objectResult);
-		}
-		return objectResults;
-	}
-	
-	public static List<Schema.DescribeSObjectResult> getCustomObjectResultsByObjectTypes(List<Schema.SObjectType> objectTypes)
-	{
-		List<Schema.DescribeSObjectResult> objectResults = new List<Schema.DescribeSObjectResult>();
-		for(Schema.SObjectType objectType : objectTypes)
-		{
-			Schema.DescribeSObjectResult objectResult = objectType.getDescribe();
-			
-			if(objectResult.isCustom())
-			{
-				objectResults.add(objectResult);
-			}
-		}
-		return objectResults;
-	}
-	*/
 	
 	public static List<String> getAllObjectNames()
 	{
@@ -123,6 +69,20 @@ public with sharing class ERDUtils
 		return objectNames;
 	}
 	
-	
-	
+	public static List<ERDEntityGroup> getERDEntityGroups(Set<String> groups, Set<String> includedGroups)
+	{
+    	List<ERDEntityGroup> erdGroups = new List<ERDEntityGroup>();
+    	
+    	List<String> sortedGroups = new List<String>(groups);
+    	sortedGroups.sort();
+    	
+    	for(String g : sortedGroups)
+    	{
+    		ERDEntityGroup grp = new ERDEntityGroup();
+    		grp.groupName = g;
+    		grp.selected = includedGroups.contains(g);
+    		erdGroups.add(grp);
+    	}
+    	return erdGroups;
+	}
 }

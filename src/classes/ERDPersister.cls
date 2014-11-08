@@ -78,7 +78,6 @@ public with sharing class ERDPersister {
 			
 			if(persistedMap != null && !persistedMap.isEmpty())
 			{
-				System.debug(LoggingLevel.ERROR, '====>persisted:' + persisted);
 				if(persistedMap.values()[0] instanceof List<Object>)
 				{
 					System.debug(LoggingLevel.ERROR, '====>old version');
@@ -129,6 +128,8 @@ public with sharing class ERDPersister {
 		} else {
 			Type persistedType = Type.forName('ERDSettingsV'+persistedVersion);
 			Versionable hydrated = (Versionable) JSON.deserialize(persisted, persistedType);
+			System.debug(LoggingLevel.ERROR, '====>hydrated:' + hydrated);
+			// Until this point, the deserialized 
 			return upgrade(targetVersion, hydrated);
 		}
 	}
@@ -136,6 +137,7 @@ public with sharing class ERDPersister {
 	public Versionable upgrade(Integer targetVersion, Versionable oldVersion) {
 		Versionable latest = oldVersion;
 		while (latest.getVersion() < targetVersion) {
+			System.debug(LoggingLevel.ERROR, '@@@@upgrading:' + latest.getVersion() + ',' + targetVersion);
 			Type upgradedType = Type.forName('ERDSettingsV'+(latest.getVersion()+1));
 			Versionable nextVersion = (Versionable) upgradedType.newInstance();
 			nextVersion.upgrade(latest);

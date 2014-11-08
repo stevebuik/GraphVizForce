@@ -7,10 +7,39 @@
 public class ERDGeneratorController
 {
     public static final String EXTERNAL_TEMPLATE = 'CalloutTemplate';
-    
     public static final String GROUP_STANDARD = 'Standard';
     public static final String GROUP_CUSTOM = 'Custom';
     public static final String FOLDER_ERD_SETTINGS = 'ERD Settings';
+    
+    public String newGroupName{get;set;}
+    public String selectedGroup{get;set;}
+    public String groupToDelete{get;set;}
+    
+    public String newSettingName{get;set;}
+    public String selectedSetting{get;set;}
+    public String generatedContent{get;set;}
+
+    public String template{get;set;}
+    public String fileURL{get;set;}
+    
+    public String oauthToken{get;set;}
+    public String selectedSingleObject{get;set;}
+    
+    private ERDPersister persister;
+    private ERDSettingProcessor processor;
+    private ERDInspector inspector;
+    private List<String> settingNamesList;
+    private List<ERDEntityGroup> erdGroups;
+    
+    public String currentSetting{
+        get {
+            if (currentSetting == null) {
+                currentSetting = '<New Diagram>';
+            }
+            return currentSetting;
+        }
+        set;
+    }    
     
     public List<String> allObjectNames {
     	get {
@@ -22,30 +51,6 @@ public class ERDGeneratorController
     	set;
     }
     
-    public String newGroupName{get;set;}
-    public String selectedGroup{get;set;}
-    public String groupToDelete{get;set;}
-    
-    public String currentSetting{
-        get {
-            if (currentSetting == null) {
-                currentSetting = '<New Diagram>';
-            }
-            return currentSetting;
-        }
-        set;
-    }    
-        
-    public String newSettingName{get;set;}
-    public String selectedSetting{get;set;}
-    public String generatedContent{get;set;}
-
-    public String template{get;set;}
-    public String fileURL{get;set;}
-    
-    public String oauthToken{get;set;}
-    
-        
     private ERDSettingsV3 settings{
     	get {
     		if (settings == null) settings = new ERDSettingsV3(); 
@@ -53,16 +58,6 @@ public class ERDGeneratorController
     	}
     	set;
     }
-    
-    private ERDPersister persister;
-    private List<String> settingNamesList;
-    private String selectedSingleObject{
-    	// TODO set this back to normal String once object sector is built
-    	get {    		
-    		return 'Account';
-    	}
-    	set;
-    	}
     
     public List<SelectOption> settingSelectOptions
     {
@@ -83,9 +78,11 @@ public class ERDGeneratorController
             return options;
         }
     }
-        
+    
     public ERDGeneratorController() {
-        initERDPersister();    
+        initERDPersister();
+        processor = new ERDSettingProcessor();
+        inspector = new ERDInspector();
     }
         
     private void initERDPersister() {
@@ -103,7 +100,72 @@ public class ERDGeneratorController
             loadSelectedSetting();
         }
     }
-        
+    
+    /********Getter Setter Methods********/
+    public Boolean getIncludeFields() {
+    	return settings.includeFields;
+    }
+    
+    public void setIncludeFields(Boolean include) {
+    	settings.includeFields = include;
+    }
+    
+    public List<ERDEntityGroup> getGroups() {
+    	return ERDUtils.getERDEntityGroups(settings.groupToObjectsToFieldsMap.keySet(),settings.includedGroups);
+    }
+    
+    public List<String> getAllSelectedObjects()
+    {
+    	List<String> sorted = new List<String>();
+    	if(settings != null) {sorted = new List<String>(settings.allSelectedObjects);}
+    	sorted.sort();
+    	return sorted;
+    }
+    
+    public String getObjectsForSelectedGroup()
+    {
+    	if(selectedGroup == null || String.isBlank(selectedGroup)) return '';
+    	return getCSV(inspector.getAvailableObjectsForGroup(selectedGroup,allObjectNames,settings.groupToObjectsToFieldsMap));
+    }
+    
+    public String getSelectedObjects() {
+    	if (settings == null || selectedGroup == null || settings.groupToObjectsToFieldsMap.get(selectedGroup) == null) return null;
+    	return getCSV(new List<String>(settings.groupToObjectsToFieldsMap.get(selectedGroup).keySet()));
+    }
+    
+    public void setSelectedObjects(String csv) {
+    	
+    	if (settings == null || selectedGroup == null) return;
+    	processor.setSelectedObjectsToGroup(settings, csv, selectedGroup);
+    }
+    
+    public String getAllFieldsForSelectedObject()
+    {
+    	if(selectedSingleObject == null || String.isBlank(selectedSingleObject)) return '';
+    	List<String> fieldNames = new List<String>();
+    	fieldNames = inspector.getFieldNamesByObjectName(selectedSingleObject);
+    	return getCSV(fieldNames);
+    }
+    
+    public String getSelectedObjectFields()
+    {
+    	if(settings == null || selectedSingleObject == null || String.isBlank(selectedSingleObject)) return null;
+    	return getCSV(processor.retrieveFieldsForObject(settings, selectedSingleObject));
+    }
+    
+    /** 
+    * @description This is the problematic setter:
+    * Problem: When select object in selectlist, selctedsingleobject is updated immediately when this setter is called, csv passed into this method is still the old set of fields, that gets updated into the new selected single object
+    * Solution: in UI, use table with edit button instead of selectlist
+    */
+    public void setSelectedObjectFields(String csv)
+    {
+    	if (settings == null || selectedSingleObject == null || String.isBlank(selectedSingleObject)) return;
+    	processor.setSelectedFieldsToObject(settings, csv, selectedSingleObject);
+    }
+    
+       
+    /********UI Interactive Methods********/
     public void loadSelectedSetting()
     {
         if(String.isBlank(selectedSetting))
@@ -112,35 +174,34 @@ public class ERDGeneratorController
             return;
         }
         
+        // Update currentSetting
         currentSetting = selectedSetting;
-        
         settings = (ERDSettingsV3) persister.getSettings(selectedSetting);
         
+        // Reset UI persistency
+        selectedGroup = null;
+        selectedSingleObject = null;
     }
     
-    public List<ERDGroup> getGroups() {
-    	List<ERDGroup> groups = new List<ERDGroup>();
-    	for(String g : settings.groupToObjectsToFieldsMap.keySet())
-    	{
-    		ERDGroup grp = new ERDGroup();
-    		grp.groupName = g;
-    		grp.selected = settings.includedGroups.contains(g);
-    		groups.add(grp);
-    	}
-    	return groups;
+    public void updateERDGroupSelection()
+    {
+    	processor.setERDGroupSelection(settings,erdGroups);
+    }
+    
+    public void refreshObjectFieldSelection()
+    {
+    	selectedSingleObject = null;
     }
     
     public void addNewGroupWithInput() {
-    	if (newGroupName != null)
-    		settings.groupToObjectsToFieldsMap.put(newGroupName, new Map<String, List<String>>());
+    	if (newGroupName == null) {return;}
+    	processor.addNewERDGroup(settings,newGroupName);
     }
-        
+    
     public void deleteERDGroup() {
-    	settings.groupToObjectsToFieldsMap.remove(groupToDelete);
-    	if(settings.includedGroups.contains(groupToDelete))
-    	{
-    		settings.includedGroups.remove(groupToDelete);
-    	}
+    	processor.deleteERDGroup(settings,groupToDelete);
+    	// Reset UI Persistency
+    	if(groupToDelete == selectedGroup) {selectedGroup = null;}
     }
     
     public void deleteSelectedSetting()
@@ -159,10 +220,11 @@ public class ERDGeneratorController
             persister.deleteSettings(selectedSetting);
         }
         
+        // Reset UI Persistency
         selectedSetting = null;
         currentSetting = null;
         selectedGroup = null;
-        
+        selectedSingleObject = null;
     }
         
     public void saveSelectedSetting()
@@ -178,10 +240,8 @@ public class ERDGeneratorController
             ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please add some groups'));
             return;
         }
-        
-		System.debug('before settings: '+settings);        
+          
         persister.saveSettings(selectedSetting, settings);
-        
         currentSetting = selectedSetting;
     }
     
@@ -194,103 +254,18 @@ public class ERDGeneratorController
         }
         
         persister.saveSettings(newSettingName, settings);
-        
-        selectedSetting = newSettingName;
-        currentSetting = selectedSetting;
-        
         if(ListUtils.getStringItemIndex(newSettingName,settingNamesList) == -1)
         {
             settingNamesList.add(newSettingName);
         }
-    }
-    
-    // JQuery Selectable / VF Hidden Input Interop
-    private String getCSV(List<String> options) {
-    	if (options == null) return '';
-    	String result = '';
-    	for (String o : options) {
-    		if (result.length() > 0) {
-    		result += ',';
-    		}
-    		result += o;
-    	}
-    	return result;
-    }
         
-    public String getAllObjects() {
-    	return getCSV(allObjectNames);
-    }
-    
-    public String getAllObjectsForFieldSelection()
-    {
-    	return getCSV(allObjectNames);
-    }
-    
-    public String getAllFieldsForSelectedObject()
-    {
-    	List<String> fieldNames;
-    	if(!String.isBlank(selectedSingleObject))
-    	{
-    		ERDInspector inspector = new ERDInspector();
-    		fieldNames = inspector.getFieldNamesByObjectName(selectedSingleObject);
-    	}
-    	return getCSV(fieldNames);
-    }
-    
-    public String getSelectedObjects() {
-    	if (settings == null || selectedGroup == null) return null;
-    	return getCSV(new List<String>(settings.groupToObjectsToFieldsMap.get(selectedGroup).keySet()));
-    }
-    
-    public void setSelectedObjects(String csv) {
-    	if (settings == null || selectedGroup == null) return;
-    	Map<String, List<String>> objectToFieldsMap = new Map<String, List<String>>();
-    	for(String selectedObj : csv.split(','))
-    	{
-    		objectToFieldsMap.put(selectedObj, new List<String>());
-    	}
-    	settings.groupToObjectsToFieldsMap.put(selectedGroup, objectToFieldsMap);
-    }
-    
-    public String getSelectedSingleObject()
-    {
-    	return this.selectedSingleObject;
-    }
-    
-    public void setSelectedSingleObject(String csv)
-    {
-    	this.selectedSingleObject = csv.split(',')[0];
-    }
-    
-    public String getSelectedObjectFields()
-    {
-    	if(settings == null || selectedGroup == null || selectedSingleObject == null) return null;
-    	return getCSV(settings.groupToObjectsToFieldsMap.get(selectedGroup).get(selectedSingleObject));
-    }
-    
-    public void setSelectedObjectFields(String csv)
-    {
-    	if (settings == null || selectedGroup == null || selectedSingleObject == null) return;
-    	settings.groupToObjectsToFieldsMap.get(selectedGroup).put(selectedSingleObject,csv.split(','));
-    }
-    
-    public Boolean getIncludeFields() {
-    	return settings.includeFields;
-    }
-    
-    public void setIncludeFields(Boolean include) {
-    	settings.includeFields = include;
-    }
-    
-    public Boolean getIsDropboxEnabled() {
-    	return new ERDDropboxAPI().areOAuthCredsPresent();
+        selectedSetting = newSettingName;
+        currentSetting = selectedSetting;
     }
     
     public void generateERD()
     {
         ERDGenerator generator;
-        System.debug(LoggingLevel.ERROR,'====>template:' + template);
-        System.debug(LoggingLevel.ERROR,'====>fileUrl:' + fileUrl);
         if (template == EXTERNAL_TEMPLATE) {   
             if (fileUrl == null || fileUrl == '') {
                 ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please choose an external file'));
@@ -301,7 +276,6 @@ public class ERDGeneratorController
             generator = new ERDGenerator(template);         
         }
         if (generator != null) {
-        	System.debug(LoggingLevel.ERROR,'====>generator:' + generator);
             generatedContent = generator.generateERD(settings);         
             if (oauthToken != null) {
                 ERDDropboxAPI api = new ERDDropboxAPI();
@@ -309,6 +283,13 @@ public class ERDGeneratorController
                 System.debug(api.writeFile(currentSetting+'.gv', generatedContent));
             }
         }
+    }
+    
+    
+    
+    /********Template Related Methods********/
+    public Boolean getIsDropboxEnabled() {
+    	return new ERDDropboxAPI().areOAuthCredsPresent();
     }
     
     public List<SelectOption> getTemplates() {
@@ -320,14 +301,21 @@ public class ERDGeneratorController
         templates.add(new SelectOption(EXTERNAL_TEMPLATE, '<Use External Template>'));
         return templates;
     }
+        
     
-    /**
-    * @description Group inner class for front end
-    */
-    public class ERDGroup
-    {
-        public String groupName {get;set;}
-        public Boolean selected {get;set;}
+    /********Local Methods********/
+    // JQuery Selectable / VF Hidden Input Interop
+    private String getCSV(List<String> options) {
+    	System.debug(LoggingLevel.ERROR, '@@@@getCSV:' + options);
+    	if (options == null) return '';
+    	String result = '';
+    	for (String o : options) {
+    		if (result.length() > 0) {
+    		result += ',';
+    		}
+    		result += o;
+    	}
+    	return result;
     }
     
 }
