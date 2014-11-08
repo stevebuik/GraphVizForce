@@ -90,10 +90,34 @@ public with sharing class ERDInspector
 				Schema.DescribeFieldResult fieldResult = field.getDescribe();
 				fieldNames.add(fieldResult.getName());
 			}
-			
-			return fieldNames;
 		}
+		fieldNames.sort();
 		return fieldNames;
+	}
+	
+	public List<String> getAvailableObjectsForGroup(String selectedGroup,
+													List<String> allObjectNames,
+													Map<String, Map<String, List<String>>> erdMap)
+	{
+		Set<String> availableObjects = new Set<String>(allObjectNames);
+		
+		for(String grp : erdMap.keySet())
+		{
+			if(grp != selectedGroup)
+			{
+				for(String obj : erdMap.get(grp).keySet())
+				{
+					if(availableObjects.contains(obj))
+					{
+						availableObjects.remove(obj);
+					}
+				}
+			}
+		}
+		
+		List<String> sorted = new List<String>(availableObjects);
+		sorted.sort();
+		return sorted;
 	}
 
 }
