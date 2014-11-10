@@ -9,7 +9,7 @@ An Entity Relationship Diagram generator in [Graphviz](http://graphviz.org) form
 - Automatically generate and layout diagrams from SFDC to Graphviz
 - Group entities and choose which fields are included
 - Save diagrams for later changes
-- Export diagrams to [Image](assets/Recruiting+and+Standard.png) or [PDF](assets/Recruiting+and+Standard.pdf) using Graphviz
+- Export diagrams to [Image](assets/Recruiting+and+Standard.png) or [PDF](blob/master/assets/Recruiting+and+Standard.pdf?raw=true) using Graphviz
 - Generate diagrams directly to your computer using Dropbox
 - Customise the templates used for the diagram for your style preferences
 
