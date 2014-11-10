@@ -1,32 +1,11 @@
-@isTest(SeeAllData = true)
+@isTest(SeeAllData = true) // required because tests assume a Document Folder exists 
 public with sharing class ERDGeneratorControllerTest
 {
-	//private static final String FOLDER_ERD_SETTINGS = 'ERD_Settings';
 	
 	@isTest
-	static void testSettingsTabWithSavedDiagrams()
+	static void testSettingsTabWithDefaultDiagram()
 	{
-		// Initiate diagram
-		String diagramName = 'd1';
 		ERDPersister persister = new ERDPersister();
-		Map<String,Map<String,List<String>>> erdMap = new Map<String,Map<String,List<String>>>{
-				'Sales' => new Map<String, List<String>>
-							{
-								'Account' => new List<String>{'Name'},
-								'Contact' => new List<String>(),
-								'Opportunity' => new List<String>()
-							},
-				'Marketing' => new Map<String, List<String>>
-							{
-								'Lead' => new List<String>(),
-								'Campaign' => new List<String>()
-							}
-			};
-		
-		// create fake non-versioned persisted settings		
-		insert new Document(Name = diagramName,
-			FolderId = persister.folderId,
-			Body = Blob.valueOf(JSON.serialize(erdMap)));
         
 		// Initiate page reference
 		PageReference pageRef = Page.ERDGeneratorPage;
@@ -39,12 +18,12 @@ public with sharing class ERDGeneratorControllerTest
 		Test.startTest();
         
         	// Test d1 document exists
-        	List<Document> docs = [SELECT Id, Body FROM Document WHERE Name = 'd1' AND FolderId = :persister.folderId];
+        	List<Document> docs = [SELECT Id, Body FROM Document WHERE Name = 'Standard Objects' AND FolderId = :persister.folderId];
 			System.assertEquals(1, docs.size());
         	
 			// Test loading setting d1 
-			System.assertEquals('d1', controller.selectedSetting);
-			System.assertEquals('d1', controller.currentSetting);
+			System.assertEquals('Standard Objects', controller.selectedSetting);
+			System.assertEquals('Standard Objects', controller.currentSetting);
 			
 			// User save current setting d1 after deleted group
 			controller.selectedGroup = 'Marketing';
@@ -53,7 +32,7 @@ public with sharing class ERDGeneratorControllerTest
 			controller.saveSelectedSetting();
         	//List<ERDEntityGroup> groups = controller.getGroups();
 			//System.debug(LoggingLevel.ERROR,'@@@@@@@@@@controller.getGroups():' + groups);
-			System.assertEquals(1, controller.erdGroups.size(), 'erd map size should be 1 after group deletion');
+			System.assertEquals(3, controller.erdGroups.size(), 'erd map size should be 3 after Marketing deletion');
 			
 			// User type in new setting name and save current setting as new
 			controller.newSettingName = 'd2';

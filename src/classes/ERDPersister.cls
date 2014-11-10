@@ -38,6 +38,11 @@ public with sharing class ERDPersister {
 		return diagramList;
 	}
 	
+	public Versionable getDefaultSettings() {
+		StaticResource defaultDiagram = [select Body from StaticResource where Name = 'DefaultDiagram'];
+		return upgrade(3, defaultDiagram.Body.toString());	
+	}
+	
 	public Versionable getSettings(String name)
 	{
 		return getSettingsByNameVersion(name,CURRENT_VERSION);

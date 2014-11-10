@@ -83,8 +83,8 @@ public class ERDGeneratorController
         processor = new ERDSettingProcessor();
         inspector = new ERDInspector();
         initERDPersister();
-    }
-        
+	}
+	
     private void initERDPersister() {
     	
         persister = new ERDPersister();
@@ -95,10 +95,23 @@ public class ERDGeneratorController
         {
             settingNamesList.sort();
             selectedSetting = settingNamesList[0];
-            currentSetting = selectedSetting;
-            
+            currentSetting = selectedSetting;            
             loadSelectedSetting();
         }
+    }
+    
+    // if no diagrams exist i.e. new user, then seed one from a static resource
+    public PageReference ensureDefaultDiagram() {
+    	if (settingNamesList.size() == 0) {
+    		selectedSetting = 'Standard Objects';
+    		settings = (ERDSettingsV3) persister.getDefaultSettings();  
+	        persister.saveSettings(selectedSetting, settings);
+	        PageReference ref = Page.ERDGeneratorPage;
+	        ref.setRedirect(true);
+	        return ref;
+    	} else {
+	    	return null;
+    	}
     }
     
     /********Getter Setter Methods********/
