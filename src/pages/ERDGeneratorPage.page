@@ -87,6 +87,20 @@
 	    #groupsRight {
 	    	float:left;
 	    }
+	    .editorBlockTitle {
+			color: #000;
+			font-size: 1.3em;	    
+			margin: 1em 0 0 1em;
+			display: block;		
+			float: left;
+		}
+	    .editorBlockHint {
+			color: #000;
+			font-size: 1.1em;	    
+			margin: 1em 1em 0 0;
+			display: inline-block;
+			float: right;		
+		}
 	    .tabPageBlock
 	    {
 	    	height:400px;
@@ -203,8 +217,12 @@
 							<div id="objectsForSelectedGroup" style="display:none;">{!objectsForSelectedGroup}</div>
 							<apex:inputHidden id="selectedObjects" value="{!selectedObjects}">
 							</apex:inputHidden>
-			                <apex:pageBlock rendered="{!NOT(ISNULL(selectedGroup))}" 
-			                	title="Group: {!selectedGroup}">
+			                <apex:pageBlock rendered="{!NOT(ISNULL(selectedGroup))}">
+			                	<apex:facet name="header">
+			                		<h2 class="editorBlockTitle">Group: {!selectedGroup}</h2>
+			                		<span class="editorBlockHint">Hold down <strong>Ctrl/Cmd</strong> to Select Multiple Objects</span>
+			                		<div class="clearfix"></div>
+			                	</apex:facet>
 								<c:JQuerySelectable selectableId="objectSelector" 
 									optionsFieldId="objectsForSelectedGroup" 
 									selectedFieldId="{!$Component.selectedObjects}"/> 
@@ -238,7 +256,12 @@
 		                <apex:outputPanel id="blockFieldSelection">
 							<div id="allFieldsForSelectedObject" style="display:none;">{!allFieldsForSelectedObject}</div>
 							<apex:inputHidden id="selectedObjectFields" value="{!selectedObjectFields}"/>
-			                <apex:pageBlock title="Object: {!selectedSingleObject}" rendered="{!NOT(ISNULL(selectedSingleObject))}">
+			                <apex:pageBlock rendered="{!NOT(ISNULL(selectedSingleObject))}">
+			                	<apex:facet name="header">
+			                		<h2 class="editorBlockTitle">Object: {!selectedSingleObject}</h2>
+			                		<span class="editorBlockHint">Hold down <strong>Ctrl/Cmd</strong> to Select Multiple Fields</span>
+			                		<div class="clearfix"></div>
+			                	</apex:facet>
 								<c:JQuerySelectable selectableId="fieldSelector" 
 									optionsFieldId="allFieldsForSelectedObject" 
 									selectedFieldId="{!$Component.selectedObjectFields}"/> 
