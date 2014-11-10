@@ -170,10 +170,12 @@
 		                    	</apex:commandButton>
 		                	</apex:pageBlockSection>
                             <div class="scrollableLeft">
-                                <apex:pageBlockTable id="groupTable" value="{!groups}" var="group">
+                            	<!-- <apex:actionFunction name="updateGroupSelection">
+                            		<apex:param name
+                            	</apex:actionFunction> -->
+                                <apex:pageBlockTable id="groupTable" value="{!erdGroups}" var="group">
                                     <apex:column headerValue="Select Groups">
                                         <apex:inputCheckbox id="groupCheckBox" value="{!group.selected}">
-                                            <apex:actionSupport event="onchange" action="{!updateERDGroupSelection}" />
                                         </apex:inputCheckbox>
                                         <apex:outputLabel value="{!group.groupName}" for="groupCheckBox" />
                                     </apex:column>

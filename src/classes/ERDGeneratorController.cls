@@ -9,7 +9,7 @@ public class ERDGeneratorController
     public static final String EXTERNAL_TEMPLATE = 'CalloutTemplate';
     public static final String GROUP_STANDARD = 'Standard';
     public static final String GROUP_CUSTOM = 'Custom';
-    public static final String FOLDER_ERD_SETTINGS = 'ERD Settings';
+    //public static final String FOLDER_ERD_SETTINGS = 'ERD Settings';
     
     public String newGroupName{get;set;}
     public String selectedGroup{get;set;}
@@ -29,7 +29,7 @@ public class ERDGeneratorController
     private ERDSettingProcessor processor;
     private ERDInspector inspector;
     private List<String> settingNamesList;
-    private List<ERDEntityGroup> erdGroups;
+    public List<ERDEntityGroup> erdGroups{get;set;}
     
     public String currentSetting{
         get {
@@ -80,14 +80,14 @@ public class ERDGeneratorController
     }
     
     public ERDGeneratorController() {
-        initERDPersister();
         processor = new ERDSettingProcessor();
         inspector = new ERDInspector();
+        initERDPersister();
     }
         
     private void initERDPersister() {
     	
-        persister = new ERDPersister(FOLDER_ERD_SETTINGS);
+        persister = new ERDPersister();
         
         // Load first setting if setting List is not empty
         settingNamesList = persister.getSettingsNameList();
@@ -110,8 +110,15 @@ public class ERDGeneratorController
     	settings.includeFields = include;
     }
     
+    /*
     public List<ERDEntityGroup> getGroups() {
     	return ERDUtils.getERDEntityGroups(settings.groupToObjectsToFieldsMap.keySet(),settings.includedGroups);
+    }
+    */
+    
+    public void updateERDGroupSelection()
+    {
+    	processor.setERDGroupSelection(settings,erdGroups);
     }
     
     public List<String> getAllSelectedObjects()
@@ -178,18 +185,17 @@ public class ERDGeneratorController
         currentSetting = selectedSetting;
         settings = (ERDSettingsV3) persister.getSettings(selectedSetting);
         
+        // Get ERD Entity Groups
+        erdGroups = ERDUtils.getERDEntityGroups(settings.groupToObjectsToFieldsMap.keySet(),settings.includedGroups);
+        
         // Reset UI persistency
         selectedGroup = null;
         selectedSingleObject = null;
     }
     
-    public void updateERDGroupSelection()
-    {
-    	processor.setERDGroupSelection(settings,erdGroups);
-    }
-    
     public void refreshObjectFieldSelection()
     {
+    	updateERDGroupSelection();
     	selectedSingleObject = null;
     }
     
@@ -240,7 +246,9 @@ public class ERDGeneratorController
             ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please add some groups'));
             return;
         }
-          
+        
+        updateERDGroupSelection();
+        
         persister.saveSettings(selectedSetting, settings);
         currentSetting = selectedSetting;
     }
@@ -265,6 +273,8 @@ public class ERDGeneratorController
     
     public void generateERD()
     {
+    	updateERDGroupSelection();
+    	
         ERDGenerator generator;
         if (template == EXTERNAL_TEMPLATE) {   
             if (fileUrl == null || fileUrl == '') {
