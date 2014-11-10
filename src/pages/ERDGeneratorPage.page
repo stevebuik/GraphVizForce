@@ -44,6 +44,9 @@
 	    	color:#555555 !important; 
     		background-image:none
     	}
+    	.btnSave {
+    		margin: 0 10px 0 20px !important;
+    	}
 	    .throbber {
 	    	padding-left: 20px;
 	    	margin: 0 10px; 
@@ -110,8 +113,6 @@
         	height:240px;
         	overflow:scroll;
         }
-	    
-	    
 	    .configHint {
 	    	margin: 0 0 0 20px;
 	    }
@@ -140,6 +141,10 @@
     			<apex:outputPanel id="title">
     				<div id="titleContainer">
 	    				<h2 id="generatorTitle">Diagram: {!currentSetting}</h2>
+                    	<apex:commandButton styleClass="btnSave" value="Save" 
+                    		action="{!saveSelectedSetting}" rerender="messages,title" 
+                    		status="working" style="width:40px;">
+                    	</apex:commandButton>
 	    				<apex:actionStatus id="working">
 	    					<apex:facet name="start">
 	    						<span id="workingLabel" class="throbber">Working..</span>
@@ -152,32 +157,29 @@
     		
     		<apex:tabPanel switchType="client" id="tabPanel" selectedTab="tab1"
     			tabClass="activeTab" inactiveTabClass="inactiveTab">
-    			<apex:tab label="Load/Save Diagrams" id="tab1" name="tab1">
+    			<apex:tab label="Choose/Create Diagram" id="tab1" name="tab1">
     				<div class="tabLeftOne">
 					    <apex:pageBlock id="blockSetting">
-		                	<apex:pageBlockSection >
+		                	<apex:pageBlockSection columns="3">
+		                		
+		                		<apex:outputText value="Choose a Diagram" />
 		                		<apex:selectList id="settingPicklist" value="{!selectedSetting}" 
 		                			size="1" style="width:150px;">
 						            <apex:actionSupport event="onchange" action="{!loadSelectedSetting}" rerender="blockGroup,blockSelection,blockSingleObjectSelection,blockFieldSelection,title" status="working" />
 						            <apex:selectOptions value="{!settingSelectOptions}"/>
 						        </apex:selectList>
-						        <apex:panelGroup >
-		                    	<apex:commandButton id="btnDeleteSetting" value="Delete" 
+		                    	<apex:commandButton id="btnDeleteSetting" value="Delete Diagram" 
 		                    		action="{!deleteSelectedSetting}" rerender="blockSetting,blockGroup,blockSelection,blockSingleObjectSelection,blockFieldSelection,title" 
-		                    		status="working" style="width:40px;">
+		                    		status="working">
 		                    	</apex:commandButton>
-		                    	<apex:commandButton id="btnSaveSetting" value="Save" 
-		                    		action="{!saveSelectedSetting}" rerender="messages,title" 
-		                    		status="working" style="width:40px;">
-		                    	</apex:commandButton>
-		                    	</apex:panelGroup>
-		                		<apex:outputText value="OR" />
-		                    	<br />
-		                		<apex:inputText html-placeholder="Enter Diagram Name" id="inpSettingName" styleClass="textInput" value="{!newSettingName}" />
+		                    	
+		                		<apex:outputText value="Create a new Diagram" />
+		                		<apex:inputText html-placeholder="Enter New Diagram Name" id="inpSettingName" styleClass="textInput" value="{!newSettingName}" />
 		                    	<apex:commandButton id="btnSaveNewSetting" value="Save As" 
 		                    		action="{!saveAsNewSetting}" rerender="messages,settingPicklist,title" status="working">
 		                    		<apex:param value="{!newSettingName}"/>
 		                    	</apex:commandButton>
+		                    	
 		                	</apex:pageBlockSection>
 		                </apex:pageBlock>
 					</div>
