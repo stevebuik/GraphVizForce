@@ -13,25 +13,31 @@ An Entity Relationship Diagram generator in [Graphviz](http://graphviz.org) form
 - Generate diagrams directly to your computer using Dropbox
 - Customise the templates used for the diagram for your style preferences
 
-<a href="https://githubsfdeploy.herokuapp.com/app/githubdeploy/stevebuik/GraphVizForce" target="deploy">
-  <img alt="Deploy to Salesforce"
-       src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/src/main/webapp/resources/img/deploy.png">
-</a>
+<a href="https://githubsfdeploy-sandbox.herokuapp.com/app/githubdeploy/stevebuik/GraphVizForce" target="deploy">Deploy to Sandbox</a>
+.....or..... 
+<a href="https://githubsfdeploy.herokuapp.com/app/githubdeploy/stevebuik/GraphVizForce" target="deploy">Deploy to Production</a>
 
 ###Getting Started
 
-First create a folder in the Documents tab called *ERD Settings* . This name is case sensitive.
+First create a folder in the Documents tab called *ERD Settings* . This name is case sensitive. The API Name of the folder can be anything.
 
 To run the generator, navigate to the ERD Generator tab. You may need to make the tab visible in your Profile. 
 Or just change the url in your browser to /apex/ERDGeneratorPage
 
 1. Configure which objects are included in the diagram by creating groups in the *Configure Groups* tab.
 2. Then just click the *Generate* button and you will see the generated content. 
-3. This content needs to be saved to a file on your computer with a .gv extension. 
+3. The text that appears in the textarea needs to be saved to a file on your computer with a .gv extension. 
 4. Then you can open the file using [Graphviz](http://www.graphviz.org) and export to a pdf or image file if required.
-5. Use the *Load/Save Diagrams* tab to *Save As* your diagram settings. This allows you to update it later without starting from scratch.
+5. Now add fields to the diagram
+	1. Click the *Options* tab and tick the *Include Fields* checkbox
+	2. Click the *Configure Objects* tab and click *Refresh* if not Objects are listed
+	3. Edit any object and choose the fields you want to see
+	4. Click generate to get updated text for your diagram. Cut/Paste this to the Graphviz file (on Windows click the *Layout* button in Graphviz to refresh)
+6. Use the *Load/Save Diagrams* tab to *Save As* your diagram. This allows you to update it later without starting from scratch.
 
-If you don't want to manually save the .gv file then you can enable the *Generate to Dropbox* feature by:
+###Advanced Use
+
+If you don't want to cut/paste to the .gv file then you can enable the *Generate to Dropbox* feature by:
 
 1. Add 2 new *Remote Site Settings* in Salesforce Setup
     - https://api-content.dropbox.com
@@ -44,7 +50,7 @@ If you don't want to manually save the .gv file then you can enable the *Generat
 4. Enter any App Name
 5. Enter https://c.ap1.visual.force.com/apex/erdoauth into the *Redirect URIs* filed and click add. 
 Note that you need to change the ap1 in the url to be your Salesforce server name
-6. In Salesforce Setup, go to *Develop/Custom Settings* and click on the *manage* link for ERD
+6. In Salesforce Setup, go to *Develop/Custom Settings* and click on the *Manage* link for ERD
 7. Add a setting named *DropboxClientKey* with a value copied from the *App key* in your Dropbox API App 
 8. Add a setting named *DropboxClientSecret* with a value copied from the *App secret* in your Dropbox API App 
 9. Go back to the ERD Generator tab and you will now see a *Generate to Dropbox* link in the generate section. 
