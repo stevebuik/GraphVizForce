@@ -1,7 +1,17 @@
 Graphviz Force
 ========
 
-An Entity Relationship Diagram generator in Graphviz format for Salesforce.com
+An Entity Relationship Diagram generator in [Graphviz](http://graphviz.org) format for Salesforce.com
+
+![Sample](assets/Recruiting+and+Standard.png)
+
+###Features
+- Automatically generate and layout diagrams from SFDC to Graphviz
+- Group entities and choose which fields are included
+- Save diagrams for later changes
+- Export diagrams to [Image](assets/Recruiting+and+Standard.png) or [PDF](assets/Recruiting+and+Standard.pdf?raw=true) using Graphviz
+- Generate diagrams directly to your computer using Dropbox
+- Customise the templates used for the diagram for your style preferences
 
 <a href="https://githubsfdeploy.herokuapp.com/app/githubdeploy/stevebuik/GraphVizForce" target="deploy">
   <img alt="Deploy to Salesforce"
@@ -10,13 +20,16 @@ An Entity Relationship Diagram generator in Graphviz format for Salesforce.com
 
 ###Getting Started
 
-To run the generator, navigate to the ERD Generator tab. You may need to make the tab visible in your Profile.
+First create a folder in the Documents tab called *ERD Settings* . This name is case sensitive.
 
-You can configure which objects are included in the diagram by creating groups in the *Configure Groups* tab.
+To run the generator, navigate to the ERD Generator tab. You may need to make the tab visible in your Profile. 
+Or just change the url in your browser to /apex/ERDGeneratorPage
 
-Then just click the *Generate* button and you will see the generated content. 
-This content needs to be saved to a file on your computer with a .gv extension. 
-Then you can open the file using [Graphviz](http://www.graphviz.org) and export to a pdf or image file if required.
+1. Configure which objects are included in the diagram by creating groups in the *Configure Groups* tab.
+2. Then just click the *Generate* button and you will see the generated content. 
+3. This content needs to be saved to a file on your computer with a .gv extension. 
+4. Then you can open the file using [Graphviz](http://www.graphviz.org) and export to a pdf or image file if required.
+5. Use the *Load/Save Diagrams* tab to *Save As* your diagram settings. This allows you to update it later without starting from scratch.
 
 If you don't want to manually save the .gv file then you can enable the *Generate to Dropbox* feature by:
 

@@ -24,6 +24,8 @@
 
 function setDropboxToken(token) {
 	$c(globals.fields.token).val(token);
+	$110("#oauth").css("display", "none");
+	$110("#oauthComplete").css("display", "inline-block");
 }
 
 function templateChanged() {

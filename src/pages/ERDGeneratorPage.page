@@ -48,7 +48,8 @@
 	    	padding-left: 20px;
 	    	margin: 0 10px; 
 	    	font-size: 1.1em;
-	    	background: url("{!$Resource.WorkingImage}") no-repeat;}
+	    	color: #888;
+	    	background: #66FF33 url("{!$Resource.WorkingImage}") no-repeat;}
 	    #generatingLabel {
 	    	margin: 5px 5px;
 	    }
@@ -58,6 +59,9 @@
 	    #generateContainer > * {
 	    	float:left;
 	    	margin: 0 5px 2px 0;
+	    }
+	    #oauthComplete {
+	    	display:none;
 	    }
 	    #dropboxFileSelected {
 	    	padding: 2px 0 0 0;
@@ -270,6 +274,7 @@
 		    		<apex:inputHidden id="fileURL" value="{!fileURL}" />
 		    		<apex:outputPanel rendered="{!isDropboxEnabled}">
 				    	<a id="oauth" href="{!$Page.ERDOAuth}?start=true">Generate to Dropbox</a>
+				    	<span id="oauthComplete">Generating to Dropbox</span>
 			    		<apex:inputHidden id="oauthToken" value="{!oauthToken}" />
 		    		</apex:outputPanel>
 			    	<a id="download" target="download">Download Template</a>
