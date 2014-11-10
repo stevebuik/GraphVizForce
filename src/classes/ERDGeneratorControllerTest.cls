@@ -1,24 +1,25 @@
-@isTest(SeeAllData = true) // required because tests assume a Document Folder exists 
+@isTest 
 public with sharing class ERDGeneratorControllerTest
 {
 	
 	@isTest
 	static void testSettingsTabWithDefaultDiagram()
 	{
-		ERDPersister persister = new ERDPersister();
-        
 		// Initiate page reference
 		PageReference pageRef = Page.ERDGeneratorPage;
         Test.setCurrentPage(pageRef);
-        
+    	System.debug(LoggingLevel.ERROR, '@@@@@@PageReference is initialised');
+    	
         // Instantiate a new controller with all parameters in the page
       	ERDGeneratorController controller;
         controller = new ERDGeneratorController();
+    	System.debug(LoggingLevel.ERROR, '@@@@@@ERDGeneratorController is initialised');
+		controller.ensureDefaultDiagram();
 		
 		Test.startTest();
         
         	// Test d1 document exists
-        	List<Document> docs = [SELECT Id, Body FROM Document WHERE Name = 'Standard Objects' AND FolderId = :persister.folderId];
+        	List<Document> docs = [SELECT Id, Body FROM Document WHERE Name = 'Standard Objects' AND FolderId = :controller.persister.folderId];
 			System.assertEquals(1, docs.size());
         	
 			// Test loading setting d1 
@@ -38,28 +39,34 @@ public with sharing class ERDGeneratorControllerTest
 			controller.newSettingName = 'd2';
 			controller.saveAsNewSetting();
 			System.assertEquals('d2', controller.selectedSetting);
-			docs = [SELECT Id, Body FROM Document WHERE Name = 'd2' AND FolderId = :persister.folderId];
+			docs = [SELECT Id, Body FROM Document WHERE Name = 'd2' AND FolderId = :controller.persister.folderId];
 			System.assertEquals(1, docs.size());
 			
 			// User delete selected setting
 			controller.deleteSelectedSetting();
 			System.assertEquals(null,controller.selectedSetting);
-			docs = [SELECT Id, Body FROM Document WHERE Name = 'd2' AND FolderId = :persister.folderId];
+			docs = [SELECT Id, Body FROM Document WHERE Name = 'd2' AND FolderId = :controller.persister.folderId];
 			System.assertEquals(0, docs.size());
 			
 		Test.stopTest();
 	}
 	
 	@isTest
-	static void testSettingsTabWithoutSavedDiagrams()
-	{
-		
-	}
-	
-	@isTest
 	static void testGroupConfigurationTab()
 	{
-		
+		ERDPersister persister = new ERDPersister();
+        
+		// Initiate page reference
+		PageReference pageRef = Page.ERDGeneratorPage;
+        Test.setCurrentPage(pageRef);
+        
+        // Instantiate a new controller with all parameters in the page
+      	ERDGeneratorController controller;
+        controller = new ERDGeneratorController();
+        
+        Test.startTest();
+        	
+        Test.stopTest();
 	}
 	
 	@isTest

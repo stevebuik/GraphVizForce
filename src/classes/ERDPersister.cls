@@ -153,7 +153,7 @@ public with sharing class ERDPersister {
 	}
 
 	public void saveSettings(String name, Versionable settings) {
-		
+		System.debug(LoggingLevel.ERROR, '@@@@saveSettings is called');
 		List<Document> ds = [select Id from Document 
 			where Name = :name 
 			and FolderId = :folderId];

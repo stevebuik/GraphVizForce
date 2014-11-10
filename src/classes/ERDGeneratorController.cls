@@ -11,6 +11,7 @@ public class ERDGeneratorController
     public static final String GROUP_CUSTOM = 'Custom';
     //public static final String FOLDER_ERD_SETTINGS = 'ERD Settings';
     
+    public List<ERDEntityGroup> erdGroups{get;set;}
     public String newGroupName{get;set;}
     public String selectedGroup{get;set;}
     public String groupToDelete{get;set;}
@@ -25,11 +26,10 @@ public class ERDGeneratorController
     public String oauthToken{get;set;}
     public String selectedSingleObject{get;set;}
     
-    private ERDPersister persister;
-    private ERDSettingProcessor processor;
-    private ERDInspector inspector;
+    @TestVisible private ERDPersister persister;
+    @TestVisible private ERDSettingProcessor processor;
+    @TestVisible private ERDInspector inspector;
     private List<String> settingNamesList;
-    public List<ERDEntityGroup> erdGroups{get;set;}
     
     public String currentSetting{
         get {
@@ -80,38 +80,53 @@ public class ERDGeneratorController
     }
     
     public ERDGeneratorController() {
+    	System.debug(LoggingLevel.ERROR, '@@@@@@ERDGeneratorController constructor is called');
         processor = new ERDSettingProcessor();
         inspector = new ERDInspector();
         initERDPersister();
 	}
 	
+	/***********Initialisation************/
     private void initERDPersister() {
     	
         persister = new ERDPersister();
         
         // Load first setting if setting List is not empty
         settingNamesList = persister.getSettingsNameList();
-        if(!settingNamesList.isEmpty())
-        {
-            settingNamesList.sort();
-            selectedSetting = settingNamesList[0];
-            currentSetting = selectedSetting;            
-            loadSelectedSetting();
-        }
     }
     
     // if no diagrams exist i.e. new user, then seed one from a static resource
     public PageReference ensureDefaultDiagram() {
+    	System.debug(LoggingLevel.ERROR,'@@@@@ensureDefaultDiagram is called');
     	if (settingNamesList.size() == 0) {
+    		System.debug(LoggingLevel.ERROR,'@@@@@settingNamesList is empty');
     		selectedSetting = 'Standard Objects';
+    		currentSetting = selectedSetting;
     		settings = (ERDSettingsV3) persister.getDefaultSettings();  
 	        persister.saveSettings(selectedSetting, settings);
+	        initUI();
 	        PageReference ref = Page.ERDGeneratorPage;
 	        ref.setRedirect(true);
 	        return ref;
     	} else {
+    		System.debug(LoggingLevel.ERROR,'@@@@@settingNamesList is not empty');
+    		settingNamesList.sort();
+            selectedSetting = settingNamesList[0];
+            currentSetting = selectedSetting;            
+            loadSelectedSetting();
+            initUI();
 	    	return null;
     	}
+    }
+    
+    private void initUI()
+    {
+    	// Get ERD Entity Groups
+        erdGroups = ERDUtils.getERDEntityGroups(settings.groupToObjectsToFieldsMap.keySet(),settings.includedGroups);
+        
+        // Reset UI persistency
+        selectedGroup = null;
+        selectedSingleObject = null;
     }
     
     /********Getter Setter Methods********/
@@ -186,13 +201,6 @@ public class ERDGeneratorController
         // Update currentSetting
         currentSetting = selectedSetting;
         settings = (ERDSettingsV3) persister.getSettings(selectedSetting);
-        
-        // Get ERD Entity Groups
-        erdGroups = ERDUtils.getERDEntityGroups(settings.groupToObjectsToFieldsMap.keySet(),settings.includedGroups);
-        
-        // Reset UI persistency
-        selectedGroup = null;
-        selectedSingleObject = null;
     }
     
     public void refreshObjectFieldSelection()
