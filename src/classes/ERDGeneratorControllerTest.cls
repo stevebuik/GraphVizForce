@@ -51,9 +51,9 @@ public with sharing class ERDGeneratorControllerTest
 			controller.groupToDelete = controller.selectedGroup;
 			controller.deleteERDGroup();
 			controller.saveSelectedSetting();
-        	List<ERDEntityGroup> groups = controller.getGroups();
-			System.debug(LoggingLevel.ERROR,'@@@@@@@@@@controller.getGroups():' + groups);
-			System.assertEquals(1, groups.size(), 'erd map size should be 1 after group deletion');
+        	//List<ERDEntityGroup> groups = controller.getGroups();
+			//System.debug(LoggingLevel.ERROR,'@@@@@@@@@@controller.getGroups():' + groups);
+			System.assertEquals(1, controller.erdGroups.size(), 'erd map size should be 1 after group deletion');
 			
 			// User type in new setting name and save current setting as new
 			controller.newSettingName = 'd2';

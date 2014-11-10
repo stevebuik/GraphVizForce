@@ -205,7 +205,20 @@ public class ERDGeneratorController
     }
     
     public void deleteERDGroup() {
-    	processor.deleteERDGroup(settings,groupToDelete);
+    	if(erdGroups != null)
+    	{
+    		for(Integer i=0;i<erdGroups.size();i++)
+    		{
+    			if(erdGroups[i].groupName == groupToDelete)
+    			{
+    				erdGroups.remove(i);
+    				break;
+    			}
+    		}
+    	}
+    	// TODO: remove this method from processor
+    	//processor.deleteERDGroup(settings,groupToDelete);
+    	updateERDGroupSelection();
     	// Reset UI Persistency
     	if(groupToDelete == selectedGroup) {selectedGroup = null;}
     }
