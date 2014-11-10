@@ -1,11 +1,10 @@
 @isTest
 public with sharing class ERDPersisterTests {
 
-    public static final String FOLDER_ERD_SETTINGS = 'ERD Settings';
 
 	@isTest
 	private static void testUpgrade() {
-		ERDPersister persister = new ERDPersister(FOLDER_ERD_SETTINGS);
+		ERDPersister persister = new ERDPersister();
 		
 		Map<String,List<String>> v0 = new Map<String,List<String>>{
 			'Sales' => new List<String>{'Account', 'Contact'},
@@ -51,7 +50,7 @@ public with sharing class ERDPersisterTests {
 
 		String name1 = 'd1'; 
 
-		ERDPersister persister = new ERDPersister(FOLDER_ERD_SETTINGS);
+		ERDPersister persister = new ERDPersister();
 
 		Map<String,List<String>> v0 = new Map<String,List<String>>{
 			'Sales' => new List<String>{'Account', 'Contact'},

@@ -25,6 +25,7 @@ public class ERDSettingsV3 implements ERDPersister.Versionable {
 	
 	public Boolean includeFields {get;set;}
 	
+	// TODO: move this logic to processor
 	public Set<String> allSelectedObjects
 	{
 		get

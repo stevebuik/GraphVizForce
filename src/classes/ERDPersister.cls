@@ -1,6 +1,7 @@
 public with sharing class ERDPersister {
 	
 	public static final Integer CURRENT_VERSION = 3;
+    @TestVisible private static final String FOLDER_ERD_SETTINGS = 'ERD_Settings';
 	
 	public interface Versionable {
 		Integer getVersion();
@@ -9,16 +10,16 @@ public with sharing class ERDPersister {
 
 	public Id folderId;
 
-	public ERDPersister(String folderName) {
+	public ERDPersister() {
 		List<Folder> fs = [select Id from Folder 
-			where Name = :folderName
+			where DeveloperName = :FOLDER_ERD_SETTINGS
 			and Type = 'Document'];	
 		if (fs.size() == 0) {
-			throw new ApplicationException('Folder not found: '+folderName);
+			throw new ApplicationException('Folder not found: '+FOLDER_ERD_SETTINGS);
 		} else if (fs.size() == 1) {
 			this.folderId = fs.get(0).Id;
 		} else {
-			throw new ApplicationException('Too many folders found: '+folderName);
+			throw new ApplicationException('Too many folders found: '+FOLDER_ERD_SETTINGS);
 		}
 	}
 	
