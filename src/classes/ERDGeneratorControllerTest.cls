@@ -1,14 +1,14 @@
-@isTest
+@isTest(SeeAllData = true)
 public with sharing class ERDGeneratorControllerTest
 {
-	private static final String FOLDER_ERD_SETTINGS = 'ERD Settings';
+	//private static final String FOLDER_ERD_SETTINGS = 'ERD_Settings';
 	
 	@isTest
-	static void testERDGeneratorWithSavedDiagrams()
+	static void testSettingsTabWithSavedDiagrams()
 	{
 		// Initiate diagram
 		String diagramName = 'd1';
-		ERDPersister persister = new ERDPersister(FOLDER_ERD_SETTINGS);
+		ERDPersister persister = new ERDPersister();
 		Map<String,Map<String,List<String>>> erdMap = new Map<String,Map<String,List<String>>>{
 				'Sales' => new Map<String, List<String>>
 							{
@@ -22,11 +22,12 @@ public with sharing class ERDGeneratorControllerTest
 								'Campaign' => new List<String>()
 							}
 			};
+		
 		// create fake non-versioned persisted settings		
 		insert new Document(Name = diagramName,
 			FolderId = persister.folderId,
 			Body = Blob.valueOf(JSON.serialize(erdMap)));
-		
+        
 		// Initiate page reference
 		PageReference pageRef = Page.ERDGeneratorPage;
         Test.setCurrentPage(pageRef);
@@ -36,29 +37,67 @@ public with sharing class ERDGeneratorControllerTest
         controller = new ERDGeneratorController();
 		
 		Test.startTest();
-			// Test Tab 1
+        
+        	// Test d1 document exists
+        	List<Document> docs = [SELECT Id, Body FROM Document WHERE Name = 'd1' AND FolderId = :persister.folderId];
+			System.assertEquals(1, docs.size());
+        	
+			// Test loading setting d1 
 			System.assertEquals('d1', controller.selectedSetting);
+			System.assertEquals('d1', controller.currentSetting);
+			
+			// User save current setting d1 after deleted group
+			controller.selectedGroup = 'Marketing';
+			controller.groupToDelete = controller.selectedGroup;
+			controller.deleteERDGroup();
+			controller.saveSelectedSetting();
+        	List<ERDEntityGroup> groups = controller.getGroups();
+			System.debug(LoggingLevel.ERROR,'@@@@@@@@@@controller.getGroups():' + groups);
+			System.assertEquals(1, groups.size(), 'erd map size should be 1 after group deletion');
 			
 			// User type in new setting name and save current setting as new
 			controller.newSettingName = 'd2';
 			controller.saveAsNewSetting();
 			System.assertEquals('d2', controller.selectedSetting);
-			List<Document> docs = [select Id, Body from Document where Name = 'd2' and FolderId = :FOLDER_ERD_SETTINGS];
+			docs = [SELECT Id, Body FROM Document WHERE Name = 'd2' AND FolderId = :persister.folderId];
+			System.assertEquals(1, docs.size());
 			
 			// User delete selected setting
 			controller.deleteSelectedSetting();
 			System.assertEquals(null,controller.selectedSetting);
-			docs = [select Id, Body from Document where Name = 'd2' and FolderId = :FOLDER_ERD_SETTINGS];
+			docs = [SELECT Id, Body FROM Document WHERE Name = 'd2' AND FolderId = :persister.folderId];
 			System.assertEquals(0, docs.size());
+			
 		Test.stopTest();
 	}
 	
-	/*
 	@isTest
-	static void testERDGeneratorWithoutSavedDiagrams()
+	static void testSettingsTabWithoutSavedDiagrams()
 	{
-	 
 		
 	}
-	*/
+	
+	@isTest
+	static void testGroupConfigurationTab()
+	{
+		
+	}
+	
+	@isTest
+	static void testObjectConfigurationTab()
+	{
+		
+	}
+	
+	@isTest
+	static void testOptionsTab()
+	{
+		
+	}
+	
+	@isTest
+	static void testERDContentGeneration()
+	{
+		
+	}
 }
