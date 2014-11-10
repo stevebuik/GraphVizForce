@@ -1,0 +1,1 @@
+public enum ERDTemplateType {MAIN, CLUSTER, ENTITY, RELATIONSHIP, FIELD}

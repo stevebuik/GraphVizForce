@@ -7,14 +7,14 @@ public with sharing class ERDGenerator
 {
 	private Integer describeChildCount = 0;
 	
-	private TemplateEngine templateEngine;
+	private ERDTemplateEngine templateEngine;
 	
 	public ERDGenerator(String resourceName) {
-		this(new TemplateEngine.StaticResourceTemplateSource(resourceName));	
+		this(new ERDTemplateEngine.StaticResourceTemplateSource(resourceName));	
 	}
 
-	public ERDGenerator(TemplateEngine.TemplateSource source) {
-		templateEngine = new TemplateEngine(source);
+	public ERDGenerator(ERDTemplateEngine.TemplateSource source) {
+		templateEngine = new ERDTemplateEngine(source);
 	}
 	
 	public String generateERD(ERDSettingsV3 settings)
@@ -76,7 +76,7 @@ public with sharing class ERDGenerator
 		if(!allObjectRelationshipList.isEmpty())
 		{
             for(ERDEntityRelationship crossRelationship : allObjectRelationshipList){
-				crossGroupRelationshipContent += templateEngine.render(TemplateType.RELATIONSHIP,
+				crossGroupRelationshipContent += templateEngine.render(ERDTemplateType.RELATIONSHIP,
 									new Map<String, String>{
 										'from' => crossRelationship.parentObjectName,
 										'to' => crossRelationship.childObjectName
@@ -90,7 +90,7 @@ public with sharing class ERDGenerator
 	private String renderERDGraphvizContent(String subgraphContent, String crossGroupRelationshipContent)
 	{
 		// Render ERD graphviz content using template engine
-		return templateEngine.render(TemplateType.MAIN,
+		return templateEngine.render(ERDTemplateType.MAIN,
 					new Map<String, String>{
 						'content' => subgraphContent + crossGroupRelationshipContent
 					});
@@ -102,7 +102,7 @@ public with sharing class ERDGenerator
 		
 		for(String fieldName : entityFields)
 		{
-			entityFieldsOutput += templateEngine.render(TemplateType.FIELD,
+			entityFieldsOutput += templateEngine.render(ERDTemplateType.FIELD,
 				new Map<String, String>{
 					'name' => fieldName
 				});
@@ -130,14 +130,14 @@ public with sharing class ERDGenerator
 				entityFieldsOutput = '';
 			}
 			
-			entityOutput += templateEngine.render(TemplateType.ENTITY,
+			entityOutput += templateEngine.render(ERDTemplateType.ENTITY,
 				new Map<String, String>{
 					'name' => entity.objectName,
 					'fields' => entityFieldsOutput
 				});
 		}
 				
-		return templateEngine.render(TemplateType.CLUSTER,
+		return templateEngine.render(ERDTemplateType.CLUSTER,
 					new Map<String, String>{
 						'sequence' => ''+subgraphIndex,
 						'name' => groupName,

@@ -15,11 +15,11 @@ public with sharing class ERDPersister {
 			where DeveloperName = :FOLDER_ERD_SETTINGS
 			and Type = 'Document'];	
 		if (fs.size() == 0) {
-			throw new ApplicationException('Folder not found: '+FOLDER_ERD_SETTINGS);
+			throw new ERDException('Folder not found: '+FOLDER_ERD_SETTINGS);
 		} else if (fs.size() == 1) {
 			this.folderId = fs.get(0).Id;
 		} else {
-			throw new ApplicationException('Too many folders found: '+FOLDER_ERD_SETTINGS);
+			throw new ERDException('Too many folders found: '+FOLDER_ERD_SETTINGS);
 		}
 	}
 	
@@ -67,7 +67,7 @@ public with sharing class ERDPersister {
 			Versionable v = upgrade(version, settingJSON);
 			return v;
 		} else {
-			throw new ApplicationException('Too many documents found: '+name);
+			throw new ERDException('Too many documents found: '+name);
 		}	
 	}
 	
@@ -172,7 +172,7 @@ public with sharing class ERDPersister {
 			d.Body = Blob.valueOf(body);
 			update d;
 		} else {
-			throw new ApplicationException('Too many Documents found: '+name);			
+			throw new ERDException('Too many Documents found: '+name);			
 		}
 
 	}
@@ -190,7 +190,7 @@ public with sharing class ERDPersister {
 		}
 		else
 		{
-			throw new ApplicationException('Document does not exist: ' + name);
+			throw new ERDException('Document does not exist: ' + name);
 		}
 	}
 

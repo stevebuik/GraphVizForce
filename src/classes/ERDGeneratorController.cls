@@ -246,7 +246,7 @@ public class ERDGeneratorController
             return;
         }
         
-        Integer index = ListUtils.getStringItemIndex(selectedSetting,settingNamesList);
+        Integer index = ERDListUtils.getStringItemIndex(selectedSetting,settingNamesList);
         
         if(index != -1)
         {
@@ -290,7 +290,7 @@ public class ERDGeneratorController
         }
         
         persister.saveSettings(newSettingName, settings);
-        if(ListUtils.getStringItemIndex(newSettingName,settingNamesList) == -1)
+        if(ERDListUtils.getStringItemIndex(newSettingName,settingNamesList) == -1)
         {
             settingNamesList.add(newSettingName);
         }
@@ -308,7 +308,7 @@ public class ERDGeneratorController
             if (fileUrl == null || fileUrl == '') {
                 ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please choose an external file'));
             } else {    
-                generator = new ERDGenerator(new TemplateEngine.CalloutTemplateSource(fileUrl));
+                generator = new ERDGenerator(new ERDTemplateEngine.CalloutTemplateSource(fileUrl));
             }           
         } else {
             generator = new ERDGenerator(template);         
