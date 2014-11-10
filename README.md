@@ -24,16 +24,17 @@ First create a folder in the Documents tab called *ERD Settings* . This name is 
 To run the generator, navigate to the ERD Generator tab. You may need to make the tab visible in your Profile. 
 Or just change the url in your browser to /apex/ERDGeneratorPage
 
-1. Configure which objects are included in the diagram by creating groups in the *Configure Groups* tab.
-2. Then just click the *Generate* button and you will see the generated content. 
-3. The text that appears in the textarea needs to be saved to a file on your computer with a .gv extension. 
-4. Then you can open the file using [Graphviz](http://www.graphviz.org) and export to a pdf or image file if required.
-5. Now add fields to the diagram
-	1. Click the *Options* tab and tick the *Include Fields* checkbox
-	2. Click the *Configure Objects* tab and click *Refresh* if not Objects are listed
+1. Click the *Generate* button and you will see the generated content. 
+2. The text that appears in the textarea needs to be saved to a file on your computer with a .gv extension. 
+3. Then you can open the file using [Graphviz](http://www.graphviz.org) and export to a pdf or image file if required.
+4. Now add some new fields to the diagram
+	2. Click the *Configure Objects* tab
 	3. Edit any object and choose the fields you want to see
 	4. Click generate to get updated text for your diagram. Cut/Paste this to the Graphviz file (on Windows click the *Layout* button in Graphviz to refresh)
-6. Use the *Load/Save Diagrams* tab to *Save As* your diagram. This allows you to update it later without starting from scratch.
+5. Click the *Configure Groups* tab to add or remove a Group and some Objects
+6. Click the *Generate* button again to see your changes in the Graphviz code field	
+7. Use the *Save* button to save your diagram. This allows you to update it later without starting from scratch.
+8. Maybe use the *Save As* button in the *Choose/Create Diagram* tab to clone a new Diagram from the default.
 
 ###Advanced Use
 
