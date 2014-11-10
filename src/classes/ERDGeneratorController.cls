@@ -123,21 +123,10 @@ public class ERDGeneratorController
     	settings.includeFields = include;
     }
     
-    /*
-    public List<ERDEntityGroup> getGroups() {
-    	return ERDUtils.getERDEntityGroups(settings.groupToObjectsToFieldsMap.keySet(),settings.includedGroups);
-    }
-    */
-    
-    public void updateERDGroupSelection()
-    {
-    	processor.setERDGroupSelection(settings,erdGroups);
-    }
-    
     public List<String> getAllSelectedObjects()
     {
     	List<String> sorted = new List<String>();
-    	if(settings != null) {sorted = new List<String>(settings.allSelectedObjects);}
+    	if(settings != null) {sorted = new List<String>(processor.retrieveAllObjectsForGroups(settings));}
     	sorted.sort();
     	return sorted;
     }
@@ -212,6 +201,11 @@ public class ERDGeneratorController
     	selectedSingleObject = null;
     }
     
+    public void updateERDGroupSelection()
+    {
+    	processor.setERDGroupSelection(settings,erdGroups);
+    }
+    
     public void addNewGroupWithInput() {
     	if (newGroupName == null) {return;}
     	processor.addNewERDGroup(settings,newGroupName);
@@ -229,9 +223,9 @@ public class ERDGeneratorController
     			}
     		}
     	}
-    	// TODO: remove this method from processor
-    	//processor.deleteERDGroup(settings,groupToDelete);
+    	
     	updateERDGroupSelection();
+    	
     	// Reset UI Persistency
     	if(groupToDelete == selectedGroup) {selectedGroup = null;}
     }

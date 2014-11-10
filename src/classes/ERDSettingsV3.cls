@@ -25,26 +25,6 @@ public class ERDSettingsV3 implements ERDPersister.Versionable {
 	
 	public Boolean includeFields {get;set;}
 	
-	// TODO: move this logic to processor
-	public Set<String> allSelectedObjects
-	{
-		get
-		{
-			System.debug(LoggingLevel.ERROR, '@@@@@@@@objectNameSet is called');
-			Set<String> objectNameSet = new Set<String>();
-			
-			for(String grp : groupToObjectsToFieldsMap.keySet())
-			{
-				if(includedGroups.contains(grp))
-				{
-					objectNameSet.addAll(groupToObjectsToFieldsMap.get(grp).keySet());
-				}
-			}
-			
-			return objectNameSet;
-		}
-	}
-	
 	public void upgrade(ERDPersister.Versionable old) {
 		// old version is always the current - 1
 		ERDSettingsV2 v2 = (ERDSettingsV2) old; 

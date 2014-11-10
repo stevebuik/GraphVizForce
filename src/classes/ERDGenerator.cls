@@ -20,9 +20,10 @@ public with sharing class ERDGenerator
 	public String generateERD(ERDSettingsV3 settings)
 	{
 		ERDInspector inspector = new ERDInspector();
+		ERDSettingProcessor processor = new ERDSettingProcessor();
 		Boolean includeFields = settings.includeFields;
 		Map<String,Map<String,List<String>>> erdMap = new Map<String,Map<String,List<String>>>();
-		Set<String> allSelectedObjects = settings.allSelectedObjects;
+		Set<String> allSelectedObjects = processor.retrieveAllObjectsForGroups(settings);
 		List<ERDEntityRelationship> allObjectRelationshipList = new List<ERDEntityRelationship>();
 		Map<String, List<ERDEntity>> groupToERDEntityListMap = new Map<String, List<ERDEntity>>(); 
 		

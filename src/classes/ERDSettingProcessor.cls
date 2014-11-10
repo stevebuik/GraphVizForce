@@ -1,5 +1,20 @@
 public with sharing class ERDSettingProcessor
 {
+	public Set<String> retrieveAllObjectsForGroups(ERDSettingsv3 settings)
+	{
+		Set<String> objectNameSet = new Set<String>();
+		
+		for(String grp : settings.groupToObjectsToFieldsMap.keySet())
+		{
+			if(settings.includedGroups.contains(grp))
+			{
+				objectNameSet.addAll(settings.groupToObjectsToFieldsMap.get(grp).keySet());
+			}
+		}
+		
+		return objectNameSet;
+	}
+	
 	public void setSelectedObjectsToGroup(ERDSettingsV3 settings, String csv, String selectedGroup)
 	{
 		Map<String, List<String>> objectToFieldsMap = settings.groupToObjectsToFieldsMap.get(selectedGroup);
