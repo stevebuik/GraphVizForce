@@ -47,9 +47,13 @@ public with sharing class ERDGenerator
 		return renderERDGraphvizContent(subgraphContent, crossGroupRelationshipContent);
 	}
 	
+	private static final List<String> COLORS = new List<String> {
+		'powderblue','olivedrab3','peachpuff','orange','lightsalmon4','indianred2'
+		,'mediumpurple','tomato2','orchid','wheat','palegreen','darkslateblue' 
+	};
+	
 	private String generateSubgraphContent(Map<String, List<ERDEntity>> groupToERDEntityListMap,
-											Boolean includeFields)
-	{
+											Boolean includeFields) {
 		String subgraphsContent = '';
 		Integer subgraphIndex = 0;
 		
@@ -61,7 +65,12 @@ public with sharing class ERDGenerator
 			List<ERDEntity> entities = groupToERDEntityListMap.get(groupName);
 			
 			// Generate the subgraph section with group index, groupname, object names for the group, entity List and relationship List
-			String groupSubGraph = generateSubgraph(subgraphIndex,groupName,entities,includeFields);
+			String groupSubGraph = generateSubgraph(
+				subgraphIndex,
+				groupName,
+				COLORS.get(subgraphIndex), 
+				entities,
+				includeFields);
 			subgraphsContent += groupSubGraph;
 			subgraphIndex++;
 		}
@@ -114,6 +123,7 @@ public with sharing class ERDGenerator
 	private String generateSubgraph(
 		Integer subgraphIndex, 
 		String groupName, 
+		String colour,
 		List<ERDEntity> entities,
 		Boolean includeFields
 		){
@@ -140,6 +150,7 @@ public with sharing class ERDGenerator
 		return templateEngine.render(ERDTemplateType.CLUSTER,
 					new Map<String, String>{
 						'sequence' => ''+subgraphIndex,
+						'color' => colour,
 						'name' => groupName,
 						'content' => entityOutput + entityRelationshipOutput
 					});

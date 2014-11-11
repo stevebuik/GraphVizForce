@@ -8,8 +8,8 @@ digraph G {
 ========== CLUSTER
 
 subgraph cluster_{{sequence}} { label = "{{name}}";
-	style=filled; 
-	color=lightgrey;
+	style="rounded, filled";
+	fillcolor={{color}};
 	node [style=filled,color=white];
 
 {{content}}
