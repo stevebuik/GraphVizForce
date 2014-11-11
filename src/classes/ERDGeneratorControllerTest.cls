@@ -54,17 +54,54 @@ public with sharing class ERDGeneratorControllerTest
 	@isTest
 	static void testGroupConfigurationTab()
 	{
-		ERDPersister persister = new ERDPersister();
-        
 		// Initiate page reference
 		PageReference pageRef = Page.ERDGeneratorPage;
         Test.setCurrentPage(pageRef);
-        
+    	
         // Instantiate a new controller with all parameters in the page
       	ERDGeneratorController controller;
         controller = new ERDGeneratorController();
+		controller.ensureDefaultDiagram();
         
         Test.startTest();
+        	// User unselect a group
+        	controller.erdGroups[0].selected = false;
+        	controller.saveSelectedSetting();
+        	System.assertEquals(3, controller.settings.includedGroups.size());
+        	
+        	// User select a group
+        	controller.erdGroups[0].selected = true;
+        	controller.saveSelectedSetting();
+        	System.assertEquals(4, controller.settings.includedGroups.size());
+        	
+        	// User add a new group
+        	controller.newGroupName = 'New Group';
+        	controller.addNewGroupWithInput();
+        	controller.saveSelectedSetting();
+        	System.assertEquals(5, controller.settings.includedGroups.size());
+        	
+        	// User delete a group
+        	controller.groupToDelete = 'New Group';
+        	controller.deleteERDGroup();
+        	controller.saveSelectedSetting();
+        	System.assertEquals(4, controller.settings.includedGroups.size());
+        	
+        	// User press edit button on a group
+        	controller.selectedGroup = 'Common';
+        	String selectedObjectsForGroup = controller.getSelectedObjects();
+        	System.assertEquals('Contact,Account', selectedObjectsForGroup);
+        	
+        	// User add objects to a group
+        	controller.setSelectedObjects('Contact,Account,Lead');
+        	controller.saveSelectedSetting();
+        	selectedObjectsForGroup = controller.getSelectedObjects();
+        	System.assertEquals('Contact,Account,Lead',selectedObjectsForGroup);
+        	
+        	// User remove objects to a group
+        	controller.setSelectedObjects('Contact,Account');
+        	controller.saveSelectedSetting();
+        	selectedObjectsForGroup = controller.getSelectedObjects();
+        	System.assertEquals('Contact,Account',selectedObjectsForGroup);
         	
         Test.stopTest();
 	}

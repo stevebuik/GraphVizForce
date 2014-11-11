@@ -78,9 +78,7 @@ public with sharing class ERDUtils
     	
     	for(String g : sortedGroups)
     	{
-    		ERDEntityGroup grp = new ERDEntityGroup();
-    		grp.groupName = g;
-    		grp.selected = includedGroups.contains(g);
+    		ERDEntityGroup grp = new ERDEntityGroup(g,includedGroups.contains(g));
     		erdGroups.add(grp);
     	}
     	return erdGroups;
