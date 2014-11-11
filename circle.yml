@@ -1,0 +1,4 @@
+test:
+  override:
+    - ant -lib CI/ Build: 
+        timeout: 600
