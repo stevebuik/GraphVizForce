@@ -1,7 +1,10 @@
 Graphviz Force
 ========
 
-An Entity Relationship Diagram generator in [Graphviz](http://graphviz.org) format for Salesforce.com
+An Entity Relationship Diagram generator in [Graphviz](http://graphviz.org) format for Salesforce.com. 
+Graphviz is a free tool that converts text files into diagrams. Those text files are what this tool generates automatically.
+
+This is an example of what you can produce.
 
 ![Sample](assets/Recruiting+and+Standard.png)
 
@@ -13,13 +16,16 @@ An Entity Relationship Diagram generator in [Graphviz](http://graphviz.org) form
 - Generate diagrams directly to your computer using Dropbox
 - Customise the templates used for the diagram for your style preferences
 
-<a href="https://githubsfdeploy-sandbox.herokuapp.com/app/githubdeploy/stevebuik/GraphVizForce" target="deploy">Deploy to Sandbox</a>
-.....or..... 
-<a href="https://githubsfdeploy.herokuapp.com/app/githubdeploy/stevebuik/GraphVizForce" target="deploy">Deploy to Production</a>
-
 ###Getting Started
 
-First create a folder in the Documents tab called *ERD Settings* . This name is case sensitive. The API Name of the folder can be anything.
+Install [Graphviz](http://graphviz.org) on your computer.
+
+Install this app into your Salesforce: 
+<a href="https://githubsfdeploy-sandbox.herokuapp.com/app/githubdeploy/stevebuik/GraphVizForce" target="deploy">Install into Sandbox</a>
+.....or..... 
+<a href="https://githubsfdeploy.herokuapp.com/app/githubdeploy/stevebuik/GraphVizForce" target="deploy">Install into Production</a>
+
+Create a folder in the Documents tab called *ERD Settings* . This name is case sensitive. The API Name of the folder can be anything.
 
 To run the generator, navigate to the ERD Generator tab. You may need to make the tab visible in your Profile. 
 Or just change the url in your browser to /apex/ERDGeneratorPage
@@ -38,7 +44,10 @@ Or just change the url in your browser to /apex/ERDGeneratorPage
 
 ###Advanced Use
 
-If you don't want to cut/paste to the .gv file then you can enable the *Generate to Dropbox* feature by:
+If you don't want to cut/paste to the .gv file then it's possible for the generator to update the .gv file via Dropbox. 
+You will need the Dropbox desktop software installed for this to work.
+
+You can enable the *Generate to Dropbox* feature by:
 
 1. Add 2 new *Remote Site Settings* in Salesforce Setup
     - https://api-content.dropbox.com
