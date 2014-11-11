@@ -51,6 +51,7 @@ public class ERDGeneratorController
     	set;
     }
     
+    @TestVisible
     private ERDSettingsV3 settings{
     	get {
     		if (settings == null) settings = new ERDSettingsV3(); 
@@ -215,7 +216,11 @@ public class ERDGeneratorController
     }
     
     public void addNewGroupWithInput() {
-    	if (newGroupName == null) {return;}
+    	if (newGroupName == null || erdGroups == null) {return;}
+    	
+    	ERDEntityGroup newGroup = new ERDEntityGroup(newGroupName,true);
+    	erdGroups.add(newGroup);
+    	
     	processor.addNewERDGroup(settings,newGroupName);
     }
     
@@ -232,7 +237,7 @@ public class ERDGeneratorController
     		}
     	}
     	
-    	updateERDGroupSelection();
+    	processor.deleteERDGroup(settings,groupToDelete);
     	
     	// Reset UI Persistency
     	if(groupToDelete == selectedGroup) {selectedGroup = null;}
