@@ -10,13 +10,14 @@ public with sharing class ERDGeneratorControllerTest
         Test.setCurrentPage(pageRef);
     	System.debug(LoggingLevel.ERROR, '@@@@@@PageReference is initialised');
     	
-        // Instantiate a new controller with all parameters in the page
-      	ERDGeneratorController controller;
-        controller = new ERDGeneratorController();
-    	System.debug(LoggingLevel.ERROR, '@@@@@@ERDGeneratorController is initialised');
-		controller.ensureDefaultDiagram();
-		
 		Test.startTest();
+        	
+        	/* Test controller without saved diagram */
+        	// Instantiate a new controller with all parameters in the page
+	      	ERDGeneratorController controller;
+	        controller = new ERDGeneratorController();
+	    	System.debug(LoggingLevel.ERROR, '@@@@@@ERDGeneratorController is initialised');
+			controller.ensureDefaultDiagram();
         
         	// Test d1 document exists
         	List<Document> docs = [SELECT Id, Body FROM Document WHERE Name = 'Standard Objects' AND FolderId = :controller.persister.folderId];
@@ -25,6 +26,14 @@ public with sharing class ERDGeneratorControllerTest
 			// Test loading setting d1 
 			System.assertEquals('Standard Objects', controller.selectedSetting);
 			System.assertEquals('Standard Objects', controller.currentSetting);
+			
+			/* Test controller with saved diagram */
+			// Load page with saved diagram "Standard Objects"
+			controller = new ERDGeneratorController();
+			controller.ensureDefaultDiagram();
+			
+			// Test controller UI methods
+			System.assertEquals(1,controller.settingSelectOptions.size());
 			
 			// User save current setting d1 after deleted group
 			controller.selectedGroup = 'Marketing';
@@ -90,6 +99,8 @@ public with sharing class ERDGeneratorControllerTest
         	controller.selectedGroup = 'Common';
         	String selectedObjectsForGroup = controller.getSelectedObjects();
         	System.assertEquals('Contact,Account', selectedObjectsForGroup);
+        	String objectsForSelectedGroup = controller.getObjectsForSelectedGroup();
+        	System.assertEquals(true, objectsForSelectedGroup.contains('Contact'));
         	
         	// User add objects to a group
         	controller.setSelectedObjects('Contact,Account,Lead');
@@ -199,6 +210,10 @@ public with sharing class ERDGeneratorControllerTest
 		controller.ensureDefaultDiagram();
         
         Test.startTest();
+        	
+        	// Test templates list:
+        	List<SelectOption> templates = controller.getTemplates();
+        	System.assertEquals(2, templates.size());
         	
         	// User press generate button
         	controller.template = 'DefaultTemplate';
