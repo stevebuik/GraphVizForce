@@ -202,12 +202,15 @@ public class ERDGeneratorController
         // Update currentSetting
         currentSetting = selectedSetting;
         settings = (ERDSettingsV3) persister.getSettings(selectedSetting);
+        
+        initUI();
     }
     
-    public void refreshObjectFieldSelection()
+    public PageReference refreshObjectFieldSelection()
     {
     	updateERDGroupSelection();
     	selectedSingleObject = null;
+    	return null;
     }
     
     public void updateERDGroupSelection()
