@@ -20,18 +20,16 @@
         window.open(url, "oauth", "width=600,height=400");		
 	});
 	
-	// Initialise Accordion
-	$110( "#accordion" ).accordion();
-	
-	// On Accordion switch section
-	$110("#accordion").accordion({ beforeActivate: function(event, ui) {
-        var sectionHeader = ui.newHeader.text();
-        if(sectionHeader.indexOf("Step 3") != -1)
-        {
-        	refreshTab3();
-        }         
-     }
-  });
+    // Initialise jquery tabs
+    $110( "#tabs" ).tabs({
+	                    activate: function(event ,ui){
+	                        if(ui.newTab.index() == 2)
+	                        {
+	                        	refreshTab3();
+	                        }
+	                    }
+	});
+    
 }());
 
 
