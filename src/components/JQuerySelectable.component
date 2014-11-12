@@ -14,7 +14,7 @@
 	#selectable{!selectableId} li { margin: 4px; padding: 5px; float: left; font-size: 1.3em; text-align: center; }
 	.clearfix {clear: both;}
 	#container{!selectableId} {
-		height: 340px;
+		height: 240px;
 		overflow: scroll;
 	}
 	</style>

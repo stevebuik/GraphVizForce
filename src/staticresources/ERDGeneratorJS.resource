@@ -19,22 +19,8 @@
 		var url = $110(this).attr("href");
         window.open(url, "oauth", "width=600,height=400");		
 	});
-	
-	// Initialise Accordion
-	$110( "#accordion" ).accordion();
-	
-	// On Accordion switch section
-	$110("#accordion").accordion({ beforeActivate: function(event, ui) {
-        var sectionHeader = ui.newHeader.text();
-        if(sectionHeader.indexOf("Step 3") != -1)
-        {
-        	refreshTab3();
-        }         
-     }
-  });
+
 }());
-
-
 
 function setDropboxToken(token) {
 	$c(globals.fields.token).val(token);

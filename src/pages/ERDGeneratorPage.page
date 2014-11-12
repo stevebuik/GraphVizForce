@@ -1,18 +1,9 @@
 <apex:page controller="ERDGeneratorController" action="{!ensureDefaultDiagram}">
 
-	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"/>
-	
-	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.js" 
 		type="text/javascript"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.js" 
 		type="text/javascript"></script>
-	
-	<!-- 
-	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-	<script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-	 -->
-	 
     <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" 
     	id="dropboxjs" data-app-key="1nasijgpqxbicyu"></script>
     <script type="text/javascript">    
@@ -29,8 +20,6 @@
     			"DefaultTemplate" : "{!$Resource.DefaultTemplate}"
     		}
     	};
-    	
-    	
 	</script>
 
 	<style type="text/css">
@@ -85,15 +74,15 @@
 	    	float: right;
 	    }
 	    .tabLeftOne {
-    		min-height: 400px;
+    		min-height: 300px;
 	    	width: 500px;
 	    }
 	    .tabLeftTwo {
-    		min-height: 400px;
+    		min-height: 300px;
 	    	width: 800px;
 	    }
 	    #groupsLeft {
-    		min-height: 400px;
+    		min-height: 300px;
 	    	width: 300px;
 	    	float:left;
 	    	margin: 0 20px 0 0;
@@ -121,15 +110,14 @@
 	    }
 	    .scrollableLeft
         {
-        	height:340px;
+        	height:240px;
         	overflow:scroll;
         }
 	    .configHint {
 	    	margin: 0 0 0 20px;
 	    }
 	    #generator {
-	    	padding: 20px 20px 0 20px;
-	    	min-height:400px;
+	    	padding: 10px 0 0 0;
 	    }
 	    #generator h2 {
 	    	font-size: 1.2em;
@@ -167,37 +155,38 @@
     			</apex:outputPanel>
     		</apex:facet>
     		
-    		<div id="accordion">
-				<h3>Step 1 - Choose/Create Diagram</h3>
-			  	<div class="tabLeftOne">
-				    <apex:pageBlock id="blockSetting">
-	                	<apex:pageBlockSection columns="3">
-	                		
-	                		<apex:outputText value="Choose a Diagram" />
-	                		<apex:selectList id="settingPicklist" value="{!selectedSetting}" 
-	                			size="1" style="width:150px;">
-					            <apex:actionSupport event="onchange" action="{!loadSelectedSetting}" rerender="blockSetting,blockGroup,blockSelection,blockSingleObjectSelection,blockFieldSelection,blockIncludeFields,title" status="working" />
-					            <apex:selectOptions value="{!settingSelectOptions}"/>
-					        </apex:selectList>
-	                    	<apex:commandButton id="btnDeleteSetting" value="Delete Diagram" 
-	                    		action="{!deleteSelectedSetting}" rerender="blockSetting,blockGroup,blockSelection,blockSingleObjectSelection,blockFieldSelection,blockIncludeFields,title" 
-	                    		status="working">
-	                    	</apex:commandButton>
-	                    	
-	                		<apex:outputText value="Create a new Diagram" />
-	                		<apex:inputText html-placeholder="Enter New Diagram Name" id="inpSettingName" styleClass="textInput" value="{!newSettingName}" />
-	                    	<apex:commandButton id="btnSaveNewSetting" value="Save As" 
-	                    		action="{!saveAsNewSetting}" rerender="messages,settingPicklist,title" status="working">
-	                    		<apex:param value="{!newSettingName}"/>
-	                    	</apex:commandButton>
-	                    	
-	                	</apex:pageBlockSection>
-	                </apex:pageBlock>
-				</div>
-				
-			  	<h3>Step 2 - Configure Group > Objects</h3>
-			  	<div>
-				  	<div id="groupsLeft">
+    		<apex:tabPanel switchType="client" id="tabPanel" selectedTab="tab1"
+    			tabClass="activeTab" inactiveTabClass="inactiveTab">
+    			<apex:tab label="Choose/Create Diagram" id="tab1" name="tab1">
+    				<div class="tabLeftOne">
+					    <apex:pageBlock id="blockSetting">
+		                	<apex:pageBlockSection columns="3">
+		                		
+		                		<apex:outputText value="Choose a Diagram" />
+		                		<apex:selectList id="settingPicklist" value="{!selectedSetting}" 
+		                			size="1" style="width:150px;">
+						            <apex:actionSupport event="onchange" action="{!loadSelectedSetting}" rerender="blockGroup,blockSelection,blockSingleObjectSelection,blockFieldSelection,title" status="working" />
+						            <apex:selectOptions value="{!settingSelectOptions}"/>
+						        </apex:selectList>
+		                    	<apex:commandButton id="btnDeleteSetting" value="Delete Diagram" 
+		                    		action="{!deleteSelectedSetting}" rerender="blockSetting,blockGroup,blockSelection,blockSingleObjectSelection,blockFieldSelection,title" 
+		                    		status="working">
+		                    	</apex:commandButton>
+		                    	
+		                		<apex:outputText value="Create a new Diagram" />
+		                		<apex:inputText html-placeholder="Enter New Diagram Name" id="inpSettingName" styleClass="textInput" value="{!newSettingName}" />
+		                    	<apex:commandButton id="btnSaveNewSetting" value="Save As" 
+		                    		action="{!saveAsNewSetting}" rerender="messages,settingPicklist,title" status="working">
+		                    		<apex:param value="{!newSettingName}"/>
+		                    	</apex:commandButton>
+		                    	
+		                	</apex:pageBlockSection>
+		                </apex:pageBlock>
+					</div>
+    			</apex:tab>
+    			
+    			<apex:tab label="Configure Groups" id="tab2" name="tab2">
+    				<div id="groupsLeft">
 		                <apex:pageBlock title="Groups" id="blockGroup">
 		                	<apex:pageBlockSection >
 		                    	<apex:inputText html-placeholder="Enter Group Name" id="inpGroupName" styleClass="textInput" value="{!newGroupName}" />
@@ -205,32 +194,32 @@
 		                    		action="{!addNewGroupWithInput}" rerender="messages,groupTable" status="working">
 		                    	</apex:commandButton>
 		                	</apex:pageBlockSection>
-	                           <div class="scrollableLeft">
-	                           	<!-- <apex:actionFunction name="updateGroupSelection">
-	                           		<apex:param name
-	                           	</apex:actionFunction> -->
-	                               <apex:pageBlockTable id="groupTable" value="{!erdGroups}" var="group">
-	                                   <apex:column headerValue="Select Groups">
-	                                       <apex:inputCheckbox id="groupCheckBox" value="{!group.selected}">
-	                                       </apex:inputCheckbox>
-	                                       <apex:outputLabel value="{!group.groupName}" for="groupCheckBox" />
-	                                   </apex:column>
-	                                   <apex:column headerValue="Edit" width="30">
-	                                       <apex:commandButton id="editGroupButton" value="Edit >>" rerender="blockSelection,blockSingleObjectSelection,blockFieldSelection" status="working">
-	                                           <apex:param assignTo="{!selectedGroup}" value="{!group.groupName}" name="selectedERDGroup"/>
-	                                       </apex:commandButton>
-	                                   </apex:column>
-	                                   <apex:column headerValue="Delete" width="30">
-	                                       <apex:commandButton id="deleteGroupButton" value="Delete" action="{!deleteERDGroup}" rerender="blockGroup,blockSelection,blockSingleObjectSelection,blockFieldSelection" status="working">
-	                                           <apex:param assignTo="{!groupToDelete}" value="{!group.groupName}" name="ERDGroupToDelete"/>
-	                                       </apex:commandButton>
-	                                   </apex:column>
-	                               </apex:pageBlockTable>
-	                           </div>
+                            <div class="scrollableLeft">
+                            	<!-- <apex:actionFunction name="updateGroupSelection">
+                            		<apex:param name
+                            	</apex:actionFunction> -->
+                                <apex:pageBlockTable id="groupTable" value="{!erdGroups}" var="group">
+                                    <apex:column headerValue="Select Groups">
+                                        <apex:inputCheckbox id="groupCheckBox" value="{!group.selected}">
+                                        </apex:inputCheckbox>
+                                        <apex:outputLabel value="{!group.groupName}" for="groupCheckBox" />
+                                    </apex:column>
+                                    <apex:column headerValue="Edit" width="30">
+                                        <apex:commandButton id="editGroupButton" value="Edit >>" rerender="blockSelection,blockSingleObjectSelection,blockFieldSelection" status="working">
+                                            <apex:param assignTo="{!selectedGroup}" value="{!group.groupName}" name="selectedERDGroup"/>
+                                        </apex:commandButton>
+                                    </apex:column>
+                                    <apex:column headerValue="Delete" width="30">
+                                        <apex:commandButton id="deleteGroupButton" value="Delete" action="{!deleteERDGroup}" rerender="blockGroup,blockSelection,blockSingleObjectSelection,blockFieldSelection" status="working">
+                                            <apex:param assignTo="{!groupToDelete}" value="{!group.groupName}" name="ERDGroupToDelete"/>
+                                        </apex:commandButton>
+                                    </apex:column>
+                                </apex:pageBlockTable>
+                            </div>
 		                </apex:pageBlock>
-					</div>
-		      	   
-					<div id="groupsRight">
+			      	</div>
+			      	   
+    				<div id="groupsRight">
 		                <apex:outputPanel id="blockSelection">
 							<div id="objectsForSelectedGroup" style="display:none;">{!objectsForSelectedGroup}</div>
 							<apex:inputHidden id="selectedObjects" value="{!selectedObjects}">
@@ -246,30 +235,31 @@
 									selectedFieldId="{!$Component.selectedObjects}"/> 
 		                	</apex:pageBlock>
 		                </apex:outputPanel>
-					</div>	
-				</div>
-				
-				<h3>Step 3 - Configure Object > Fields</h3>
-				<div>
-					<apex:actionFunction action="{!refreshObjectFieldSelection}" name="refreshTab3" reRender="blockSingleObjectSelection,blockFieldSelection" status="working" />
+					</div>		                	
+		        </apex:tab>
+		        
+		        <apex:tab label="Configure Objects" id="tab3" name="tab3">
+		        	<div style="width:100%">
+		        		<apex:commandButton value="Refresh" action="{!refreshObjectFieldSelection}" reRender="blockSingleObjectSelection,blockFieldSelection" status="working" />
+		        	</div>
 					<div id="groupsLeft">
 						<apex:pageBlock id="blockSingleObjectSelection" title="Select Object to Edit">
-	                           <div class="scrollableLeft">
-	                               <apex:pageBlockTable id="objectTable" value="{!allSelectedObjects}" var="selectedObj">
-	                                   <apex:column headerValue="Object Name">
-	                                       <apex:outputLabel value="{!selectedObj}" />
-	                                   </apex:column>
-	                                   <apex:column headerValue="Edit" width="30">
-	                                       <apex:commandButton id="editObjectButton" value="Edit >>" rerender="blockFieldSelection" status="working">
-	                                           <apex:param assignTo="{!selectedSingleObject}" value="{!selectedObj}" name="selectedSingleObjecToEditFields"/>
-	                                       </apex:commandButton>
-	                                   </apex:column>
-	                               </apex:pageBlockTable>
-	                           </div>
+                            <div class="scrollableLeft">
+                                <apex:pageBlockTable id="objectTable" value="{!allSelectedObjects}" var="selectedObj">
+                                    <apex:column headerValue="Object Name">
+                                        <apex:outputLabel value="{!selectedObj}" />
+                                    </apex:column>
+                                    <apex:column headerValue="Edit" width="30">
+                                        <apex:commandButton id="editObjectButton" value="Edit >>" rerender="blockFieldSelection" status="working">
+                                            <apex:param assignTo="{!selectedSingleObject}" value="{!selectedObj}" name="selectedSingleObjecToEditFields"/>
+                                        </apex:commandButton>
+                                    </apex:column>
+                                </apex:pageBlockTable>
+                            </div>
 						</apex:pageBlock>
 					</div>
-				
-	   				<div id="groupsRight">
+					
+    				<div id="groupsRight">
 		                <apex:outputPanel id="blockFieldSelection">
 							<div id="allFieldsForSelectedObject" style="display:none;">{!allFieldsForSelectedObject}</div>
 							<apex:inputHidden id="selectedObjectFields" value="{!selectedObjectFields}"/>
@@ -285,56 +275,56 @@
 		                	</apex:pageBlock>
 		                </apex:outputPanel>
 					</div>	
-				</div>
-				
-				<h3>Step 4 - Options</h3>
-				<div class="tabLeftOne">
-		            <apex:pageBlock id="blockIncludeFields">
-			            <apex:inputCheckbox id="fieldsCheckbox" value="{!includeFields}" />
-					    <apex:outputLabel value="Include Fields" for="fieldsCheckbox" />
-					    <span class="configHint">Show fields in the diagram. Does not affect your field selections.</span>
-			        </apex:pageBlock>
-				</div>
-				
-				<h3>Step 5 - Generate ERD</h3>
-				<div id="generator">
-				    <div id="generateContainer">
-			    		<apex:commandButton value="Generate" action="{!generateERD}" 
-			    			rerender="messages,generated" status="generating"/>
-			    		<span id="templateLabel">Template:</span>
-				    	<apex:selectList id="template" size="1" value="{!template}" 
-				    		onChange="templateChanged();">
-				    		<apex:selectOptions value="{!templates}"/>
-				    	</apex:selectList>
-				    	<span id="dropboxFileSelected"></span>
-				    	<span id="pickDropboxContainer"></span>
-			    		<apex:inputHidden id="fileURL" value="{!fileURL}" />
-			    		<apex:outputPanel rendered="{!isDropboxEnabled}">
-					    	<a id="oauth" href="{!$Page.ERDOAuth}?start=true">Generate to Dropbox</a>
-					    	<span id="oauthComplete">Dropbox Generation Enabled</span>
-				    		<apex:inputHidden id="oauthToken" value="{!oauthToken}" />
-			    		</apex:outputPanel>
-				    	<a id="download" target="download">Download Template</a>
-				    </div>
-				    <div style="clear: both;"></div>
-				    <div>
-					    <apex:actionStatus id="generating">
-		   					<apex:facet name="start">
-		   						<div id="generatingLabel" class="throbber">Generating..</div>
-		   					</apex:facet>
-		   				</apex:actionStatus>			    
-		   			</div>
-		   			<apex:outputPanel id="generated">
-		               	<apex:inputTextarea value="{!generatedContent}" 
-		               		rendered="{!LEN(generatedContent) != 0}" rows="25" style="width:100%;" />
-		               	<apex:outputPanel styleClass="generatedHint" rendered="{!LEN(generatedContent) == 0}">
-		               		When you click the "Generate" button, Graphviz code will appear here. Cut/Paste this code to Graphviz to see it as a diagram.
-		               	</apex:outputPanel>
-	               	</apex:outputPanel>
-	            </div>
-	            
-			</div>
+		         	
+		        </apex:tab>
+    			<apex:tab label="Options" id="tab4" name="tab4">
+	            	<div class="tabLeftOne">
+			            <apex:pageBlock id="blockIncludeFields">
+				            <apex:inputCheckbox id="fieldsCheckbox" value="{!includeFields}" />
+						    <apex:outputLabel value="Include Fields" for="fieldsCheckbox" />
+						    <span class="configHint">Show fields in the diagram. Does not affect your field selections.</span>
+				        </apex:pageBlock>
+					</div>
+    			</apex:tab>
+		        
+    		</apex:tabPanel>
     		
+            <div id="generator">
+				<h2>ERD Content</h2>
+			    <div id="generateContainer">
+		    		<apex:commandButton value="Generate" action="{!generateERD}" 
+		    			rerender="messages,generated" status="generating"/>
+		    		<span id="templateLabel">Template:</span>
+			    	<apex:selectList id="template" size="1" value="{!template}" 
+			    		onChange="templateChanged();">
+			    		<apex:selectOptions value="{!templates}"/>
+			    	</apex:selectList>
+			    	<span id="dropboxFileSelected"></span>
+			    	<span id="pickDropboxContainer"></span>
+		    		<apex:inputHidden id="fileURL" value="{!fileURL}" />
+		    		<apex:outputPanel rendered="{!isDropboxEnabled}">
+				    	<a id="oauth" href="{!$Page.ERDOAuth}?start=true">Generate to Dropbox</a>
+				    	<span id="oauthComplete">Dropbox Generation Enabled</span>
+			    		<apex:inputHidden id="oauthToken" value="{!oauthToken}" />
+		    		</apex:outputPanel>
+			    	<a id="download" target="download">Download Template</a>
+			    </div>
+			    <div style="clear: both;"></div>
+			    <div>
+				    <apex:actionStatus id="generating">
+	   					<apex:facet name="start">
+	   						<div id="generatingLabel" class="throbber">Generating..</div>
+	   					</apex:facet>
+	   				</apex:actionStatus>			    
+	   			</div>
+	   			<apex:outputPanel id="generated">
+	               	<apex:inputTextarea value="{!generatedContent}" 
+	               		rendered="{!LEN(generatedContent) != 0}" rows="20" style="width:100%;" />
+	               	<apex:outputPanel styleClass="generatedHint" rendered="{!LEN(generatedContent) == 0}">
+	               		When you click the "Generate" button, Graphviz code will appear here. Cut/Paste this code to Graphviz to see it as a diagram.
+	               	</apex:outputPanel>
+               	</apex:outputPanel>
+            </div>
         </apex:pageBlock>
     </apex:form>
 
