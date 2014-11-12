@@ -5,6 +5,7 @@ This class is to provide utility functionalities for the ERD Generator
 */
 public with sharing class ERDUtils
 {
+	/** This function is removed from ERDGenerator
 	public static Boolean isValidObjectName(String objName, List<String> objNames)
 	{
 		if(objNames != null)
@@ -20,7 +21,9 @@ public with sharing class ERDUtils
 		
 		return false;
 	}
+	*/
 	
+	/** This function is removed from ERDGenerator
 	public static Boolean isEnitityExists(String objectName, List<ERDEntity> entities)
 	{
 		if(entities != null)
@@ -36,6 +39,7 @@ public with sharing class ERDUtils
 		
 		return false;
 	}
+	*/
 	
 	public static Boolean isEnitityRelationshipExists(String parentObjectName, String childObjectName, List<ERDEntityRelationship> relationships)
 	{

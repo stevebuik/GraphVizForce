@@ -308,7 +308,7 @@ public class ERDGeneratorController
         currentSetting = selectedSetting;
     }
     
-    public void generateERD()
+    public String generateERD()
     {
     	updateERDGroupSelection();
     	

@@ -5,6 +5,7 @@ This class is to provide utility functionalities for List Collection primitive
 */
 public with sharing class ERDListUtils
 {
+	/** This function is removed from ERDGenerator
     public static List<SObject> subList(Integer startIndex, Integer numOfItems, List<SObject> items)
     {
         if(items == null)
@@ -35,6 +36,7 @@ public with sharing class ERDListUtils
         
         return returnList;
     }
+    */
     
     public static Integer getStringItemIndex(String item, List<String> items)
     {

@@ -163,12 +163,50 @@ public with sharing class ERDGeneratorControllerTest
 	@isTest
 	static void testSettingOptions()
 	{
-		
+		// Initiate page reference
+		PageReference pageRef = Page.ERDGeneratorPage;
+        Test.setCurrentPage(pageRef);
+    	
+        // Instantiate a new controller with all parameters in the page
+      	ERDGeneratorController controller;
+        controller = new ERDGeneratorController();
+		controller.ensureDefaultDiagram();
+        
+        Test.startTest();
+        	
+        	// Test include fields with default diagram
+        	Boolean includeFields = controller.getIncludeFields();
+        	System.assertEquals(true,includeFields);
+        	
+        	// User diselect include fields checkbox
+        	controller.setIncludeFields(false);
+        	includeFields = controller.getIncludeFields();
+        	controller.saveSelectedSetting();
+        	System.assertEquals(false,includeFields);
+        Test.stopTest();
 	}
 	
 	@isTest
 	static void testERDContentGeneration()
 	{
-		
+		// Initiate page reference
+		PageReference pageRef = Page.ERDGeneratorPage;
+        Test.setCurrentPage(pageRef);
+    	
+        // Instantiate a new controller with all parameters in the page
+      	ERDGeneratorController controller;
+        controller = new ERDGeneratorController();
+		controller.ensureDefaultDiagram();
+        
+        Test.startTest();
+        	
+        	// User press generate button
+        	controller.template = 'DefaultTemplate';
+        	controller.generateERD();
+        	System.assertEquals(true,controller.generatedContent.contains('graph [rankdir=LR,nodesep=1.0];'));
+        	System.assertEquals(true,controller.generatedContent.contains('label = "Common"'));
+        	System.assertEquals(true,controller.generatedContent.contains('Account -> Account'));
+        	System.assertEquals(true,controller.generatedContent.contains('Account [label='));
+        Test.stopTest();
 	}
 }
