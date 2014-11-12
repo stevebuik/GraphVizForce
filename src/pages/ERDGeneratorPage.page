@@ -238,7 +238,8 @@
 					</div>		                	
 		        </apex:tab>
 		        
-		        <apex:tab label="Configure Objects" id="tab3" name="tab3">
+		        <apex:actionFunction name="refreshTab3" action="{!refreshObjectFieldSelection}" reRender="blockSingleObjectSelection,blockFieldSelection" status="working" />
+		        <apex:tab label="Configure Objects" id="tab3" name="tab3" ontabenter="refreshTab3();">
 		        	<div style="width:100%">
 		        		<apex:commandButton value="Refresh" action="{!refreshObjectFieldSelection}" reRender="blockSingleObjectSelection,blockFieldSelection" status="working" />
 		        	</div>

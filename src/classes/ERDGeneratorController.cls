@@ -208,6 +208,7 @@ public class ERDGeneratorController
     
     public PageReference refreshObjectFieldSelection()
     {
+    	System.debug(LoggingLevel.ERROR, '@@@@@@refreshObjectFieldSelection is called');
     	updateERDGroupSelection();
     	selectedSingleObject = null;
     	return null;

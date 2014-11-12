@@ -3,7 +3,7 @@ public with sharing class ERDGeneratorControllerTest
 {
 	
 	@isTest
-	static void testSettingsTabWithDefaultDiagram()
+	static void testSettingsWithDefaultDiagram()
 	{
 		// Initiate page reference
 		PageReference pageRef = Page.ERDGeneratorPage;
@@ -52,7 +52,7 @@ public with sharing class ERDGeneratorControllerTest
 	}
 	
 	@isTest
-	static void testGroupConfigurationTab()
+	static void testGroupConfiguration()
 	{
 		// Initiate page reference
 		PageReference pageRef = Page.ERDGeneratorPage;
@@ -97,7 +97,7 @@ public with sharing class ERDGeneratorControllerTest
         	selectedObjectsForGroup = controller.getSelectedObjects();
         	System.assertEquals('Contact,Account,Lead',selectedObjectsForGroup);
         	
-        	// User remove objects to a group
+        	// User remove objects from a group
         	controller.setSelectedObjects('Contact,Account');
         	controller.saveSelectedSetting();
         	selectedObjectsForGroup = controller.getSelectedObjects();
@@ -106,14 +106,62 @@ public with sharing class ERDGeneratorControllerTest
         Test.stopTest();
 	}
 	
-	@isTest
-	static void testObjectConfigurationTab()
-	{
-		
-	}
 	
 	@isTest
-	static void testOptionsTab()
+	static void testObjectConfiguration()
+	{
+		// Initiate page reference
+		PageReference pageRef = Page.ERDGeneratorPage;
+        Test.setCurrentPage(pageRef);
+    	
+        // Instantiate a new controller with all parameters in the page
+      	ERDGeneratorController controller;
+        controller = new ERDGeneratorController();
+		controller.ensureDefaultDiagram();
+        
+        // User press edit button on a group
+    	controller.selectedGroup = 'Common';
+    	String selectedObjectsForGroup = controller.getSelectedObjects();
+    	System.assertEquals('Contact,Account', selectedObjectsForGroup);
+    	
+    	// User add objects to a group
+    	controller.setSelectedObjects('Contact,Account,Lead');
+    	selectedObjectsForGroup = controller.getSelectedObjects();
+    	System.assertEquals('Contact,Account,Lead',selectedObjectsForGroup);
+        
+        Test.startTest();
+        	
+        	// User switch to step 3 - object > fields section
+        	controller.refreshObjectFieldSelection();
+        	Set<String> allSelectedObjects = new Set<String>(controller.getAllSelectedObjects());
+        	System.assertEquals(true,allSelectedObjects.contains('Lead'));
+        	
+        	// User press edit button on an object
+        	controller.selectedSingleObject = 'Contact';
+        	String allFieldsForSelectedObject = controller.getAllFieldsForSelectedObject();
+        	String selectedObjectFields = controller.getSelectedObjectFields();
+        	System.assertEquals(true,allFieldsForSelectedObject.contains('FirstName'));
+        	System.assertEquals(true,selectedObjectFields.contains('FirstName'));
+        	System.assertEquals(false,selectedObjectFields.contains('Email'));
+        	
+        	// User add fields to an object
+        	controller.setSelectedObjectFields('Jigsaw,Languages__c,FirstName,LastName,Email');
+        	controller.saveSelectedSetting();
+        	selectedObjectFields = controller.getSelectedObjectFields();
+        	System.assertEquals(true,selectedObjectFields.contains('Email'));
+        	
+        	// User remove fields from an object
+        	controller.setSelectedObjectFields('Jigsaw,Languages__c,FirstName,LastName');
+        	controller.saveSelectedSetting();
+        	selectedObjectFields = controller.getSelectedObjectFields();
+        	System.assertEquals(false,selectedObjectFields.contains('Email'));
+        	
+        Test.stopTest();
+	}
+	
+	
+	@isTest
+	static void testSettingOptions()
 	{
 		
 	}
