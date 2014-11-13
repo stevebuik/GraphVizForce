@@ -9,7 +9,7 @@ public class ERDGeneratorController
     public static final String EXTERNAL_TEMPLATE = 'CalloutTemplate';
     public static final String GROUP_STANDARD = 'Standard';
     public static final String GROUP_CUSTOM = 'Custom';
-    //public static final String FOLDER_ERD_SETTINGS = 'ERD Settings';
+    public static final String DEFAULT_DIAGRAM_NAME = 'Default Diagram';
     
     public List<ERDEntityGroup> erdGroups{get;set;}
     public String newGroupName{get;set;}
@@ -101,7 +101,7 @@ public class ERDGeneratorController
     	System.debug(LoggingLevel.ERROR,'@@@@@ensureDefaultDiagram is called');
     	if (settingNamesList.size() == 0) {
     		System.debug(LoggingLevel.ERROR,'@@@@@settingNamesList is empty');
-    		selectedSetting = 'Default Diagram';
+    		selectedSetting = DEFAULT_DIAGRAM_NAME;
     		currentSetting = selectedSetting;
     		settings = (ERDSettingsV3) persister.getDefaultSettings();  
 	        persister.saveSettings(selectedSetting, settings);

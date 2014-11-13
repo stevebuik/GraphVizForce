@@ -20,12 +20,12 @@ public with sharing class ERDGeneratorControllerTest
 			controller.ensureDefaultDiagram();
         
         	// Test d1 document exists
-        	List<Document> docs = [SELECT Id, Body FROM Document WHERE Name = 'Standard Objects' AND FolderId = :controller.persister.folderId];
+        	List<Document> docs = [SELECT Id, Body FROM Document WHERE Name = :ERDGeneratorController.DEFAULT_DIAGRAM_NAME AND FolderId = :controller.persister.folderId];
 			System.assertEquals(1, docs.size());
         	
 			// Test loading setting d1 
-			System.assertEquals('Standard Objects', controller.selectedSetting);
-			System.assertEquals('Standard Objects', controller.currentSetting);
+			System.assertEquals(ERDGeneratorController.DEFAULT_DIAGRAM_NAME, controller.selectedSetting);
+			System.assertEquals(ERDGeneratorController.DEFAULT_DIAGRAM_NAME, controller.currentSetting);
 			
 			/* Test controller with saved diagram */
 			// Load page with saved diagram "Standard Objects"
