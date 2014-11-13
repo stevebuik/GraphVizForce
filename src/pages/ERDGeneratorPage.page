@@ -14,7 +14,8 @@
     		fields: {
     			fileURL:  "{!$Component.generatorForm.generatorBlock.fileURL}",
     			token:	  "{!$Component.generatorForm.generatorBlock.oauthToken}",
-    			template: "{!$Component.generatorForm.generatorBlock.template}"
+    			template: "{!$Component.generatorForm.generatorBlock.template}",
+    			fieldSelectorContainer: "{!$Component.generatorForm.generatorBlock.blockFieldSelection}"
     		},
     		templates: {
     			"DefaultTemplate" : "{!$Resource.DefaultTemplate}"
@@ -245,30 +246,31 @@
 					</div>		                	
 		        </apex:tab>
 		        
-		        <apex:actionFunction name="refreshTab3" action="{!refreshObjectFieldSelection}" 
-		        	reRender="blockSingleObjectSelection,blockFieldSelection" status="working" />
-		        <apex:tab label="Configure Objects" id="tab3" name="tab3" ontabenter="refreshTab3();">
-		        	<div style="width:100%">
-		        		<apex:commandButton value="Refresh" action="{!refreshObjectFieldSelection}" 
-		        			reRender="blockSingleObjectSelection,blockFieldSelection" status="working" />
-		        	</div>
+		        <apex:tab label="Configure Objects" id="tab3" name="tab3" ontabenter="updateObjectsTab();">		        	
 					<div id="groupsLeft">
-						<apex:pageBlock id="blockSingleObjectSelection" title="Select Object to Edit">
-                            <div class="scrollableLeft">
-                                <apex:pageBlockTable id="objectTable" value="{!allSelectedObjects}" var="selectedObj">
-                                    <apex:column headerValue="Object Name">
-                                        <apex:outputLabel value="{!selectedObj}" />
-                                    </apex:column>
-                                    <apex:column headerValue="Edit" width="30">
-                                        <apex:commandButton id="editObjectButton" value="Edit >>" 
-                                        	rerender="blockFieldSelection" status="statusFieldSelection">
-                                            <apex:param assignTo="{!selectedSingleObject}" 
-                                            	value="{!selectedObj}" name="selectedSingleObjecToEditFields"/>
-                                        </apex:commandButton>
-                                    </apex:column>
-                                </apex:pageBlockTable>
-                            </div>
-						</apex:pageBlock>
+    					<apex:actionStatus id="statusFieldObjectSelection">
+     						<apex:facet name="start">
+	    						<span id="" class="throbber">Loading..</span>
+     						</apex:facet>
+    						<apex:facet name="stop">
+								<apex:pageBlock id="blockSingleObjectSelection" title="Select Object to Edit">
+		                            <div class="scrollableLeft">
+		                                <apex:pageBlockTable id="objectTable" value="{!allSelectedObjects}" var="selectedObj">
+		                                    <apex:column headerValue="Object Name">
+		                                        <apex:outputLabel value="{!selectedObj}" />
+		                                    </apex:column>
+		                                    <apex:column headerValue="Edit" width="30">
+		                                        <apex:commandButton id="editObjectButton" value="Edit >>" 
+		                                        	rerender="blockFieldSelection" status="statusFieldSelection">
+		                                            <apex:param assignTo="{!selectedSingleObject}" 
+		                                            	value="{!selectedObj}" name="selectedSingleObjecToEditFields"/>
+		                                        </apex:commandButton>
+		                                    </apex:column>
+		                                </apex:pageBlockTable>
+		                            </div>
+								</apex:pageBlock>
+							</apex:facet>
+						</apex:actionStatus>
 					</div>
 					
     				<div id="groupsRight">
@@ -294,6 +296,10 @@
 			                </apex:facet>
 		                </apex:actionStatus>
 					</div>	
+
+			        <apex:actionFunction name="refreshTab3" action="{!refreshObjectFieldSelection}" 
+			        	reRender="blockSingleObjectSelection,blockFieldSelection" 
+			        	status="statusFieldObjectSelection" />
 		         	
 		        </apex:tab>
     			<apex:tab label="Options" id="tab4" name="tab4">

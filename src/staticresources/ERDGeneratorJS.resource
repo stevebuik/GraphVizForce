@@ -28,6 +28,11 @@ function setDropboxToken(token) {
 	$110("#oauthComplete").css("display", "inline-block");
 }
 
+function updateObjectsTab() {
+	$c(globals.fields.fieldSelectorContainer).css("display", "none");
+	refreshTab3();
+}
+
 function templateChanged() {
 	adjustGeneratorButtons();
 	setDownloadURL();
