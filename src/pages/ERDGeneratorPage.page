@@ -205,7 +205,7 @@
                                         <apex:outputLabel value="{!group.groupName}" for="groupCheckBox" />
                                     </apex:column>
                                     <apex:column headerValue="Edit" width="30">
-                                        <apex:commandButton id="editGroupButton" value="Edit >>" rerender="blockSelection,blockSingleObjectSelection,blockFieldSelection" status="working">
+                                        <apex:commandButton id="editGroupButton" value="Edit >>" rerender="blockSelection,blockSingleObjectSelection,blockFieldSelection" status="statusObjectSelection">
                                             <apex:param assignTo="{!selectedGroup}" value="{!group.groupName}" name="selectedERDGroup"/>
                                         </apex:commandButton>
                                     </apex:column>
@@ -220,28 +220,37 @@
 			      	</div>
 			      	   
     				<div id="groupsRight">
-		                <apex:outputPanel id="blockSelection">
-							<div id="objectsForSelectedGroup" style="display:none;">{!objectsForSelectedGroup}</div>
-							<apex:inputHidden id="selectedObjects" value="{!selectedObjects}">
-							</apex:inputHidden>
-			                <apex:pageBlock rendered="{!NOT(ISNULL(selectedGroup))}">
-			                	<apex:facet name="header">
-			                		<h2 class="editorBlockTitle">Group: {!selectedGroup}</h2>
-			                		<span class="editorBlockHint">Hold down <strong>Ctrl/Cmd</strong> to Select Multiple Objects</span>
-			                		<div class="clearfix"></div>
-			                	</apex:facet>
-								<c:JQuerySelectable selectableId="objectSelector" 
-									optionsFieldId="objectsForSelectedGroup" 
-									selectedFieldId="{!$Component.selectedObjects}"/> 
-		                	</apex:pageBlock>
-		                </apex:outputPanel>
+    					<apex:actionStatus id="statusObjectSelection">
+     						<apex:facet name="start">
+	    						<span id="" class="throbber">Loading..</span>
+     						</apex:facet>
+    						<apex:facet name="stop">    				
+				                <apex:outputPanel id="blockSelection">
+									<div id="objectsForSelectedGroup" style="display:none;">{!objectsForSelectedGroup}</div>
+									<apex:inputHidden id="selectedObjects" value="{!selectedObjects}">
+									</apex:inputHidden>
+					                <apex:pageBlock rendered="{!NOT(ISNULL(selectedGroup))}">
+					                	<apex:facet name="header">
+					                		<h2 class="editorBlockTitle">Group: {!selectedGroup}</h2>
+					                		<span class="editorBlockHint">Hold down <strong>Ctrl/Cmd</strong> to Select Multiple Objects</span>
+					                		<div class="clearfix"></div>
+					                	</apex:facet>
+										<c:JQuerySelectable selectableId="objectSelector" 
+											optionsFieldId="objectsForSelectedGroup" 
+											selectedFieldId="{!$Component.selectedObjects}"/> 
+				                	</apex:pageBlock>
+				                </apex:outputPanel>
+				            </apex:facet>
+			            </apex:actionStatus>
 					</div>		                	
 		        </apex:tab>
 		        
-		        <apex:actionFunction name="refreshTab3" action="{!refreshObjectFieldSelection}" reRender="blockSingleObjectSelection,blockFieldSelection" status="working" />
+		        <apex:actionFunction name="refreshTab3" action="{!refreshObjectFieldSelection}" 
+		        	reRender="blockSingleObjectSelection,blockFieldSelection" status="working" />
 		        <apex:tab label="Configure Objects" id="tab3" name="tab3" ontabenter="refreshTab3();">
 		        	<div style="width:100%">
-		        		<apex:commandButton value="Refresh" action="{!refreshObjectFieldSelection}" reRender="blockSingleObjectSelection,blockFieldSelection" status="working" />
+		        		<apex:commandButton value="Refresh" action="{!refreshObjectFieldSelection}" 
+		        			reRender="blockSingleObjectSelection,blockFieldSelection" status="working" />
 		        	</div>
 					<div id="groupsLeft">
 						<apex:pageBlock id="blockSingleObjectSelection" title="Select Object to Edit">
@@ -251,8 +260,10 @@
                                         <apex:outputLabel value="{!selectedObj}" />
                                     </apex:column>
                                     <apex:column headerValue="Edit" width="30">
-                                        <apex:commandButton id="editObjectButton" value="Edit >>" rerender="blockFieldSelection" status="working">
-                                            <apex:param assignTo="{!selectedSingleObject}" value="{!selectedObj}" name="selectedSingleObjecToEditFields"/>
+                                        <apex:commandButton id="editObjectButton" value="Edit >>" 
+                                        	rerender="blockFieldSelection" status="statusFieldSelection">
+                                            <apex:param assignTo="{!selectedSingleObject}" 
+                                            	value="{!selectedObj}" name="selectedSingleObjecToEditFields"/>
                                         </apex:commandButton>
                                     </apex:column>
                                 </apex:pageBlockTable>
@@ -261,20 +272,27 @@
 					</div>
 					
     				<div id="groupsRight">
-		                <apex:outputPanel id="blockFieldSelection">
-							<div id="allFieldsForSelectedObject" style="display:none;">{!allFieldsForSelectedObject}</div>
-							<apex:inputHidden id="selectedObjectFields" value="{!selectedObjectFields}"/>
-			                <apex:pageBlock rendered="{!NOT(ISNULL(selectedSingleObject))}">
-			                	<apex:facet name="header">
-			                		<h2 class="editorBlockTitle">Object: {!selectedSingleObject}</h2>
-			                		<span class="editorBlockHint">Hold down <strong>Ctrl/Cmd</strong> to Select Multiple Fields</span>
-			                		<div class="clearfix"></div>
-			                	</apex:facet>
-								<c:JQuerySelectable selectableId="fieldSelector" 
-									optionsFieldId="allFieldsForSelectedObject" 
-									selectedFieldId="{!$Component.selectedObjectFields}"/> 
-		                	</apex:pageBlock>
-		                </apex:outputPanel>
+    					<apex:actionStatus id="statusFieldSelection">
+     						<apex:facet name="start">
+	    						<span id="" class="throbber">Loading..</span>
+     						</apex:facet>
+    						<apex:facet name="stop">
+				                <apex:outputPanel id="blockFieldSelection">
+									<div id="allFieldsForSelectedObject" style="display:none;">{!allFieldsForSelectedObject}</div>
+									<apex:inputHidden id="selectedObjectFields" value="{!selectedObjectFields}"/>
+					                <apex:pageBlock rendered="{!NOT(ISNULL(selectedSingleObject))}">
+					                	<apex:facet name="header">
+					                		<h2 class="editorBlockTitle">Object: {!selectedSingleObject}</h2>
+					                		<span class="editorBlockHint">Hold down <strong>Ctrl/Cmd</strong> to Select Multiple Fields</span>
+					                		<div class="clearfix"></div>
+					                	</apex:facet>
+										<c:JQuerySelectable selectableId="fieldSelector" 
+											optionsFieldId="allFieldsForSelectedObject" 
+											selectedFieldId="{!$Component.selectedObjectFields}"/> 
+				                	</apex:pageBlock>
+				                </apex:outputPanel>
+			                </apex:facet>
+		                </apex:actionStatus>
 					</div>	
 		         	
 		        </apex:tab>
