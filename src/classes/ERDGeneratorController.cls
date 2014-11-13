@@ -101,7 +101,7 @@ public class ERDGeneratorController
     	System.debug(LoggingLevel.ERROR,'@@@@@ensureDefaultDiagram is called');
     	if (settingNamesList.size() == 0) {
     		System.debug(LoggingLevel.ERROR,'@@@@@settingNamesList is empty');
-    		selectedSetting = 'Standard Objects';
+    		selectedSetting = 'Default Diagram';
     		currentSetting = selectedSetting;
     		settings = (ERDSettingsV3) persister.getDefaultSettings();  
 	        persister.saveSettings(selectedSetting, settings);
