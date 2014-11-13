@@ -1,5 +1,12 @@
 public class ERDDropboxAPI {
-
+	
+	@TestVisible
+	private static final String DROPBOX_AUTH_ENDPOINT = 'https://www.dropbox.com/1/oauth2/authorize';
+	@TestVisible
+	private static final String DROPBOX_TOKEN_ENDPOINT = 'https://api.dropbox.com/1/oauth2/token';
+	@TestVisible
+	private static final String DROPBOX_CONTENT_ENDPOINT = 'https://api-content.dropbox.com/1/';
+	
 	public String key {get;set;}
 	public String secret {get;set;}
 	public String oauthToken {get;set;}
@@ -49,7 +56,7 @@ public class ERDDropboxAPI {
 		if (code != null) {
 			Http http = new Http();
 			HttpRequest req = new HttpRequest();
-			req.setEndpoint('https://api.dropbox.com/1/oauth2/token'); 
+			req.setEndpoint(DROPBOX_TOKEN_ENDPOINT); 
 			req.setMethod('POST');
 			req.setBody('code=' + code + '&grant_type=authorization_code&client_id='+key+'&client_secret='+secret+'&redirect_uri='+getCallbackURL());
 			req.setHeader('Content-Type','application/x-www-form-urlencoded');
@@ -60,7 +67,7 @@ public class ERDDropboxAPI {
 	}
 	
 	public String getAuthoriseURL() {
-		String url = 'https://www.dropbox.com/1/oauth2/authorize';
+		String url = DROPBOX_AUTH_ENDPOINT;
 		url += '?client_id='+key;
 		url += '&response_type=code';
 		url += '&redirect_uri='+getCallbackURL();
@@ -69,7 +76,7 @@ public class ERDDropboxAPI {
 	
 	public String writeFile(String file, String contents) {
 		String filePathEncoded = EncodingUtil.urlEncode(file, 'UTF-8');
-		String putFileURL = 'https://api-content.dropbox.com/1/files_put/auto/'+filePathEncoded;
+		String putFileURL = DROPBOX_CONTENT_ENDPOINT+'files_put/auto/'+filePathEncoded;
 		Http http = new Http();
 		HttpRequest request = new HttpRequest();
 		request.setEndpoint(putFileURL);
