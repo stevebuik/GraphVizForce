@@ -20,6 +20,7 @@ public with sharing class ERDInspector
 			{
 				Schema.DescribeSobjectResult objectResult = objectNameSObjectResultMap.get(objectName);
 				List<String> objectFieldNames = objectToFieldsMap.get(objectName);
+				objectFieldNames.sort();
 				
 				// Add ERDEntity to Map
 				ERDEntity entity = new ERDEntity();
