@@ -22,6 +22,7 @@ public with sharing class ERDInspector
 				
 				// Get list of ERDEntityField
 				List<String> includedFieldNames = objectToFieldsMap.get(objectName);
+				includedFieldNames.sort();
 				List<ERDEntityField> erdFields = getIncludedERDEntityFieldListByObjectName(objectName,includedFieldNames);
 				
 				// Add ERDEntity to Map
@@ -127,28 +128,30 @@ public with sharing class ERDInspector
 	private List<ERDEntityField> getIncludedERDEntityFieldListByObjectName(String objectName, List<String> includedFieldNames)
 	{
 		List<ERDEntityField> erdFields = new List<ERDEntityField>();
-		Set<String> includedFieldNameSet = new Set<String>(includedFieldNames);
-		List<String> availableFieldNames = getFieldNamesByObjectName(objectName);
+		//Set<String> includedFieldNameSet = new Set<String>(includedFieldNames);
+		Map<String,String> fieldNameToFieldTypeMap = new Map<String,String>();
 		List<Schema.DescribeSobjectResult> objectResults = Schema.describeSObjects(new List<String>{objectName});
 		
 		if(!objectResults.isEmpty())
 		{
+			// collect field schema
 			Map<String, Schema.SObjectField> objectFieldMap = objectResults[0].fields.getMap();
 			List<Schema.SObjectField> fieldValues = objectFieldMap.values();
 			
+			// Setup field name to field type map
 			for(Schema.SObjectField field : fieldValues)
 			{
 				Schema.DescribeFieldResult fieldResult = field.getDescribe();
 				String fieldName = fieldResult.getName();
 				Schema.DisplayType displayType= fieldResult.getType();
-				System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@displayType is ' + displayType);
 				String fieldType = ERDDisplayType.getDisplayTypeLabel(displayType);
-				System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@fieldType is ' + fieldType);
-				if(includedFieldNameSet.contains(fieldName))
-				{
-					ERDEntityField erdField = new ERDEntityField(fieldName,fieldType);
-					erdFields.add(erdField);
-				}
+				fieldNameToFieldTypeMap.put(fieldName,fieldType);
+			}
+			
+			for(String includedFieldName : includedFieldNames)
+			{
+				ERDEntityField erdField = new ERDEntityField(includedFieldName,fieldNameToFieldTypeMap.get(includedFieldName));
+				erdFields.add(erdField);
 			}
 		}
 		
