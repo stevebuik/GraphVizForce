@@ -105,15 +105,17 @@ public with sharing class ERDGenerator
 					});
 	}
 	
-	private String generateFields(List<String> entityFields)
+	private String generateFields(List<ERDEntityField> entityFields)
 	{
 		String entityFieldsOutput = '';
 		
-		for(String fieldName : entityFields)
+		for(ERDEntityField entityField : entityFields)
 		{
+			System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@@@entityField.fieldType:' + entityField.fieldType);
 			entityFieldsOutput += templateEngine.render(ERDTemplateType.FIELD,
 				new Map<String, String>{
-					'name' => fieldName
+					'name' => entityField.fieldName,
+					'fieldType' => entityField.fieldType
 				});
 		}
 		
@@ -135,7 +137,7 @@ public with sharing class ERDGenerator
 		for(ERDEntity entity : entities){
 			
 			if(includeFields) {
-				entityFieldsOutput = generateFields(entity.fieldNameList);
+				entityFieldsOutput = generateFields(entity.fieldList);
 			} else {
 				entityFieldsOutput = '';
 			}

@@ -18,11 +18,11 @@ subgraph cluster_{{sequence}} { label = "{{name}}";
 ========== ENTITY
 
 {{name}} [label=<<table border="0" cellborder="1" cellspacing="0" color="#808080" port="{{name}}">
-			<tr><td bgcolor="gray">{{name}}</td></tr>
+			<tr><td bgcolor="gray" colspan="2">{{name}}</td></tr>
 		{{fields}}
 		</table>>]
 
 ========== RELATIONSHIP
 	{{from}} -> {{to}}
 ========== FIELD
-	<tr><td>{{name}}</td></tr>
+	<tr><td>{{name}}</td><td>{{fieldType}}</td></tr>

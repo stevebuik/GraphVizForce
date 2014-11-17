@@ -19,14 +19,16 @@ public with sharing class ERDInspector
 			for(String objectName : objectToFieldsMap.keySet())
 			{
 				Schema.DescribeSobjectResult objectResult = objectNameSObjectResultMap.get(objectName);
-				List<String> objectFieldNames = objectToFieldsMap.get(objectName);
-				objectFieldNames.sort();
+				
+				// Get list of ERDEntityField
+				List<String> includedFieldNames = objectToFieldsMap.get(objectName);
+				List<ERDEntityField> erdFields = getIncludedERDEntityFieldListByObjectName(objectName,includedFieldNames);
 				
 				// Add ERDEntity to Map
 				ERDEntity entity = new ERDEntity();
 				entity.objectName = objectName;
 				entity.isCustom = objectResult.isCustom();
-				entity.fieldNameList = objectFieldNames;
+				entity.fieldList = erdFields;
 				erdEntityList.add(entity);
 				
 				// For all the child relationship of an object
@@ -120,5 +122,36 @@ public with sharing class ERDInspector
 		sorted.sort();
 		return sorted;
 	}
-
+	
+	/****************Local Functions*****************/
+	private List<ERDEntityField> getIncludedERDEntityFieldListByObjectName(String objectName, List<String> includedFieldNames)
+	{
+		List<ERDEntityField> erdFields = new List<ERDEntityField>();
+		Set<String> includedFieldNameSet = new Set<String>(includedFieldNames);
+		List<String> availableFieldNames = getFieldNamesByObjectName(objectName);
+		List<Schema.DescribeSobjectResult> objectResults = Schema.describeSObjects(new List<String>{objectName});
+		
+		if(!objectResults.isEmpty())
+		{
+			Map<String, Schema.SObjectField> objectFieldMap = objectResults[0].fields.getMap();
+			List<Schema.SObjectField> fieldValues = objectFieldMap.values();
+			
+			for(Schema.SObjectField field : fieldValues)
+			{
+				Schema.DescribeFieldResult fieldResult = field.getDescribe();
+				String fieldName = fieldResult.getName();
+				Schema.DisplayType displayType= fieldResult.getType();
+				System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@displayType is ' + displayType);
+				String fieldType = ERDDisplayType.getDisplayTypeLabel(displayType);
+				System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@fieldType is ' + fieldType);
+				if(includedFieldNameSet.contains(fieldName))
+				{
+					ERDEntityField erdField = new ERDEntityField(fieldName,fieldType);
+					erdFields.add(erdField);
+				}
+			}
+		}
+		
+		return erdFields;
+	}
 }
