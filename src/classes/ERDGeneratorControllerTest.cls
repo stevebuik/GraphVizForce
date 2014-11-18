@@ -224,4 +224,29 @@ public with sharing class ERDGeneratorControllerTest
         	System.assertEquals(true,controller.generatedContent.contains('Account [label='));
         Test.stopTest();
 	}
+	
+	@isTest
+	static void testERDPersisterMethods()
+	{
+		// Instantiate a new controller with all parameters in the page
+      	ERDGeneratorController controller;
+        controller = new ERDGeneratorController();
+		
+		Test.startTest();
+		
+			// On controller initialisation in new org, no settings available
+			List<String> settingNames = controller.persister.getSettingsNameList();
+			System.assertEquals(0,settingNames.size());
+			
+			// Controller initialise with DefaultDiagram
+			controller.ensureDefaultDiagram();
+			settingNames = controller.persister.getSettingsNameList();
+			System.assertEquals(1,settingNames.size());
+			
+			// Controller load settings
+			controller.loadSelectedSetting();
+			System.assertEquals(4,controller.erdGroups.size());
+			
+		Test.stopTest();
+	}
 }
