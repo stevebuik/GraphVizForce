@@ -6,6 +6,7 @@
 		type="text/javascript"></script>
     <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" 
     	id="dropboxjs" data-app-key="1nasijgpqxbicyu"></script>
+    
     <script type="text/javascript">    
 		// need separate jquery because of the apex:tabpanel
 		// see http://salesforce.stackexchange.com/questions/21207/tab-panel-error
@@ -21,6 +22,7 @@
     			"DefaultTemplate" : "{!$Resource.DefaultTemplate}"
     		}
     	};
+    	
 	</script>
 
 	<style type="text/css">
@@ -128,6 +130,7 @@
 	    	margin: 2em 3em;
 	    	display: block;
 	    }
+	    .diagramOutputPanel {margin-top:20px;}
 	    .clearfix {clear: both;}
     </style>
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"></link>
@@ -318,7 +321,8 @@
 				<h2>ERD Content</h2>
 			    <div id="generateContainer">
 		    		<apex:commandButton value="Generate" action="{!generateERD}" 
-		    			rerender="messages,generated" status="generating"/>
+		    			rerender="messages,generated" status="generating"
+		    			oncomplete="generateERDToWeb('{!generatedContent}');" />
 		    		<span id="templateLabel">Template:</span>
 			    	<apex:selectList id="template" size="1" value="{!template}" 
 			    		onChange="templateChanged();">
@@ -334,25 +338,24 @@
 		    		</apex:outputPanel>
 			    	<a id="download" target="download">Download Template</a>
 			    </div>
-			    <div style="clear: both;"></div>
-			    <div>
-				    <apex:actionStatus id="generating">
-	   					<apex:facet name="start">
-	   						<div id="generatingLabel" class="throbber">Generating..</div>
-	   					</apex:facet>
-	   				</apex:actionStatus>			    
-	   			</div>
-	   			<apex:outputPanel id="generated">
-	               	<apex:inputTextarea value="{!generatedContent}" 
-	               		rendered="{!LEN(generatedContent) != 0}" rows="20" style="width:100%;" />
-	               	<apex:outputPanel styleClass="generatedHint" rendered="{!LEN(generatedContent) == 0}">
-	               		When you click the "Generate" button, Graphviz code will appear here. Cut/Paste this code to Graphviz to see it as a diagram.
-	               	</apex:outputPanel>
-               	</apex:outputPanel>
+			    <div class="clearfix"></div>
+			    <div class="diagramOutputPanel">
+			    	<div>
+					    <apex:actionStatus id="generating">
+		   					<apex:facet name="start">
+		   						<div id="generatingLabel" class="throbber">Generating..</div>
+		   					</apex:facet>
+		   				</apex:actionStatus>			    
+		   			</div>
+		   			<div id="diagramContainer"></div>
+			    </div>
             </div>
+            
+            <div id="erdWeb"></div>
         </apex:pageBlock>
     </apex:form>
-
-    <script type="text/javascript" src="{!$Resource.ERDGeneratorJS}"></script>
-
+	
+    <apex:includeScript value="{!$Resource.VizJS}"/>
+    <apex:includeScript value="{!$Resource.ERDGeneratorJS}"/>
+	
 </apex:page>
