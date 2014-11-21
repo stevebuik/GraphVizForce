@@ -326,7 +326,9 @@ public class ERDGeneratorController
         }
     }
     
-    
+    public PageReference download() {    	
+    	return Page.ERDDownloader;
+    }
     
     /********Template Related Methods********/
     

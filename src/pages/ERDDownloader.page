@@ -1,0 +1,4 @@
+<apex:page controller="ERDGeneratorController" showHeader="false"
+	contentType="application/x-graphviz#{!currentSetting}.gv">
+{!generatedContent}
+</apex:page>

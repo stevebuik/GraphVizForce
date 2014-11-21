@@ -83,6 +83,7 @@ function convertERDContentToMarkup(content, format, engine) {
 function generateERDToWeb(content)
 {
 	var erdMarkup = convertERDContentToMarkup(content,"svg");
+	$c(globals.fields.downloadFile).css("display", "block");
 	document.getElementById("diagramContainer").innerHTML = erdMarkup;
 }
 

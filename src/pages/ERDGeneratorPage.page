@@ -1,4 +1,4 @@
-<apex:page controller="ERDGeneratorController" action="{!ensureDefaultDiagram}">
+<apex:page controller="ERDGeneratorController" action="{!ensureDefaultDiagram}" sidebar="false">
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.js" 
 		type="text/javascript"></script>
@@ -13,6 +13,7 @@
 		var $110 = jQuery.noConflict( false );
     	var globals = {
     		fields: {
+    			downloadFile: "{!$Component.generatorForm.generatorBlock.downloadFile}",
     			fileURL:  "{!$Component.generatorForm.generatorBlock.fileURL}",
     			template: "{!$Component.generatorForm.generatorBlock.template}",
     			fieldSelectorContainer: "{!$Component.generatorForm.generatorBlock.blockFieldSelection}"
@@ -64,6 +65,9 @@
 	    #generateContainer > * {
 	    	float:left;
 	    	margin: 0 5px 2px 0;
+	    }
+	    #templateLabel {
+	    	margin: 3px 10px 0 30px;
 	    }
 	    #dropboxFileSelected {
 	    	padding: 2px 0 0 0;
@@ -317,8 +321,11 @@
 				<h2>ERD Content</h2>
 			    <div id="generateContainer">
 		    		<apex:commandButton value="Generate" action="{!generateERD}" 
-		    			rerender="messages,generated" status="generating"
+		    			rerender="messages,generated" 
+		    			status="generating"
 		    			oncomplete="generateERDToWeb('{!generatedContent}');" />
+			    	<apex:commandButton value="Download Graphviz File" 
+			    		action="{!download}" id="downloadFile" style="display:none;"/>		   			
 		    		<span id="templateLabel">Template:</span>
 			    	<apex:selectList id="template" size="1" value="{!template}" 
 			    		onChange="templateChanged();">
