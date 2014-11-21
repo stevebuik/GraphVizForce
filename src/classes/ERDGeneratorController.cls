@@ -23,7 +23,6 @@ public class ERDGeneratorController
     public String template{get;set;}
     public String fileURL{get;set;}
     
-    public String oauthToken{get;set;}
     public String selectedSingleObject{get;set;}
     
     @TestVisible private ERDPersister persister;
@@ -324,20 +323,12 @@ public class ERDGeneratorController
         }
         if (generator != null) {
             generatedContent = generator.generateERD(settings);         
-            if (oauthToken != null) {
-                ERDDropboxAPI api = new ERDDropboxAPI();
-                api.oauthToken = oauthToken; 
-                System.debug(api.writeFile(currentSetting+'.gv', generatedContent));
-            }
         }
     }
     
     
     
     /********Template Related Methods********/
-    public Boolean getIsDropboxEnabled() {
-    	return new ERDDropboxAPI().areOAuthCredsPresent();
-    }
     
     public List<SelectOption> getTemplates() {
         List<SelectOption> templates = new List<SelectOption>();

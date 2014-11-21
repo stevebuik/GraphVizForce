@@ -14,7 +14,6 @@
     	var globals = {
     		fields: {
     			fileURL:  "{!$Component.generatorForm.generatorBlock.fileURL}",
-    			token:	  "{!$Component.generatorForm.generatorBlock.oauthToken}",
     			template: "{!$Component.generatorForm.generatorBlock.template}",
     			fieldSelectorContainer: "{!$Component.generatorForm.generatorBlock.blockFieldSelection}"
     		},
@@ -65,9 +64,6 @@
 	    #generateContainer > * {
 	    	float:left;
 	    	margin: 0 5px 2px 0;
-	    }
-	    #oauthComplete {
-	    	display:none;
 	    }
 	    #dropboxFileSelected {
 	    	padding: 2px 0 0 0;
@@ -331,11 +327,6 @@
 			    	<span id="dropboxFileSelected"></span>
 			    	<span id="pickDropboxContainer"></span>
 		    		<apex:inputHidden id="fileURL" value="{!fileURL}" />
-		    		<apex:outputPanel rendered="{!isDropboxEnabled}">
-				    	<a id="oauth" href="{!$Page.ERDOAuth}?start=true">Generate to Dropbox</a>
-				    	<span id="oauthComplete">Dropbox Generation Enabled</span>
-			    		<apex:inputHidden id="oauthToken" value="{!oauthToken}" />
-		    		</apex:outputPanel>
 			    	<a id="download" target="download">Download Template</a>
 			    </div>
 			    <div class="clearfix"></div>
