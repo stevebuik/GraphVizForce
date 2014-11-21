@@ -346,7 +346,7 @@
         </apex:pageBlock>
     </apex:form>
 	
-    <apex:includeScript value="{!$Resource.VizJS}"/>
-    <apex:includeScript value="{!$Resource.ERDGeneratorJS}"/>
+    <script src="{!$Resource.VizJS}" type="text/javascript"></script>
+    <script src="{!$Resource.ERDGeneratorJS}" type="text/javascript"></script>
 	
 </apex:page>
