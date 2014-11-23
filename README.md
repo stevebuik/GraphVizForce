@@ -2,17 +2,21 @@ Graphviz Force
 ========
 
 An Entity Relationship Diagram generator in [Graphviz](http://graphviz.org) format for Salesforce.com. 
-Graphviz is a free tool that converts text files into diagrams. Those text files are what this tool generates automatically.
 
-This is an example of what you can produce.
+Why? ER Diagrams are used for communication and as a reference. Often you want many different diagrams from the same Salesforce instance.
+This tool allows you to save as many different diagrams as you like so you can easily change and re-generate them in the future.
 
-![Sample](assets/Recruiting+and+Standard.png)
+You can also use the built-in template system to style the saved diagrams however you like.
+
+This is a sample of what you can produce.
+
+![Sample](assets/DefaultDiagram.png)
 
 ###Features
 - Automatically generate and layout diagrams from SFDC to Graphviz
 - Group entities and choose which fields are included
 - Save diagrams for later changes
-- Export diagrams to [Image](assets/Recruiting+and+Standard.png) or [PDF](assets/Recruiting+and+Standard.pdf?raw=true) using Graphviz
+- Export diagrams to [Image](assets/DefaultDiagram.png) or [PDF](assets/DefaultDiagram.pdf?raw=true) using Graphviz
 - Customise the templates used for the diagram for your style preferences
 
 ###Getting Started
@@ -38,6 +42,7 @@ Or just change the url in your browser to /apex/ERDGeneratorPage
 4. Click *Generate* again to see your changes in the Graphviz code field	
 5. Use the *Save* button to save your diagram. This allows you to update it later without starting from scratch.
 6. Maybe use the *Save As* button in the *Choose/Create Diagram* tab to clone a new Diagram from the default.
+7. If you want a pdf or png copy of the diagram, you can download the diagram using the "Download Graphviz File" button. Open the downloaded .gv file using Graphviz on your computer and export to the format that you need. 
 
 ###Templates
 
