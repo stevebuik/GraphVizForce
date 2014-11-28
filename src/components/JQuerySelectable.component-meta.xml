@@ -3,9 +3,4 @@
     <apiVersion>31.0</apiVersion>
     <description>This is a generic template for Visualforce Component.  With this template, you may adjust the default elements and values and add new elements and values.</description>
     <label>JQuerySelectable</label>
-    <packageVersions>
-        <majorNumber>1</majorNumber>
-        <minorNumber>5</minorNumber>
-        <namespace>sf_com_apps</namespace>
-    </packageVersions>
 </ApexComponent>
