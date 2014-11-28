@@ -161,7 +161,7 @@
     		
     		<apex:tabPanel switchType="client" id="tabPanel" selectedTab="tab1"
     			tabClass="activeTab" inactiveTabClass="inactiveTab">
-    			<apex:tab label="Choose/Create Diagram" id="tab1" name="tab1">
+    			<apex:tab label="Diagrams" id="tab1" name="tab1">
     				<div class="tabLeftOne">
 					    <apex:pageBlock id="blockSetting">
 		                	<apex:pageBlockSection columns="3">
@@ -177,7 +177,7 @@
 		                    		status="working">
 		                    	</apex:commandButton>
 		                    	
-		                		<apex:outputText value="Create a new Diagram" />
+		                		<apex:outputText value="Clone Diagram" />
 		                		<apex:inputText html-placeholder="Enter New Diagram Name" id="inpSettingName" styleClass="textInput" value="{!newSettingName}" />
 		                    	<apex:commandButton id="btnSaveNewSetting" value="Save As" 
 		                    		action="{!saveAsNewSetting}" rerender="messages,settingPicklist,title" status="working">
@@ -189,7 +189,7 @@
 					</div>
     			</apex:tab>
     			
-    			<apex:tab label="Configure Groups" id="tab2" name="tab2">
+    			<apex:tab label="Objects" id="tab2" name="tab2">
     				<div id="groupsLeft">
 		                <apex:pageBlock title="Groups" id="blockGroup">
 		                	<apex:pageBlockSection >
@@ -249,7 +249,7 @@
 					</div>		                	
 		        </apex:tab>
 		        
-		        <apex:tab label="Configure Objects" id="tab3" name="tab3" ontabenter="updateObjectsTab();">		        	
+		        <apex:tab label="Fields" id="tab3" name="tab3" ontabenter="updateObjectsTab();">		        	
 					<div id="groupsLeft">
     					<apex:actionStatus id="statusFieldObjectSelection">
      						<apex:facet name="start">
