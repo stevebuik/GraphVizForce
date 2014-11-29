@@ -78,6 +78,9 @@ public class ERDTemplateEngine {
         private final String resourceName;
 
         public StaticResourceTemplateSource(String resourceName) {
+        	if (resourceName == null) {
+                throw new ERDException('Resource name not present');
+        	}
             this.resourceName = resourceName;
         }
 
