@@ -21,8 +21,6 @@ This is a sample of what you can produce.
 
 ###Getting Started
 
-Install [Graphviz](http://graphviz.org) on your computer.
-
 Install this app into your Salesforce: 
 <a href="https://githubsfdeploy-sandbox.herokuapp.com/app/githubdeploy/stevebuik/GraphVizForce" target="deploy">Install into Sandbox</a>
 .....or..... 
@@ -42,7 +40,9 @@ Or just change the url in your browser to /apex/ERDGeneratorPage
 4. Click *Generate* again to see your changes in the Graphviz code field	
 5. Use the *Save* button to save your diagram. This allows you to update it later without starting from scratch.
 6. Maybe use the *Save As* button in the *Choose/Create Diagram* tab to clone a new Diagram from the default.
-7. If you want a pdf or png copy of the diagram, you can download the diagram using the "Download Graphviz File" button. Open the downloaded .gv file using Graphviz on your computer and export to the format that you need. 
+7. Install [Graphviz](http://graphviz.org) on your computer
+8. If you want a pdf or png copy of the diagram, you can download the diagram using the "Download Graphviz File" button. Open the downloaded .gv file using Graphviz on your computer and export to the format that you need. 
+
 
 ###Templates
 
@@ -60,6 +60,11 @@ For more info on Graphviz syntax see http://www.graphviz.org/Documentation/dotgu
 
 The easiest way to play with templates is to generate a diagram and open it in Graphviz. 
 Then edit the .gv in any editor and Graphviz will automatically refresh. Once you are happy with the design, apply the changes to your template and re-generate.
+
+###Project Status
+
+We use CircleCI to automatically test the Apex code in this project. 
+If interested you can [see the tests running here](https://circleci.com/gh/stevebuik/GraphVizForce)
 
 ###Motivation
 
