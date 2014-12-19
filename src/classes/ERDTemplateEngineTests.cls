@@ -17,8 +17,10 @@ private class ERDTemplateEngineTests {
                 checkTemplateContains(engine, ERDTemplateType.MAIN, 'content');                 
                 checkTemplateContains(engine, ERDTemplateType.ENTITY, 'name');                  
                 checkTemplateContains(engine, ERDTemplateType.CLUSTER, 'content');                  
-                checkTemplateContains(engine, ERDTemplateType.RELATIONSHIP, 'from');                
-                checkTemplateContains(engine, ERDTemplateType.RELATIONSHIP, 'to');                  
+                checkTemplateContains(engine, ERDTemplateType.MD_RELATIONSHIP, 'from');                  
+                checkTemplateContains(engine, ERDTemplateType.MD_RELATIONSHIP, 'to');                  
+                checkTemplateContains(engine, ERDTemplateType.LOOKUP_RELATIONSHIP, 'from');                
+                checkTemplateContains(engine, ERDTemplateType.LOOKUP_RELATIONSHIP, 'to');                  
                 checkTemplateContains(engine, ERDTemplateType.FIELD, 'name');                   
             }
        }
@@ -31,7 +33,16 @@ private class ERDTemplateEngineTests {
             new ERDTemplateEngine.StaticResourceTemplateSource('DefaultTemplate');
         ERDTemplateEngine engine = new ERDTemplateEngine(src);
         
-        String rendered = engine.render(ERDTemplateType.RELATIONSHIP, new Map<String, String>{
+        String rendered = engine.render(ERDTemplateType.MD_RELATIONSHIP, new Map<String, String>{
+            'from'  => 'Contact',
+            'to'    => 'Account'
+        });
+        
+        
+        System.assert(rendered.contains('Contact -> Account'), 
+            'Basic relationship should render with entity names and an arrow');
+        
+        rendered = engine.render(ERDTemplateType.LOOKUP_RELATIONSHIP, new Map<String, String>{
             'from'  => 'Contact',
             'to'    => 'Account'
         });

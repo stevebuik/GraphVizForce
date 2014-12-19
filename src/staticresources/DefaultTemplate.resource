@@ -22,7 +22,13 @@ subgraph cluster_{{sequence}} { label = "{{name}}";
 		{{fields}}
 		</table>>]
 
-========== RELATIONSHIP
+========== MD_RELATIONSHIP
+	edge [color=red]
+	{{from}} -> {{to}} 
+	
+========== LOOKUP_RELATIONSHIP
+	edge [color=blue]
 	{{from}} -> {{to}}
+	
 ========== FIELD
 	<tr><td>{{name}}</td><td>{{fieldType}}</td></tr>

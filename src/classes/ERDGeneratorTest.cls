@@ -41,6 +41,7 @@ private with sharing class ERDGeneratorTest
 		};
 		settings.includedGroups = new Set<String>{'Standard'};
 		settings.includeFields = true;
+		settings.includeStandardUserLookup = false;
 		
 		Test.startTest();
 			String erdOutput = generator.generateERD(settings);
@@ -64,6 +65,7 @@ private with sharing class ERDGeneratorTest
 		};
 		settings.includedGroups = new Set<String>{'Standard'};
 		settings.includeFields = true;
+		settings.includeStandardUserLookup = false;
 		
 		Test.startTest();
 			String erdOutput = generator.generateERD(settings);

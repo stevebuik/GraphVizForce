@@ -59,6 +59,7 @@ public with sharing class ERDInspector
 						entityRelationship.lookupFieldName = childRelationship.getField().getDescribe().getName();
 						entityRelationship.parentObjectName = objectName;
 						entityRelationship.childObjectName = childName;
+						entityRelationship.isCascadeDelete = childRelationship.isCascadeDelete();
 						allObjectRelationshipList.add(entityRelationship);
 					}
 				}

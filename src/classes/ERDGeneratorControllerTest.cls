@@ -187,6 +187,7 @@ public with sharing class ERDGeneratorControllerTest
         	
         	// Test include fields with default diagram
         	Boolean includeFields = controller.getIncludeFields();
+        	Boolean includeStandardUserLookup = controller.getIncludeStandardUserLookup();
         	System.assertEquals(true,includeFields);
         	
         	// User diselect include fields checkbox
@@ -194,6 +195,13 @@ public with sharing class ERDGeneratorControllerTest
         	includeFields = controller.getIncludeFields();
         	controller.saveSelectedSetting();
         	System.assertEquals(false,includeFields);
+        	
+        	// User select include standard user lookup
+        	controller.setIncludeStandardUserLookup(true);
+        	includeStandardUserLookup = controller.getIncludeStandardUserLookup();
+        	controller.saveSelectedSetting();
+        	System.assertEquals(true,includeStandardUserLookup);
+        	
         Test.stopTest();
 	}
 	

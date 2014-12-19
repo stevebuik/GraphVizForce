@@ -22,8 +22,9 @@ public class ERDTemplateEngine {
             ERDTemplateType.MAIN => extracted.get(0),
             ERDTemplateType.CLUSTER => extracted.get(1),
             ERDTemplateType.ENTITY => extracted.get(2),
-            ERDTemplateType.RELATIONSHIP => extracted.get(3),
-            ERDTemplateType.FIELD => extracted.get(4)
+            ERDTemplateType.MD_RELATIONSHIP => extracted.get(3),
+            ERDTemplateType.LOOKUP_RELATIONSHIP => extracted.get(4),
+            ERDTemplateType.FIELD => extracted.get(5)
         };
     }
 

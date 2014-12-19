@@ -89,7 +89,8 @@ public with sharing class ERDGenerator
             	
             	if(includeStandardUserLookup || !ERDUtils.isStandardUserLookupRelationship(crossRelationship))
             	{
-            		crossGroupRelationshipContent += templateEngine.render(ERDTemplateType.RELATIONSHIP,
+            		ERDTemplateType templateType = (crossRelationship.isCascadeDelete?ERDTemplateType.MD_Relationship:ERDTemplateType.LOOKUP_RELATIONSHIP);
+            		crossGroupRelationshipContent += templateEngine.render(templateType,
 									new Map<String, String>{
 										'from' => crossRelationship.parentObjectName,
 										'to' => crossRelationship.childObjectName
