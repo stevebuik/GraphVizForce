@@ -22,6 +22,7 @@ public with sharing class ERDGenerator
 		ERDInspector inspector = new ERDInspector();
 		ERDSettingProcessor processor = new ERDSettingProcessor();
 		Boolean includeFields = settings.includeFields;
+		Boolean includeStandardUserLookup = settings.includeStandardUserLookup;
 		Map<String,Map<String,List<String>>> erdMap = new Map<String,Map<String,List<String>>>();
 		Set<String> allSelectedObjects = processor.retrieveAllObjectsForGroups(settings);
 		List<ERDEntityRelationship> allObjectRelationshipList = new List<ERDEntityRelationship>();
@@ -42,7 +43,7 @@ public with sharing class ERDGenerator
 								);
 								
 		String subgraphContent = generateSubgraphContent(groupToERDEntityListMap, includeFields);
-		String crossGroupRelationshipContent = generateCrossGroupRelationshipContent(allObjectRelationshipList);
+		String crossGroupRelationshipContent = generateCrossGroupRelationshipContent(allObjectRelationshipList, includeStandardUserLookup);
 		
 		return renderERDGraphvizContent(subgraphContent, crossGroupRelationshipContent);
 	}
@@ -78,18 +79,22 @@ public with sharing class ERDGenerator
 		return subgraphsContent;
 	}
 	
-	private String generateCrossGroupRelationshipContent(List<ERDEntityRelationship> allObjectRelationshipList)
+	private String generateCrossGroupRelationshipContent(List<ERDEntityRelationship> allObjectRelationshipList, Boolean includeStandardUserLookup)
 	{
 		String crossGroupRelationshipContent = '';
 		
 		if(!allObjectRelationshipList.isEmpty())
 		{
             for(ERDEntityRelationship crossRelationship : allObjectRelationshipList){
-				crossGroupRelationshipContent += templateEngine.render(ERDTemplateType.RELATIONSHIP,
+            	
+            	if(includeStandardUserLookup || !ERDUtils.isStandardUserLookupRelationship(crossRelationship))
+            	{
+            		crossGroupRelationshipContent += templateEngine.render(ERDTemplateType.RELATIONSHIP,
 									new Map<String, String>{
 										'from' => crossRelationship.parentObjectName,
 										'to' => crossRelationship.childObjectName
-									});                    
+									});    
+            	}      
             }
         }
         

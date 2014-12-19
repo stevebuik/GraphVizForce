@@ -138,6 +138,14 @@ public class ERDGeneratorController
     	settings.includeFields = include;
     }
     
+    public Boolean getIncludeStandardUserLookup(){
+    	return settings.includeStandardUserLookup;
+    }
+    
+    public void setIncludeStandardUserLookup(Boolean include){
+    	settings.includeStandardUserLookup = include;
+    }
+    
     public List<String> getAllSelectedObjects()
     {
     	List<String> sorted = new List<String>();

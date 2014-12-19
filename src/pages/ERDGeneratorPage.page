@@ -311,6 +311,10 @@
 				            <apex:inputCheckbox id="fieldsCheckbox" value="{!includeFields}" />
 						    <apex:outputLabel value="Include Fields" for="fieldsCheckbox" />
 						    <span class="configHint">Show fields in the diagram. Does not affect your field selections.</span>
+						    <br />
+						    <apex:inputCheckbox id="standardUserLookupCheckbox" value="{!includeStandardUserLookup}" />
+						    <apex:outputLabel value="Include Standard User Lookups" for="standardUserLookupCheckbox" />
+						    <span class="configHint">(i.e. CreatedBy, Owner)</span>
 				        </apex:pageBlock>
 					</div>
     			</apex:tab>

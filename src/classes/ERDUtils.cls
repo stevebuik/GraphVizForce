@@ -21,6 +21,13 @@ public with sharing class ERDUtils
 		return false;
 	}
 	
+	public static Boolean isStandardUserLookupRelationship(ERDEntityRelationship relationship)
+	{
+		//System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@relationship:' + relationship);
+		return (relationship.parentObjectName == 'User' && 
+				(relationship.lookupFieldName == 'OwnerId' || relationship.lookupFieldName == 'CreatedById' || relationship.lookupFieldName == 'LastModifiedById'));
+	}
+	
 	public static List<String> getAllObjectNames()
 	{
 		List<String> objectNames = new List<String>();

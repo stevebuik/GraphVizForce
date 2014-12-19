@@ -3,6 +3,8 @@ public class ERDSettingsV3 implements ERDPersister.Versionable {
 	// this field should always be present. It is used to hydrate/upgrade automatically
 	public Integer version = 3;
 	public Integer getVersion() { return version; }
+	public Boolean includeFields {get;set;}
+	public Boolean includeStandardUserLookup {get;set;}
 	//public Set<String> objectNameSet;
 	
 	// any other fields persisted are here
@@ -22,8 +24,6 @@ public class ERDSettingsV3 implements ERDPersister.Versionable {
 		}
 		set;
 	}
-	
-	public Boolean includeFields {get;set;}
 	
 	public void upgrade(ERDPersister.Versionable old) {
 		// old version is always the current - 1

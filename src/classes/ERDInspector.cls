@@ -45,8 +45,18 @@ public with sharing class ERDInspector
 					// Ensure the relationship has not been added
 					if(objectNameSet.contains(childName) && !ERDUtils.isEnitityRelationshipExists(objectName,childName,allObjectRelationshipList))
 					{
+						/*
+						System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.getChildSObject());
+						System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.getField());
+						System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.getRelationshipName());
+						System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.isCascadeDelete());
+						System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.isDeprecatedAndHidden());
+						System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.isRestrictedDelete());
+						*/
+						
 						// Add ERDEntityRelationship to List of relationsihp for an object
 						ERDEntityRelationship entityRelationship = new ERDEntityRelationship();
+						entityRelationship.lookupFieldName = childRelationship.getField().getDescribe().getName();
 						entityRelationship.parentObjectName = objectName;
 						entityRelationship.childObjectName = childName;
 						allObjectRelationshipList.add(entityRelationship);
