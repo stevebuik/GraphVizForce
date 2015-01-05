@@ -64,6 +64,10 @@ Then edit the .gv in any editor and Graphviz will automatically refresh. Once yo
 ###Project Status
 
 We use CircleCI to automatically test the Apex code in this project. 
+
+Here is the current build status. [![Circle CI](https://circleci.com/gh/stevebuik/GraphVizForce.svg?style=svg)](https://circleci.com/gh/stevebuik/GraphVizForce)
+Don't install the app if this is not green.
+
 If interested you can [see the tests running here](https://circleci.com/gh/stevebuik/GraphVizForce)
 
 ###Motivation
