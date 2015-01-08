@@ -20,47 +20,50 @@ public with sharing class ERDInspector
 			{
 				Schema.DescribeSobjectResult objectResult = objectNameSObjectResultMap.get(objectName);
 				
-				// Get list of ERDEntityField
-				List<String> includedFieldNames = objectToFieldsMap.get(objectName);
-				includedFieldNames.sort();
-				List<ERDEntityField> erdFields = getIncludedERDEntityFieldListByObjectName(objectName,includedFieldNames);
-				
-				// Add ERDEntity to Map
-				ERDEntity entity = new ERDEntity();
-				entity.objectName = objectName;
-				entity.isCustom = objectResult.isCustom();
-				entity.fieldList = erdFields;
-				erdEntityList.add(entity);
-				
-				// For all the child relationship of an object
-				List<Schema.ChildRelationship> childRelationshipForObject = objectResult.getChildRelationships();
-				for(Schema.ChildRelationship childRelationship : childRelationshipForObject)
+				if(objectResult != null)
 				{
-					// Get the child relationship object name
-					Schema.Sobjecttype childObjectType = childRelationship.getChildSObject();
-					Schema.DescribeSObjectResult childObjectResult = childObjectType.getDescribe();
-					String childName = childObjectResult.getName();
+					// Get list of ERDEntityField
+					List<String> includedFieldNames = objectToFieldsMap.get(objectName);
+					includedFieldNames.sort();
+					List<ERDEntityField> erdFields = getIncludedERDEntityFieldListByObjectName(objectName,includedFieldNames);
 					
-					// Ensure the child object is in the objectNameSet, meaning it is specified by user in the UI
-					// Ensure the relationship has not been added
-					if(objectNameSet.contains(childName) && !ERDUtils.isEnitityRelationshipExists(objectName,childName,allObjectRelationshipList))
+					// Add ERDEntity to Map
+					ERDEntity entity = new ERDEntity();
+					entity.objectName = objectName;
+					entity.isCustom = objectResult.isCustom();
+					entity.fieldList = erdFields;
+					erdEntityList.add(entity);
+					
+					// For all the child relationship of an object
+					List<Schema.ChildRelationship> childRelationshipForObject = objectResult.getChildRelationships();
+					for(Schema.ChildRelationship childRelationship : childRelationshipForObject)
 					{
-						/*
-						System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.getChildSObject());
-						System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.getField());
-						System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.getRelationshipName());
-						System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.isCascadeDelete());
-						System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.isDeprecatedAndHidden());
-						System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.isRestrictedDelete());
-						*/
+						// Get the child relationship object name
+						Schema.Sobjecttype childObjectType = childRelationship.getChildSObject();
+						Schema.DescribeSObjectResult childObjectResult = childObjectType.getDescribe();
+						String childName = childObjectResult.getName();
 						
-						// Add ERDEntityRelationship to List of relationsihp for an object
-						ERDEntityRelationship entityRelationship = new ERDEntityRelationship();
-						entityRelationship.lookupFieldName = childRelationship.getField().getDescribe().getName();
-						entityRelationship.parentObjectName = objectName;
-						entityRelationship.childObjectName = childName;
-						entityRelationship.isCascadeDelete = childRelationship.isCascadeDelete();
-						allObjectRelationshipList.add(entityRelationship);
+						// Ensure the child object is in the objectNameSet, meaning it is specified by user in the UI
+						// Ensure the relationship has not been added
+						if(objectNameSet.contains(childName) && !ERDUtils.isEnitityRelationshipExists(objectName,childName,allObjectRelationshipList))
+						{
+							/*
+							System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.getChildSObject());
+							System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.getField());
+							System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.getRelationshipName());
+							System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.isCascadeDelete());
+							System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.isDeprecatedAndHidden());
+							System.debug(LoggingLevel.ERROR, '@@@@@@@@@@@@@childRelationship:' + childRelationship.isRestrictedDelete());
+							*/
+							
+							// Add ERDEntityRelationship to List of relationsihp for an object
+							ERDEntityRelationship entityRelationship = new ERDEntityRelationship();
+							entityRelationship.lookupFieldName = childRelationship.getField().getDescribe().getName();
+							entityRelationship.parentObjectName = objectName;
+							entityRelationship.childObjectName = childName;
+							entityRelationship.isCascadeDelete = childRelationship.isCascadeDelete();
+							allObjectRelationshipList.add(entityRelationship);
+						}
 					}
 				}
 			}
