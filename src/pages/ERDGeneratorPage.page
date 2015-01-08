@@ -244,11 +244,6 @@
 					                		<!-- <span class="editorBlockHint">Hold down <strong>Ctrl/Cmd</strong> to Select Multiple Objects</span> -->
 					                		<div class="clearfix"></div>
 					                	</apex:facet>
-					                	<!-- 
-										<c:JQuerySelectable selectableId="objectSelector" 
-											optionsFieldId="objectsForSelectedGroup" 
-											selectedFieldId="{!$Component.selectedObjects}"/>
-										 -->
 										<c:MultiSelect selectableId="objectSelector" 
 											optionsFieldId="objectsForSelectedGroup" 
 											selectedFieldId="{!$Component.selectedObjects}"
@@ -302,9 +297,6 @@
 					                		<!-- <span class="editorBlockHint">Hold down <strong>Ctrl/Cmd</strong> to Select Multiple Fields</span> -->
 					                		<div class="clearfix"></div>
 					                	</apex:facet>
-										<!-- <c:JQuerySelectable selectableId="fieldSelector" 
-											optionsFieldId="allFieldsForSelectedObject" 
-											selectedFieldId="{!$Component.selectedObjectFields}"/>-->
 										<c:MultiSelect selectableId="fieldSelector" 
 											optionsFieldId="allFieldsForSelectedObject" 
 											selectedFieldId="{!$Component.selectedObjectFields}"

@@ -23,39 +23,6 @@
 		// locally make $ = v1.10 of jquery
 		var $ = $110;
 		
-		/*
-		var selectedOptions = {};
-    	var selectedField = document.getElementById('{!selectedFieldId}');
-    	var selectableDOMId = 'selectable{!selectableId}';
-		
-		$.each($(selectedField).val().split(','), function(i, s) {
-			selectedOptions[s] = 1;			
-	    });
-	    
-    	var optionsField = $(document.getElementById('{!optionsFieldId}'));
-	    
-	    var selectableElement = $(document.getElementById('selectable{!selectableId}'));
-	    
-		$.each(optionsField.html().split(','), function(i, s) {			
-			var extras = (selectedOptions[s])?'ui-selected':'';
-			$("#" + selectableDOMId).append($("<li class='ui-state-default "+extras+"'>"+s+"</li>"));
-		});
-    	
-    	$("#" + selectableDOMId).selectable({
-    		stop: function(event, ui) {
-    			var csv = '';
-        		$(".ui-selected", this).each(function() {
-          			var index = $("#" + selectableDOMId + " li").index(this);
-          			if (csv.length > 0) {
-          				csv+=',';
-          			}
-					csv+=$(this).html();
-        		});
-        		$(selectedField).val(csv);
-        	}
-    	});
-    	*/	
-    	
     	// List of selected options to display
     	var selectedOptions = {};
     	// Selected items passed from page into this component
