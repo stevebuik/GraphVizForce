@@ -7,6 +7,8 @@
     <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" 
     	id="dropboxjs" data-app-key="1nasijgpqxbicyu"></script>
     
+    <script src="{!URLFOR($Resource.Select2Resources, 'select2.js')}" type="text/javascript"></script>
+    
     <script type="text/javascript">    
 		// need separate jquery because of the apex:tabpanel
 		// see http://salesforce.stackexchange.com/questions/21207/tab-panel-error
@@ -24,6 +26,10 @@
     	};
     	
 	</script>
+	
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"></link>
+	<link rel="stylesheet" href="{!URLFOR($Resource.Select2Resources, 'select2.css')}" />
+	
 
 	<style type="text/css">
         .textInput {width: 100%;}
@@ -133,7 +139,6 @@
 	    .diagramOutputPanel {margin-top:20px;}
 	    .clearfix {clear: both;}
     </style>
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"></link>
     
     <apex:outputPanel id="messages">
    		<apex:messages />
@@ -236,12 +241,18 @@
 					                <apex:pageBlock rendered="{!NOT(ISNULL(selectedGroup))}">
 					                	<apex:facet name="header">
 					                		<h2 class="editorBlockTitle">Group: {!selectedGroup}</h2>
-					                		<span class="editorBlockHint">Hold down <strong>Ctrl/Cmd</strong> to Select Multiple Objects</span>
+					                		<!-- <span class="editorBlockHint">Hold down <strong>Ctrl/Cmd</strong> to Select Multiple Objects</span> -->
 					                		<div class="clearfix"></div>
 					                	</apex:facet>
+					                	<!-- 
 										<c:JQuerySelectable selectableId="objectSelector" 
 											optionsFieldId="objectsForSelectedGroup" 
-											selectedFieldId="{!$Component.selectedObjects}"/> 
+											selectedFieldId="{!$Component.selectedObjects}"/>
+										 -->
+										<c:MultiSelect selectableId="objectSelector" 
+											optionsFieldId="objectsForSelectedGroup" 
+											selectedFieldId="{!$Component.selectedObjects}"
+											selectPlaceHolder="Select objects here"/>
 				                	</apex:pageBlock>
 				                </apex:outputPanel>
 				            </apex:facet>
@@ -288,12 +299,16 @@
 					                <apex:pageBlock rendered="{!NOT(ISNULL(selectedSingleObject))}">
 					                	<apex:facet name="header">
 					                		<h2 class="editorBlockTitle">Object: {!selectedSingleObject}</h2>
-					                		<span class="editorBlockHint">Hold down <strong>Ctrl/Cmd</strong> to Select Multiple Fields</span>
+					                		<!-- <span class="editorBlockHint">Hold down <strong>Ctrl/Cmd</strong> to Select Multiple Fields</span> -->
 					                		<div class="clearfix"></div>
 					                	</apex:facet>
-										<c:JQuerySelectable selectableId="fieldSelector" 
+										<!-- <c:JQuerySelectable selectableId="fieldSelector" 
 											optionsFieldId="allFieldsForSelectedObject" 
-											selectedFieldId="{!$Component.selectedObjectFields}"/> 
+											selectedFieldId="{!$Component.selectedObjectFields}"/>-->
+										<c:MultiSelect selectableId="fieldSelector" 
+											optionsFieldId="allFieldsForSelectedObject" 
+											selectedFieldId="{!$Component.selectedObjectFields}"
+											selectPlaceHolder="Select fields here"/>
 				                	</apex:pageBlock>
 				                </apex:outputPanel>
 			                </apex:facet>

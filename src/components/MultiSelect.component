@@ -1,0 +1,121 @@
+<apex:component >
+
+	<apex:attribute name="selectableId" description="A unique id for the selectable widget within the page" 
+		type="String" required="true"/>
+	<apex:attribute name="optionsFieldId" description="The DOM id of the node in the host page that contains the possible" 
+		type="String" required="true"/>
+	<apex:attribute name="selectedFieldId" description="The DOM id of the field in the host page that binds the selected values" 
+		type="String" required="true"/>
+	<apex:attribute name="selectPlaceHolder" description="Placeholder label for multi select input" 
+		type="String" required="true"/>
+
+	<style>
+		.multiselectInput{width:500px;}
+	</style>
+
+	<div id="container{!selectableId}">
+		<select multiple="true" id="select2{!selectableId}" class="multiselectInput">
+		</select>
+	</div>
+	
+	<script type="text/javascript">
+	$110(function() {
+		// locally make $ = v1.10 of jquery
+		var $ = $110;
+		
+		/*
+		var selectedOptions = {};
+    	var selectedField = document.getElementById('{!selectedFieldId}');
+    	var selectableDOMId = 'selectable{!selectableId}';
+		
+		$.each($(selectedField).val().split(','), function(i, s) {
+			selectedOptions[s] = 1;			
+	    });
+	    
+    	var optionsField = $(document.getElementById('{!optionsFieldId}'));
+	    
+	    var selectableElement = $(document.getElementById('selectable{!selectableId}'));
+	    
+		$.each(optionsField.html().split(','), function(i, s) {			
+			var extras = (selectedOptions[s])?'ui-selected':'';
+			$("#" + selectableDOMId).append($("<li class='ui-state-default "+extras+"'>"+s+"</li>"));
+		});
+    	
+    	$("#" + selectableDOMId).selectable({
+    		stop: function(event, ui) {
+    			var csv = '';
+        		$(".ui-selected", this).each(function() {
+          			var index = $("#" + selectableDOMId + " li").index(this);
+          			if (csv.length > 0) {
+          				csv+=',';
+          			}
+					csv+=$(this).html();
+        		});
+        		$(selectedField).val(csv);
+        	}
+    	});
+    	*/	
+    	
+    	// List of selected options to display
+    	var selectedOptions = {};
+    	// Selected items passed from page into this component
+    	var selectedField = document.getElementById('{!selectedFieldId}');
+    	// The multiselect input DOM ID
+    	var selectableDOMId = "select2{!selectableId}";
+    	// The possible options for selection
+    	var optionsField = $(document.getElementById('{!optionsFieldId}'));
+    	
+    	// Populate the selected options
+    	$.each($(selectedField).val().split(','), function(i, s) {
+			selectedOptions[s] = 1;			
+	    });
+	    
+	    // Render possible options to UI
+	    $.each(optionsField.html().split(','), function(i, s) {
+    		var extras = (selectedOptions[s])?'selected="selected"':'';
+    		if(s == "Account")
+    		{
+    			alert(extras);
+    		}
+			$("#" + selectableDOMId).append($('<option value="'+s+'" ' + extras + ' >'+s+'</option>'));
+		});
+		
+		console.log("test logging");
+		
+		// Initialise the jquery multiselect component select2
+    	$("#" + selectableDOMId).select2({placeholder: "{!selectPlaceHolder}"})
+    	.on("change", function(e) {
+          // mostly used event, fired to the original element when the value changes
+          console.log("change val=" + e.val);
+          $(selectedField).val(e.val);
+        })
+        .on("select2-opening", function() {
+          console.log("opening");
+        })
+        .on("select2-open", function() {
+          // fired to the original element when the dropdown opens
+          console.log("open");
+        })
+        .on("select2-close", function() {
+          // fired to the original element when the dropdown closes
+          console.log("close");
+        })
+        .on("select2-highlight", function(e) {
+          console.log("highlighted val=" + e.val + " choice=" + e.choice.text);
+        })
+        .on("select2-selecting", function(e) {
+          console.log("selecting val=" + e.val + " choice=" + e.object.text);
+        })
+        .on("select2-removed", function(e) {
+          console.log("removed val=" + e.val + " choice=" + e.choice.text);
+        })
+        .on("select2-loaded", function(e) {
+          console.log("loaded (data property omitted for brevitiy)");
+        })
+        .on("select2-focus", function(e) {
+          console.log("focus");
+        });
+	});
+	</script>
+	
+</apex:component>

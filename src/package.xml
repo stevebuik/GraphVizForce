@@ -6,6 +6,7 @@
     </types>
     <types>
         <members>JQuerySelectable</members>
+        <members>MultiSelect</members>
         <name>ApexComponent</name>
     </types>
     <types>
@@ -21,7 +22,12 @@
         <name>CustomTab</name>
     </types>
     <types>
-        <members>*</members>
+        <members>DefaultDiagram</members>
+        <members>DefaultTemplate</members>
+        <members>ERDGeneratorJS</members>
+        <members>Select2Resources</members>
+        <members>VizJS</members>
+        <members>WorkingImage</members>
         <name>StaticResource</name>
     </types>
     <version>31.0</version>
