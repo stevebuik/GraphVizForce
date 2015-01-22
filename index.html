@@ -1,46 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <title>Graphvizforce by stevebuik</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
-    <title>Graphvizforce by stevebuik</title>
   </head>
-
   <body>
-    <header>
-      <div class="inner">
+    <div class="wrapper">
+      <header>
         <h1>Graphvizforce</h1>
-        <h2>An Entity Relationship Diagram generator in Graphviz format for Salesforce.com</h2>
-        <a href="https://github.com/stevebuik/GraphVizForce" class="button"><small>View project on</small> GitHub</a>
-      </div>
-    </header>
-
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h1>
-<a id="graphviz-force" class="anchor" href="#graphviz-force" aria-hidden="true"><span class="octicon octicon-link"></span></a>Graphviz Force</h1>
-
-<p>An Entity Relationship Diagram generator in <a href="http://graphviz.org">Graphviz</a> format for Salesforce.com. </p>
-
-<p>Why? ER Diagrams are used for communication and as a reference. Often you want many different diagrams from the same Salesforce instance.
+        <p>An Entity Relationship Diagram generator in Graphviz format for Salesforce.com</p>
+        <p class="view"><a href="https://github.com/stevebuik/GraphVizForce">View the Project on GitHub <small>stevebuik/GraphVizForce</small></a></p>
+        <ul>
+          <li><a href="https://github.com/stevebuik/GraphVizForce/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/stevebuik/GraphVizForce/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/stevebuik/GraphVizForce">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>Why? ER Diagrams are used for communication and as a reference. Often you want many different diagrams from the same Salesforce instance.
 This tool allows you to save as many different diagrams as you like so you can easily change and re-generate them in the future.</p>
 
 <p>You can also use the built-in template system to style the saved diagrams however you like.</p>
 
 <p>This is a sample of what you can produce.</p>
 
-<p><img src="https://raw.githubusercontent.com/stevebuik/GraphVizForce/master/assets/DefaultDiagram.png" alt="Sample"></p>
+<p><img src="assets/DefaultDiagram.png" alt="Sample"></p>
 
 <h3>
 <a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h3>
@@ -49,7 +43,7 @@ This tool allows you to save as many different diagrams as you like so you can e
 <li>Automatically generate and layout diagrams from SFDC to Graphviz</li>
 <li>Group entities and choose which fields are included</li>
 <li>Save diagrams for later changes</li>
-<li>Export diagrams to <a href="https://raw.githubusercontent.com/stevebuik/GraphVizForce/master/assets/DefaultDiagram.png">Image</a> or <a href="https://raw.githubusercontent.com/stevebuik/GraphVizForce/master/assets/DefaultDiagram.pdf">PDF</a> using Graphviz</li>
+<li>Export diagrams to <a href="assets/DefaultDiagram.png">Image</a> or <a href="assets/DefaultDiagram.pdf?raw=true">PDF</a> using Graphviz</li>
 <li>Customise the templates used for the diagram for your style preferences</li>
 </ul>
 
@@ -147,7 +141,6 @@ There are a few techniques used in the code which you can copy and learn from:</
 <li>Lightning Component for the JQuery Selectable</li>
 <li>Connecting Relationships to the correct Field using dot <em>ports</em>
 </li>
-<li>Displaying relationship types (Master Detail vs Lookup)</li>
 <li>Displaying relationship names</li>
 </ul>
 
@@ -157,26 +150,14 @@ There are a few techniques used in the code which you can copy and learn from:</
 <p>Jason Guan <a href="https://github.com/jasong327">Github</a> <a href="https://www.linkedin.com/pub/jason-guan/39/3a9/346">LinkedIn</a> <a href="http://cyberlemons.com/">Website</a></p>
 
 <p>Steve Buikhuizen <a href="https://twitter.com/stevebuik">@stevebuik</a> <a href="https://github.com/stevebuik">Github</a> <a href="https://www.linkedin.com/in/stevebuikhuizen">LinkedIn</a> <a href="https://plus.google.com/+SteveBuikhuizen">Google+</a></p>
-        </section>
-
-        <aside id="sidebar">
-          <a href="https://github.com/stevebuik/GraphVizForce/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/stevebuik/GraphVizForce/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
-
-          <p class="repo-owner"><a href="https://github.com/stevebuik/GraphVizForce"></a> is maintained by <a href="https://github.com/stevebuik">stevebuik</a>.</p>
-
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
+      </section>
     </div>
-
-            <script type="text/javascript">
+    <footer>
+      <p>Project maintained by <a href="https://github.com/stevebuik">stevebuik</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+              <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
