@@ -1,0 +1,28 @@
+<aura:component >
+    
+    <aura:attribute name="currentState" type="String" default="Objects" description="options: Objects, Attributes" />
+    <aura:attribute name="objects" type="Object[]" />
+    <aura:attribute name="selectedObject" type="Object" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <c:panel title="Entities" titleClass="slds-text-heading_small">
+        <aura:set attribute="icon">
+        	<lightning:icon iconName="standard:product_item_transaction" size="small"/>
+        </aura:set>
+        <div class="slds-tabs_default">
+            <ul class="slds-tabs_default__nav" role="tablist">
+                <li class="{! join(' ', 'slds-tabs_default__item', v.currentState == 'Objects' ? 'slds-is-active' : '')}" title="Item One" role="presentation"><a class="slds-tabs_default__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-1" id="tab-default-1__item" onclick="{!c.onTabChange}">Objects</a></li>
+                <li class="{! join(' ', 'slds-tabs_default__item', v.currentState == 'Attributes' ? 'slds-is-active' : '')}" title="Item Two" role="presentation"><a class="slds-tabs_default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-2" id="tab-default-2__item" onclick="{!c.onTabChange}">Attributes</a></li>
+            </ul>
+            
+            <div id="tab-default-1" class="{! join(' ', 'slds-tabs_default__content', v.currentState == 'Objects' ? '' : 'slds-hide')}" role="tabpanel" aria-labelledby="tab-default-1__item">
+                <c:ObjectPanel aura:id="objectPanel" objects="{!v.objects}" />
+            </div>
+            <div id="tab-default-2" class="{! join(' ', 'slds-tabs_default__content', v.currentState == 'Attributes' ? '' : 'slds-hide')}" role="tabpanel" aria-labelledby="tab-default-2__item">
+                <c:AttributePanel object="{!v.selectedObject}" />
+            </div>
+        </div>
+    </c:panel>
+    
+</aura:component>

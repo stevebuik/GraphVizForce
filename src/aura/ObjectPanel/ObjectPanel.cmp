@@ -1,0 +1,22 @@
+<aura:component >
+    
+    <aura:attribute name="objects" type="Object[]" />
+    <aura:attribute name="searchTerm" type="String" />
+        
+    <aura:registerEvent name="onAddObject" type="c:actionEvent" />
+    <aura:registerEvent name="onObjectClicked" type="c:actionEvent" />
+    
+	<lightning:input type="search" label="Search Object Name" name="search" value="{!v.searchTerm}" onchange="{!c.onSearchObject}" />
+    <br />
+    <div class="slds-pill_container" style="max-height:100vh;overflow:scroll;">
+        <ul class="slds-listbox slds-listbox_horizontal" role="listbox" aria-label="Selected Options:" aria-orientation="horizontal">
+            <aura:iteration items="{!v.objects}" var="object">
+                <aura:if isTrue="{! object.visible}">
+                    <li role="presentation" class="slds-p-around_xx-small">
+                        <c:pill value="{!object}" iconName="add" draggable="true" onIconClicked="{!c.onAddObject}" onLabelClicked="{!c.onObjectClicked}" />
+                    </li>
+                </aura:if>
+            </aura:iteration>
+        </ul>
+    </div>
+</aura:component>

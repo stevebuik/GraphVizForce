@@ -1,0 +1,7 @@
+.THIS .drag-enter {
+    border: 2px dashed #aaaaaa;
+}
+
+.THIS .drag-enter * {
+    pointer-events: none;
+}

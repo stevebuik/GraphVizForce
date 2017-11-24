@@ -1,0 +1,38 @@
+<aura:component >
+    
+    <aura:attribute name="showAddGroup" type="Boolean" default="false" />
+    <aura:attribute name="objects" type="Object[]" />
+    <aura:attribute name="groups" type="Object[]" />
+    <aura:attribute name="selectedObject" type="Object" />
+    <aura:attribute name="objectToAdd" type="Object" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:handler name="onAddGroup" event="c:actionEvent" action="{!c.onAddGroup}" />
+    <aura:handler name="onRemoveGroup" event="c:actionEvent" action="{!c.onRemoveGroup}" />
+    <aura:handler name="onAddObject" event="c:actionEvent" action="{!c.onAddObject}" />
+    <aura:handler name="onObjectAttributesUpdated" event="c:actionEvent" action="{!c.onObjectAttributesUpdated}" />
+    <aura:handler name="onObjectClicked" event="c:actionEvent" action="{!c.onObjectClicked}" />
+    <aura:handler name="onDragObjectToGroup" event="c:actionEvent" action="{!c.onDragObjectToGroup}" />
+    
+    <div class="slds-grid slds-wrap">
+        <div class="slds-col slds-size-1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-2 slds-p-bottom_xx-small slds-p-right_xx-small">
+            <c:SourcePanel aura:id="sourcePanel" objects="{!v.objects}" selectedObject="{!v.selectedObject}" />
+        </div>
+        <div class="slds-col slds-size-1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-2 slds-p-bottom_xx-mall">
+            <c:TargetPanel groups="{!v.groups}" onObjectClicked="{!c.onTargetPanelObjectClicked}" onRemoveObject="{!c.onTargetPanelRemoveObject}" />
+        </div>
+    </div>
+    
+    <c:modal heading="Add to a Group" show="{!v.showAddGroup}">
+    	<div class="slds-scrollable" style="max-height:320px;">
+            <ul class="slds-listbox slds-listbox_horizontal" role="listbox" aria-label="Selected Options:" aria-orientation="horizontal">
+                <aura:iteration items="{!v.groups}" var="group">
+                    <li class="slds-p-around_xx-small">
+                        <lightning:button class="slds-button slds-button_neutral" label="{!group.label}" value="{!group.value}" onclick="{!c.onAddObjectToGroupClicked}" />
+                    </li>
+                </aura:iteration>
+            </ul>
+        </div>
+    </c:modal>
+</aura:component>
