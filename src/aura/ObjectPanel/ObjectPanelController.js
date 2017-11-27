@@ -6,17 +6,30 @@
     onSearchObject : function(component, event, helper) {
         let objects = component.get('v.objects');
         let term = component.get('v.searchTerm').toLowerCase();
+        let objectFound = false;
         objects.forEach(function(object){
-            object.visible = (term == '' || object.label.toLowerCase().indexOf(term) != -1);
+            objectFound = (term == '' ? component.get('v.displayAllObjects') : object.label.toLowerCase().indexOf(term) != -1);
+            object.visible = objectFound;
         });
         component.set('v.objects', objects);
-        $A.get("e.c:UserGuideEvent").setParams({scope:'step2'}).fire();
+        if(objectFound)
+            $A.get("e.c:UserGuideEvent").setParams({scope:'step2'}).fire();
     },
 
     handleUserGuideEvent : function(component, event, helper){
         let step = event.getParam('scope');
         component.set('v.showHelp1', step == 'step1' && window.showUserGuide);
         component.set('v.showHelp2', step == 'step2' && window.showUserGuide);
+    },
+
+    onToggleAllObjects : function(component, event, helper){
+        let displayAllObjects = !component.get('v.displayAllObjects');
+        component.set('v.displayAllObjects', displayAllObjects);
+        let objects = component.get('v.objects');
+        objects.forEach(function(object){
+            object.visible = displayAllObjects;
+        });
+        component.set('v.objects', objects);
     },
     
 })

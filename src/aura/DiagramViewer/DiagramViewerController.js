@@ -8,4 +8,10 @@
         //let diagram = Viz("digraph { a -> b; }");
         //document.body.innerHTML += Viz("digraph { a -> b; }");
     },
+
+    handleUserGuideEvent : function(component, event, helper){
+        let step = event.getParam('scope');
+        let showPreview = component.get('v.showPreview');
+        component.set('v.showPreview', showPreview || step == 'step3');
+    },
 })

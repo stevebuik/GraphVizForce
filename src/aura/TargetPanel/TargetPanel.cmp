@@ -28,8 +28,8 @@
         </aura:set>
 
         <aura:if isTrue="{! v.showHelp5}">
-            <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left" role="tooltip" id="help">
-                <div class="slds-popover__body">STEP 5 - Press back button to go to groups</div>
+            <div class="slds-popover slds-popover_tooltip slds-nubbin_top-left slds-theme_success" role="tooltip" id="help">
+                <div class="slds-popover__body">Press back button to go to groups</div>
             </div>
         </aura:if>
 
@@ -47,8 +47,8 @@
 
                 <aura:if isTrue="{! v.showHelp3}">
                     <div>
-                        <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip" id="help" style="position:absolute;margin-top:20px;">
-                            <div class="slds-popover__body">STEP 3 - Click on an object below to add fields</div>
+                        <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left slds-theme_success" role="tooltip" id="help" style="position:absolute;margin-top:20px;">
+                            <div class="slds-popover__body">Click on an object below to add fields</div>
                         </div>
                     </div>
                 </aura:if>

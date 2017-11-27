@@ -7,7 +7,7 @@
             attributeArray.push({label:'Z Attribute Name' + i, value:'ZAttributeValue' + i, selected:false});   
         }
         for(var i=0;i<attributeArray.length;i++){
-            attributeArray[i].visible = true;   
+            attributeArray[i].visible = true;
         }
         attributeArray.sort(helper.compare);
         
@@ -16,31 +16,14 @@
         for(var i=0;i<objectNames.length;i++){
             let objectName = objectNames[i];
             let groupName = 'Group'
-            objects.push({label:objectName, value:objectName, visible:true, attributes:JSON.parse(JSON.stringify(attributeArray))});
+            objects.push({label:objectName, value:objectName, visible:false, attributes:JSON.parse(JSON.stringify(attributeArray))});
         }
         
         for(var i=0;i<200;i++){
-            objects.push({label:'Z Object Name' + i, value:'ZObjectValue' + i, visible:true, attributes:JSON.parse(JSON.stringify(attributeArray))});   
+            objects.push({label:'Z Object Name' + i, value:'ZObjectValue' + i, visible:false, attributes:JSON.parse(JSON.stringify(attributeArray))});
         }
 
         let groups = [{label:'First Group', value:'First Group', entities:[]}];
-        /*
-        let amount = 0;
-        for(var i=0;i<10;i++){
-            let groupName = 'Group Name ' + i;
-            let group = {label:groupName, value:groupName, entities:[]};
-            let objectIndex = i<3 ? 0 : 100;
-            amount = 0;
-            while(amount < 5){
-                let object = objects[objectIndex];
-                objects.splice(objectIndex, 1);
-                group.entities.push(object);
-                amount++;
-            }
-            group.entities.sort(helper.compare);
-            groups.push(group);
-        }
-        */
 
         objects.sort(helper.compare);
         groups.sort(helper.compare);

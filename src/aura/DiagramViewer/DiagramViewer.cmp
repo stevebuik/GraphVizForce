@@ -4,9 +4,16 @@
 
 <aura:component description="DiagramViewer">
 
+    <aura:attribute name="showPreview" type="Boolean" default="false" />
+
+    <aura:handler event="c:UserGuideEvent" action="{!c.handleUserGuideEvent}"/>
+
     <ltng:require scripts="{! $Resource.VizJS}" afterScriptsLoaded="{!c.doInit}" />
 
     <tramn:panel title="Preview">
-        <img src="{! $Resource.ERD_Sample}" />
+        <aura:if isTrue="{! v.showPreview}">
+            <img src="{! $Resource.ERD_Sample}" />
+        </aura:if>
     </tramn:panel>
+
 </aura:component>
