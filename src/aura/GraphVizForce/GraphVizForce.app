@@ -1,3 +1,3 @@
 <aura:application extends="force:slds">
-    <c:ERDContainer />
+    <tramn:ERDContainer />
 </aura:application>

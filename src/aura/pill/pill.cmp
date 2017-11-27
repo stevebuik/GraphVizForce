@@ -5,8 +5,8 @@
     <aura:attribute name="iconName" type="String" default="close" description="options: utility icon names, e.g. close, add, left, right" />
     <aura:attribute name="value" type="Object" />
     
-    <aura:registerEvent name="onIconClicked" type="c:actionEvent" />
-    <aura:registerEvent name="onLabelClicked" type="c:actionEvent" />
+    <aura:registerEvent name="onIconClicked" type="tramn:actionEvent" />
+    <aura:registerEvent name="onLabelClicked" type="tramn:actionEvent" />
     
     <span class="slds-pill" role="option" tabindex="0" aria-selected="true" style="{!v.fullWidth ? 'width:100%;' : ''}" draggable="{!v.draggable}" ondragstart="{!c.onDragStart}">
         <aura:if isTrue="{!v.iconPosition == 'left'}">

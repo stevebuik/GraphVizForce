@@ -27,12 +27,14 @@
         let attribute = event.getParam('scope');
         attribute.selected = true;
         component.getEvent('onObjectAttributesUpdated').setParams({scope:attribute}).fire();
+        $A.get("e.c:UserGuideEvent").setParams({scope:'step5'}).fire();
 	},
     
     onRemoveClicked : function(component, event, helper) {
         let attribute = event.getParam('scope');
         attribute.selected = false;
         component.getEvent('onObjectAttributesUpdated').setParams({scope:attribute}).fire();
+        $A.get("e.c:UserGuideEvent").setParams({scope:'step5'}).fire();
 	},
     
     onSearchAvailable : function(component, event, helper) {
@@ -41,5 +43,14 @@
     
     onSearchSelected : function(component, event, helper) {
         helper.handleFilterSelected(component, event, helper);
+    },
+    
+    onAttributeClicked : function(component, event, helper) {
+		event.stopPropagation();
+    },
+
+    handleUserGuideEvent : function(component, event, helper){
+        let step = event.getParam('scope');
+        component.set('v.showHelp4', step == 'step4' && window.showUserGuide);
     },
 })

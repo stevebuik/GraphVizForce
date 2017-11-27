@@ -22,8 +22,9 @@
         for(var i=0;i<200;i++){
             objects.push({label:'Z Object Name' + i, value:'ZObjectValue' + i, visible:true, attributes:JSON.parse(JSON.stringify(attributeArray))});   
         }
-        
-        let groups = [];
+
+        let groups = [{label:'First Group', value:'First Group', entities:[]}];
+        /*
         let amount = 0;
         for(var i=0;i<10;i++){
             let groupName = 'Group Name ' + i;
@@ -39,7 +40,8 @@
             group.entities.sort(helper.compare);
             groups.push(group);
         }
-        
+        */
+
         objects.sort(helper.compare);
         groups.sort(helper.compare);
         component.set('v.objects', objects);
@@ -47,9 +49,11 @@
         
 	},
     
+    /*
     onTargetPanelObjectClicked : function(component, event, helper) {
         component.find('sourcePanel').find('objectPanel').getEvent('onObjectClicked').setParams(event.getParams()).fire();
     },
+    */
     
     onAddGroup : function(component, event, helper) {
         let groups = component.get('v.groups');
@@ -168,8 +172,22 @@
     onObjectClicked : function(component, event, helper) {
         let obj = event.getParam('scope');
         console.log('onObjectClicked:', obj);
+        component.find('targetPanel').set('v.currentState', 'ATTRIBUTES');
         component.set('v.selectedObject', obj);
-        component.find('sourcePanel').set('v.currentState', 'Attributes');
+    },
+
+    onEditGroupName : function(component, event, helper) {
+        console.log('onEditGroupName');
+        let newGroup = event.getParam('scope');
+        let groups = component.get('v.groups');
+        console.log('newGroup:', newGroup);
+        groups.forEach(function (group) {
+            if(group.value == newGroup.value){
+                group.label = group.value = newGroup.label;
+                component.set('v.groups', groups);
+                return;
+            }
+        });
     },
     
 })

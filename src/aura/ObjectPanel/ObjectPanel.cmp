@@ -2,18 +2,35 @@
     
     <aura:attribute name="objects" type="Object[]" />
     <aura:attribute name="searchTerm" type="String" />
-        
-    <aura:registerEvent name="onAddObject" type="c:actionEvent" />
-    <aura:registerEvent name="onObjectClicked" type="c:actionEvent" />
-    
-	<lightning:input type="search" label="Search Object Name" name="search" value="{!v.searchTerm}" onchange="{!c.onSearchObject}" />
+    <aura:attribute name="showHelp1" type="Boolean" default="true" />
+    <aura:attribute name="showHelp2" type="Boolean" default="false" />
+
+    <aura:registerEvent name="onAddObject" type="tramn:actionEvent" />
+    <aura:handler event="c:UserGuideEvent" action="{!c.handleUserGuideEvent}"/>
+
+    <div aria-describedby="help">
+        <lightning:input type="search" label="Search Object Name" name="search" value="{!v.searchTerm}" onchange="{!c.onSearchObject}" />
+    </div>
+
+    <aura:if isTrue="{!v.showHelp1}">
+        <div class="slds-popover slds-popover_tooltip slds-nubbin_top-right" role="tooltip" id="help" style="position:relative;margin-top:10px;">
+            <div class="slds-popover__body">STEP 1 - Type object name to search for objects</div>
+        </div>
+    </aura:if>
+
+    <aura:if isTrue="{!v.showHelp2}">
+        <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip" id="help" style="position:relative;margin-top:10px;">
+            <div class="slds-popover__body">STEP 2 - Drag an object below and drop into a group on the right</div>
+        </div>
+    </aura:if>
+
     <br />
-    <div class="slds-pill_container" style="max-height:100vh;overflow:scroll;">
-        <ul class="slds-listbox slds-listbox_horizontal" role="listbox" aria-label="Selected Options:" aria-orientation="horizontal">
+    <div style="max-height:100vh;overflow:scroll;">
+        <ul class="flexList" role="listbox" aria-label="Selected Options:" aria-orientation="horizontal">
             <aura:iteration items="{!v.objects}" var="object">
                 <aura:if isTrue="{! object.visible}">
                     <li role="presentation" class="slds-p-around_xx-small">
-                        <c:pill value="{!object}" iconName="add" draggable="true" onIconClicked="{!c.onAddObject}" onLabelClicked="{!c.onObjectClicked}" />
+                        <tramn:pill value="{!object}" iconName="add" draggable="true" onIconClicked="{!c.onAddObject}" />
                     </li>
                 </aura:if>
             </aura:iteration>

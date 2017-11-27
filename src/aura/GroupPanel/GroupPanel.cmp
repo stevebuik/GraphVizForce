@@ -1,17 +1,19 @@
 <aura:component >
     <aura:attribute name="group" type="Object" />
     
-    <aura:registerEvent name="onRemoveGroup" type="c:actionEvent" />
+    <aura:registerEvent name="onRemoveGroup" type="tramn:actionEvent" />
+    <aura:registerEvent name="onEditGroupName" type="tramn:actionEvent"/>
     
-	<c:panel title="{!v.group.label}" removable="true" collapsible="true" onRemovePanel="{!c.onRemovePanel}">
-        <div class="slds-pill_container">
-            <ul class="slds-listbox slds-listbox_horizontal" role="listbox" aria-label="Selected Options:" aria-orientation="horizontal">
+	<tramn:panel title="{!v.group.label}" titleClass="slds-text-heading_xsmall" editable="true" removable="true" collapsible="true" onRemovePanel="{!c.onRemovePanel}" onEditPanelTitle="{!c.onEditPanelTitle}">
+        <div class="flexContainer">
+            <ul class="flexList" role="listbox" aria-label="Selected Options:" aria-orientation="horizontal">
                 <aura:iteration items="{!v.group.entities}" var="object">
                     <li role="presentation" class="slds-p-around_xx-small">
-                        <c:pill value="{!object}" iconName="close" draggable="true" />
+                        <tramn:pill value="{!object}" iconName="close" draggable="true" />
                     </li>
                 </aura:iteration>
             </ul>
         </div>
-    </c:panel>
+    </tramn:panel>
+
 </aura:component>

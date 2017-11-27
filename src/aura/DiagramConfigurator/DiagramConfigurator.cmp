@@ -8,23 +8,24 @@
     
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
     
-    <aura:handler name="onAddGroup" event="c:actionEvent" action="{!c.onAddGroup}" />
-    <aura:handler name="onRemoveGroup" event="c:actionEvent" action="{!c.onRemoveGroup}" />
-    <aura:handler name="onAddObject" event="c:actionEvent" action="{!c.onAddObject}" />
-    <aura:handler name="onObjectAttributesUpdated" event="c:actionEvent" action="{!c.onObjectAttributesUpdated}" />
-    <aura:handler name="onObjectClicked" event="c:actionEvent" action="{!c.onObjectClicked}" />
-    <aura:handler name="onDragObjectToGroup" event="c:actionEvent" action="{!c.onDragObjectToGroup}" />
+    <aura:handler name="onAddGroup" event="tramn:actionEvent" action="{!c.onAddGroup}" />
+    <aura:handler name="onRemoveGroup" event="tramn:actionEvent" action="{!c.onRemoveGroup}" />
+    <aura:handler name="onAddObject" event="tramn:actionEvent" action="{!c.onAddObject}" />
+    <aura:handler name="onObjectAttributesUpdated" event="tramn:actionEvent" action="{!c.onObjectAttributesUpdated}" />
+    <aura:handler name="onObjectClicked" event="tramn:actionEvent" action="{!c.onObjectClicked}" />
+    <aura:handler name="onDragObjectToGroup" event="tramn:actionEvent" action="{!c.onDragObjectToGroup}" />
+    <aura:handler name="onEditGroupName" event="tramn:actionEvent" action="{!c.onEditGroupName}" />
     
     <div class="slds-grid slds-wrap">
         <div class="slds-col slds-size-1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-2 slds-p-bottom_xx-small slds-p-right_xx-small">
-            <c:SourcePanel aura:id="sourcePanel" objects="{!v.objects}" selectedObject="{!v.selectedObject}" />
+            <tramn:SourcePanel aura:id="sourcePanel" objects="{!v.objects}" selectedObject="{!v.selectedObject}" />
         </div>
         <div class="slds-col slds-size-1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-2 slds-p-bottom_xx-mall">
-            <c:TargetPanel groups="{!v.groups}" onObjectClicked="{!c.onTargetPanelObjectClicked}" onRemoveObject="{!c.onTargetPanelRemoveObject}" />
+            <tramn:TargetPanel aura:id="targetPanel" groups="{!v.groups}" selectedObject="{!v.selectedObject}" onRemoveObject="{!c.onTargetPanelRemoveObject}" />
         </div>
     </div>
     
-    <c:modal heading="Add to a Group" show="{!v.showAddGroup}">
+    <tramn:modal heading="Add to a Group" show="{!v.showAddGroup}">
     	<div class="slds-scrollable" style="max-height:320px;">
             <ul class="slds-listbox slds-listbox_horizontal" role="listbox" aria-label="Selected Options:" aria-orientation="horizontal">
                 <aura:iteration items="{!v.groups}" var="group">
@@ -34,5 +35,5 @@
                 </aura:iteration>
             </ul>
         </div>
-    </c:modal>
+    </tramn:modal>
 </aura:component>

@@ -1,13 +1,14 @@
 <aura:component >
-    
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
     <div class="slds-grid slds-wrap">
         <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-2 slds-p-around_small">
-            <c:DiagramConfigurator />
+            <tramn:DiagramConfigurator />
         </div>
         
         <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-2 slds-p-around_small">
-            <c:panel title="Preview">
-            </c:panel>
+            <tramn:DiagramViewer />
         </div>
     </div>
 </aura:component>

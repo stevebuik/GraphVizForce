@@ -11,7 +11,7 @@
                 <header class="slds-modal__header">
                     <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.close}">
                         <lightning:icon iconName="utility:close" size="small"/>
-                        <span class="slds-assistive-text">Close</span>
+                        <span class="slds-assistive-text">Close</span>`
                     </button>
                     <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{!v.heading}</h2>
                 </header>

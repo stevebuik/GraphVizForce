@@ -5,43 +5,49 @@
     <aura:attribute name="availableAttributes" type="Object[]" access="private" />
     <aura:attribute name="availableSearchTerm" type="String" access="private" />
     <aura:attribute name="selectedSearchTerm" type="String" access="private" />
+    <aura:attribute name="showHelp4" type="Boolean" default="false" />
     
     <aura:handler name="change" value="{!v.object}" action="{!c.handleObjectChange}" />
+    <aura:handler event="c:UserGuideEvent" action="{!c.handleUserGuideEvent}"/>
     
-    <aura:registerEvent name="onObjectAttributesUpdated" type="c:actionEvent" />
-    
-    <div class="slds-text-heading_small">{!v.object.label}</div>
-    <br />
+    <aura:registerEvent name="onObjectAttributesUpdated" type="tramn:actionEvent" />
+
+    <aura:if isTrue="{! v.showHelp4}">
+        <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip" id="help" style="position:relative;margin-top:10px;">
+            <div class="slds-popover__body">STEP 4 - Press arrows below to add/remove attributes</div>
+        </div>
+    </aura:if>
+
     <div class="slds-grid">
         <div class="slds-size-1-of-2 slds-medium-size_1-of-2 slds-large-size_1-of-2 slds-p-right_x-small" style="width:50%;">
-            <c:panel title="Available">
+            <tramn:panel title="Available">
                 <lightning:input type="search" label="Search" name="search" value="{!v.availableSearchTerm}" onchange="{!c.onSearchAvailable}" />
                 <br />
                 <ul style="max-height:100vh;overflow:scroll;">
                     <aura:iteration items="{!v.availableAttributes}" var="field">
                         <aura:if isTrue="{!field.visible}">
                         	<li class="slds-p-bottom_xxx-small">
-                                <c:pill value="{!field}" iconName="right" fullWidth="true" onIconClicked="{!c.onAddClicked}" />
+                                <c:pill value="{!field}" iconName="right" fullWidth="true" onIconClicked="{!c.onAddClicked}" onLabelClicked="{!c.onAttributeClicked}" />
                             </li>
                         </aura:if>
                     </aura:iteration>
                 </ul>
-            </c:panel>
+            </tramn:panel>
         </div>
         <div class="slds-size-1-of-2 slds-medium-size_1-of-2 slds-large-size_1-of-2" style="width:50%;">
-            <c:panel title="Selected">
+            <tramn:panel title="Selected">
                 <lightning:input type="search" label="Search" name="search" value="{!v.selectedSearchTerm}" onchange="{!c.onSearchSelected}" />
                 <br />
                 <ul style="max-height:100vh;overflow:scroll;">
                     <aura:iteration items="{!v.selectedAttributes}" var="field">
                         <aura:if isTrue="{!field.visible}">
                         	<li class="slds-p-bottom_xxx-small">
-                            <c:pill value="{!field}" iconName="left" iconPosition="left" fullWidth="true" onIconClicked="{!c.onRemoveClicked}" />
+                            <tramn:pill value="{!field}" iconName="left" iconPosition="left" fullWidth="true" onIconClicked="{!c.onRemoveClicked}" onLabelClicked="{!c.onAttributeClicked}" />
                         </li>
                         </aura:if>
                     </aura:iteration>
                 </ul>
-            </c:panel>
+            </tramn:panel>
         </div>
     </div>
 </aura:component>

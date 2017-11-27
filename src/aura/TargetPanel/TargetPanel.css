@@ -5,3 +5,17 @@
 .THIS .drag-enter * {
     pointer-events: none;
 }
+
+.THIS .carouselContainer{
+    width:100%;
+    overflow:hidden;
+    position:relative;
+}
+
+.THIS .groups{
+    float:left;
+}
+
+.THIS .attributes{
+    float:left;
+}

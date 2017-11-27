@@ -1,0 +1,12 @@
+<!--
+ - Created by guan on 27/11/17.
+ -->
+
+<aura:component description="DiagramViewer">
+
+    <ltng:require scripts="{! $Resource.VizJS}" afterScriptsLoaded="{!c.doInit}" />
+
+    <tramn:panel title="Preview">
+        <img src="{! $Resource.ERD_Sample}" />
+    </tramn:panel>
+</aura:component>
