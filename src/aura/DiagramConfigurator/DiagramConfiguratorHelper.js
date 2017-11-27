@@ -10,7 +10,7 @@
     generateUniqueGroupName : function(helper, groups, groupName){
         for(var i=0;i<groups.length;i++){
             let group = groups[i];
-            if(group.label == groupName){
+            if(group.label == groupName && group.value == groupName){
                 return helper.generateUniqueGroupName(helper, groups, groupName + ' (1)');
             }
         }

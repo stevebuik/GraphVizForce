@@ -163,10 +163,12 @@
         console.log('onEditGroupName');
         let newGroup = event.getParam('scope');
         let groups = component.get('v.groups');
-        console.log('newGroup:', newGroup);
+        let groupName = helper.generateUniqueGroupName(helper, groups, newGroup.label);
+        console.log('groupName:', groupName);
+
         groups.forEach(function (group) {
             if(group.value == newGroup.value){
-                group.label = group.value = newGroup.label;
+                group.label = group.value = groupName;
                 component.set('v.groups', groups);
                 return;
             }
