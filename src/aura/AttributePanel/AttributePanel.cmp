@@ -13,7 +13,7 @@
     <aura:registerEvent name="onObjectAttributesUpdated" type="tramn:actionEvent" />
 
     <aura:if isTrue="{! v.showHelp4}">
-        <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip" id="help" style="position:relative;margin-top:10px;">
+        <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left" role="tooltip" id="help" style="position:absolute;margin-top:50px;">
             <div class="slds-popover__body">STEP 4 - Press arrows below to add/remove attributes</div>
         </div>
     </aura:if>
