@@ -4,7 +4,7 @@
 	},
     
     onRemove : function(component, event, helper) {
-		component.getEvent("onRemovePanel").setParams({action:'REMOVE'}).fire();
+		component.getEvent("onRemovePanel").setParams({scope:'REMOVE'}).fire();
 	},
 
 	onEditMode : function(component, event, helper) {
