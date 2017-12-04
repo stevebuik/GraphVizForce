@@ -8,6 +8,7 @@
     <aura:attribute name="selectedObject" type="Object" />
     <aura:attribute name="showAddGroup" type="Boolean" default="false" />
     <aura:attribute name="newDiagramName" type="String" default="" />
+    <aura:attribute name="searchTerm" type="String" default="" />
 
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
 
@@ -26,10 +27,10 @@
         </aura:set>
         <aura:set attribute="middleSection">
             <aura:if isTrue="{!v.currentState == 'LIST'}">
-                <lightning:input type="search" name="inputSearchDiagram" label="Search Diagram Name" />
+                <lightning:input type="search" name="inputSearchDiagram" label="Search Diagram Name" value="{!v.searchTerm}" onchange="{!c.onSearchDiagrams}" />
             </aura:if>
             <aura:if isTrue="{!v.currentState == 'DETAIL'}">
-                <h2>{!v.selectedDiagram.label}</h2>
+                <h2><lightning:button class="slds-button slds-button_neutral" label="Back" onclick="{!c.onBackToList}" />&nbsp;&nbsp;&nbsp;&nbsp;{!v.selectedDiagram.label}</h2>
             </aura:if>
         </aura:set>
         <aura:set attribute="rightSection">
@@ -40,7 +41,6 @@
                 </div>
             </aura:if>
             <aura:if isTrue="{!v.currentState == 'DETAIL'}">
-                <lightning:button class="slds-button slds-button_neutral" label="Back" onclick="{!c.onBackToList}" />
                 <lightning:button class="slds-button slds-button_neutral" label="Save" onclick="{!c.onSaveDiagram}" />
                 <lightning:button class="slds-button slds-button_neutral" label="Clone" onclick="{!c.onCloneDiagram}" />
             </aura:if>
@@ -51,9 +51,11 @@
         <div class="{! join(' ', 'flexContainer', v.currentState == 'LIST' ? '' : 'slds-hide')}">
             <ul class="flexList">
                 <aura:iteration items="{!v.diagrams}" var="diagram">
-                    <li class="slds-p-around_small">
-                        <tramn:DiagramCard diagram="{!diagram}" onViewDiagram="{!c.gotoDiagramDetail}" />
-                    </li>
+                    <aura:if isTrue="{!diagram.visible}">
+                        <li class="slds-p-around_small">
+                            <tramn:DiagramCard diagram="{!diagram}" onViewDiagram="{!c.gotoDiagramDetail}" onRemoveDiagram="{!c.onRemoveDiagram}" />
+                        </li>
+                    </aura:if>
                 </aura:iteration>
             </ul>
         </div>

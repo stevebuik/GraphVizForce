@@ -9,7 +9,7 @@
 
     <div class="slds-grid slds-wrap">
         <div class="slds-col slds-size-1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-2 slds-p-around_xx-small">
-            <tramn:SourcePanel aura:id="sourcePanel" objects="{!v.objects}" selectedObject="{!v.selectedObject}" />
+            <tramn:SourcePanel aura:id="sourcePanel" objects="{!v.objects}" />
         </div>
         <div class="slds-col slds-size-1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-2 slds-p-around_xx-small">
             <tramn:TargetPanel aura:id="targetPanel" groups="{!v.diagram.groups}" selectedObject="{!v.selectedObject}" />

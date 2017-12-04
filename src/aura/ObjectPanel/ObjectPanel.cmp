@@ -8,6 +8,7 @@
 
     <aura:registerEvent name="onAddObject" type="tramn:actionEvent" />
     <aura:handler event="c:UserGuideEvent" action="{!c.handleUserGuideEvent}"/>
+    <aura:handler name="change" value="{!v.objects}" action="{!c.handleObjectsChange}" />
 
     <div>
         <div class="slds-float--right">

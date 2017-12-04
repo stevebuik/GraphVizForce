@@ -31,5 +31,9 @@
         });
         component.set('v.objects', objects);
     },
+
+    handleObjectsChange : function(component, event, helper){
+        component.set('v.searchTerm', '');
+    },
     
 })

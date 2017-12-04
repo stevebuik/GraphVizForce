@@ -17,6 +17,7 @@
         let objects = [];
         allObjects.forEach(function (obj) {
             let objectInGroup = helper.isObjectInGroup(obj, diagram.groups);
+            console.log('@@@@ objectInGroup', objectInGroup);
             if(!objectInGroup){
                 objects.push(obj);
             }
@@ -30,7 +31,9 @@
     isObjectInGroup : function(obj, groups){
         groups.forEach(function (group) {
             group.entities.forEach(function (selectedObj){
-                if(obj.value != selectedObj.value){
+                console.log('@@@@ obj', obj);
+                console.log('@@@@ selectedObj', selectedObj);
+                if(obj.value == selectedObj.value){
                     return true;
                 }
             });
@@ -86,12 +89,60 @@
     },
 
     generateUniqueGroupName : function(helper, groups, groupName){
-        for(var i=0;i<groups.length;i++){
-            let group = groups[i];
-            if(group.label == groupName && group.value == groupName){
-                return helper.generateUniqueGroupName(helper, groups, groupName + ' (1)');
+        let nameList = [];
+        groups.forEach(function(group){
+            nameList.push(group.label);
+        });
+        let newName = helper.generateUniqueName(helper, nameList, groupName);
+        return newName;
+    },
+
+    generateUniqueDiagramName : function(helper, diagrams, diagramName){
+         let nameList = [];
+         diagrams.forEach(function(diagram){
+             nameList.push(diagram.label);
+         });
+         let newName = helper.generateUniqueName(helper, nameList, diagramName);
+         return newName;
+     },
+
+    generateUniqueName : function(helper, nameList, targetName){
+        nameList.forEach(function(name){
+            console.log('existing name:', name);
+            if(name == targetName){
+                console.log('matches name');
+                targetName = helper.generateUniqueName(helper, nameList, targetName + ' (1)');
             }
-        }
-        return groupName;
+        });
+        return targetName;
+    },
+
+    onSaveDiagram : function(component, event, helper) {
+        let diagrams = component.get('v.diagrams');
+        let selectedDiagram = component.get('v.selectedDiagram');
+        diagrams.forEach(function (diagram){
+           if(diagram.value == selectedDiagram.value){
+               let index = diagrams.findIndex((x) => x.value === diagram.value);
+               diagrams[index] = selectedDiagram;
+               component.set('v.diagrams', diagrams);
+               return;
+           }
+        });
+    },
+
+    onCloneDiagram : function(component, event, helper) {
+
+        helper.onSaveDiagram(component, event, helper);
+
+        let diagrams = component.get('v.diagrams');
+        let selectedDiagram = component.get('v.selectedDiagram');
+        let diagramName = helper.generateUniqueDiagramName(helper, diagrams, selectedDiagram.label);
+        let newDiagram = {label:diagramName, value:diagramName, visible:true, groups:selectedDiagram.groups};
+        diagrams.push(newDiagram);
+        diagrams.sort(helper.compare);
+        component.set('v.diagrams', diagrams);
+        component.set('v.selectedDiagram', newDiagram);
+        helper.initialiseObjects(component, event, helper);
+        alert('A new diagram ' + diagramName + ' has been cloned successfully.');
     },
 })

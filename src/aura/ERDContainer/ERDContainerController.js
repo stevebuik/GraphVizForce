@@ -33,17 +33,56 @@
 
         /* Setup Diagram List */
         let groups = [{label:'First Group', value:'First Group', entities:[]}];
-        let diagrams = [{label:'Sample Diagram', value:'Sample Diagram', groups:groups}];
+        let diagrams = [{label:'Sample Diagram', value:'Sample Diagram', visible:true, groups:groups}];
         component.set('v.diagrams', diagrams);
     },
 
     /** List View Functions **/
+    onSearchDiagrams : function(component, event, helper) {
+        let diagrams = component.get('v.diagrams');
+        let term = component.get('v.searchTerm').toLowerCase();
+        diagrams.forEach(function(diagram){
+            diagram.visible = (term == '' || diagram.label.toLowerCase().indexOf(term) != -1);
+        });
+        component.set('v.diagrams', diagrams);
+    },
+
     gotoDiagramDetail : function(component, event, helper){
         component.set('v.currentState', 'DETAIL');
         let diagram = event.getParam('scope');
         component.set('v.selectedDiagram', diagram);
-        console.log('gotoDiagramDetail');
         helper.initialiseObjects(component, event, helper);
+
+        component.find('diagramConfigurator').find('targetPanel').set('v.currentState', 'GROUPS');
+    },
+
+    onObjectClicked : function(component, event, helper) {
+        let obj = event.getParam('scope');
+        component.find('diagramConfigurator').find('targetPanel').set('v.currentState', 'ATTRIBUTES');
+        component.set('v.selectedObject', obj);
+    },
+
+    onAddDiagram : function(component, event, helper){
+        let diagrams = component.get('v.diagrams');
+        let newDiagramName = component.get('v.newDiagramName');
+        let diagramName = helper.generateUniqueDiagramName(helper, diagrams, newDiagramName);
+        let groups = [{label:'First Group', value:'First Group', entities:[]}];
+        diagrams.push({label:diagramName, value:diagramName, visible:true, groups:groups});
+        diagrams.sort(helper.compare);
+        component.set('v.diagrams', diagrams);
+    },
+
+    onRemoveDiagram : function(component, event, helper){
+       let diagrams = component.get('v.diagrams');
+       let diagramToRemove = event.getParam('scope');
+       diagrams.forEach(function (diagram) {
+           if(diagram.value == diagramToRemove.value){
+               let index = diagrams.findIndex((x) => x.value === diagramToRemove.value);
+               diagrams.splice(index, 1);
+               component.set('v.diagrams', diagrams);
+               return;
+           }
+       });
     },
 
     onBackToList : function(component, event, helper){
@@ -87,21 +126,15 @@
 
     onAddObjectToGroupClicked : function(component, event, helper){
         component.set('v.showAddGroup', false);
-
         let objectToAdd = component.get('v.objectToAdd');
         let groupValue = event.getSource().get('v.value');
-        console.log('onAddObjectToGroupClicked > objectToAdd:', objectToAdd);
-        console.log('onAddObjectToGroupClicked > groupValue:', groupValue);
         helper.addObjectToGroup(component, helper, objectToAdd, groupValue);
     },
 
     onDragObjectToGroup : function(component, event, helper){
-        console.log('handle onDragObjectToGroup');
         let scope = event.getParam('scope');
         let objectToAdd = scope.object;
         let groupValue = scope.group;
-        console.log('onDragObjectToGroup > object:', objectToAdd);
-        console.log('onDragObjectToGroup > group:', groupValue);
         helper.addObjectToGroup(component, helper, objectToAdd, groupValue);
     },
 
@@ -166,11 +199,9 @@
     },
 
     onEditGroupName : function(component, event, helper) {
-        console.log('onEditGroupName');
         let newGroup = event.getParam('scope');
         let selectedDiagram = component.get('v.selectedDiagram');
         let groupName = helper.generateUniqueGroupName(helper, selectedDiagram.groups, newGroup.label);
-        console.log('groupName:', groupName);
 
         selectedDiagram.groups.forEach(function (group) {
             if(group.value == newGroup.value){
@@ -181,17 +212,11 @@
         });
     },
 
-    onObjectClicked : function(component, event, helper) {
-        let obj = event.getParam('scope');
-        component.find('diagramConfigurator').find('targetPanel').set('v.currentState', 'ATTRIBUTES');
-        component.set('v.selectedObject', obj);
+    onSaveDiagram : function(component, event, helper) {
+        helper.onSaveDiagram(component, event, helper);
     },
 
-    onAddDiagram : function(component, event, helper){
-        let diagrams = component.get('v.diagrams');
-        let newDiagramName = component.get('v.newDiagramName');
-        let groups = [{label:'First Group', value:'First Group', entities:[]}];
-        diagrams.push({label:newDiagramName, value:newDiagramName, groups:groups});
-        component.set('v.diagrams', diagrams);
-    }
+    onCloneDiagram : function(component, event, helper) {
+        helper.onCloneDiagram(component, event, helper);
+    },
 })

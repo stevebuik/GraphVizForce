@@ -2,7 +2,6 @@
     
     <!--<aura:attribute name="currentState" type="String" default="Objects" description="options: Objects, Attributes" />-->
     <aura:attribute name="objects" type="Object[]" />
-    <aura:attribute name="selectedObject" type="Object" />
     
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
     

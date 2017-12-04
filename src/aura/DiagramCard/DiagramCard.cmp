@@ -6,6 +6,7 @@
     <aura:attribute name="diagram" type="Object" />
 
     <aura:registerEvent name="onViewDiagram" type="tramn:actionEvent"/>
+    <aura:registerEvent name="onRemoveDiagram" type="tramn:actionEvent"/>
 
     <article class="slds-card" style="width:250px;max-height:250px;">
         <div class="slds-card__header slds-grid">
@@ -17,7 +18,7 @@
                 </div>
             </header>
             <div class="slds-no-flex">
-                <lightning:buttonIcon iconName="utility:delete" variant="border" alternativeText="Remove" iconClass="slds-button_icon-x-small"/>
+                <lightning:buttonIcon iconName="utility:delete" variant="border" alternativeText="Remove" iconClass="slds-button_icon-x-small" onclick="{!c.onRemoveDiagram}" />
             </div>
         </div>
         <div class="slds-card__body slds-card__body_inner">
