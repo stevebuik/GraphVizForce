@@ -11,13 +11,11 @@
     },
 
     initialiseObjects : function(component, event, helper){
-        console.log('@@@@ initialiseObjects called');
         let allObjects = component.get('v.allObjects');
         let diagram = component.get('v.selectedDiagram');
         let objects = [];
         allObjects.forEach(function (obj) {
             let objectInGroup = helper.isObjectInGroup(obj, diagram.groups);
-            console.log('@@@@ objectInGroup', objectInGroup);
             if(!objectInGroup){
                 objects.push(obj);
             }
@@ -25,14 +23,11 @@
 
         objects.sort(helper.compare);
         component.set('v.objects', objects);
-        console.log('@@@@ initialised objects:', objects.length);
     },
 
     isObjectInGroup : function(obj, groups){
         groups.forEach(function (group) {
             group.entities.forEach(function (selectedObj){
-                console.log('@@@@ obj', obj);
-                console.log('@@@@ selectedObj', selectedObj);
                 if(obj.value == selectedObj.value){
                     return true;
                 }
@@ -88,34 +83,36 @@
         component.set('v.selectedDiagram', selectedDiagram);
     },
 
-    generateUniqueGroupName : function(helper, groups, groupName){
+    /*
+    generateUniqueGroupName : function(helper, groups, newGroupName){
         let nameList = [];
         groups.forEach(function(group){
-            nameList.push(group.label);
+            nameList.push({label:group.label, value:group.value});
         });
-        let newName = helper.generateUniqueName(helper, nameList, groupName);
+        let newName = helper.generateUniqueName(helper, nameList, newGroupName);
         return newName;
     },
 
-    generateUniqueDiagramName : function(helper, diagrams, diagramName){
+    generateUniqueDiagramName : function(helper, diagrams, newDiagramName){
          let nameList = [];
          diagrams.forEach(function(diagram){
-             nameList.push(diagram.label);
+             nameList.push({label:diagram.label, value:diagram.value});
          });
-         let newName = helper.generateUniqueName(helper, nameList, diagramName);
+         let newName = helper.generateUniqueName(helper, nameList, newDiagramName);
          return newName;
      },
 
     generateUniqueName : function(helper, nameList, targetName){
         nameList.forEach(function(name){
-            console.log('existing name:', name);
-            if(name == targetName){
-                console.log('matches name');
+            // Go through each existing name, check if new name matches existing name
+            if(targetName == name.label){
+                if()
                 targetName = helper.generateUniqueName(helper, nameList, targetName + ' (1)');
             }
         });
         return targetName;
     },
+    */
 
     onSaveDiagram : function(component, event, helper) {
         let diagrams = component.get('v.diagrams');
@@ -136,7 +133,7 @@
 
         let diagrams = component.get('v.diagrams');
         let selectedDiagram = component.get('v.selectedDiagram');
-        let diagramName = helper.generateUniqueDiagramName(helper, diagrams, selectedDiagram.label);
+        let diagramName = selectedDiagram.label + ' (1)';
         let newDiagram = {label:diagramName, value:diagramName, visible:true, groups:selectedDiagram.groups};
         diagrams.push(newDiagram);
         diagrams.sort(helper.compare);

@@ -1,5 +1,6 @@
 <aura:component >
     <aura:attribute name="title" type="String" />
+    <aura:attribute name="newTitle" type="String" />
     <aura:attribute name="titleClass" type="String" default="slds-text-heading_small" />
     <aura:attribute name="icon" type="Aura.Component[]" />
     <aura:attribute name="removable" type="Boolean" default="false" />
@@ -18,7 +19,7 @@
             </div>
             <aura:if isTrue="{!v.isEditMode}">
                 <div class="slds-col">
-                    <lightning:input type="text" label="Enter new name" value="{!v.title}" onblur="{!c.onEditCompleted}" />
+                    <ui:inputText value="{!v.newTitle}" class="slds-input" keyup="{!c.onKeyUp}" blur="{!c.onBlur}"/>
                 </div>
                 <aura:set attribute="else">
 

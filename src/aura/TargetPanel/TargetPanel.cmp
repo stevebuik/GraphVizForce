@@ -70,5 +70,7 @@
         </aura:if>
         
     </tramn:panel>
-    
+
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+
 </aura:component>

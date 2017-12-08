@@ -17,7 +17,25 @@
     },
     
     onAddGroup : function(component, event, helper){
-        component.getEvent('onAddGroup').setParams({scope:component.get('v.newGroupName')}).fire();
+        let newGroupName = component.get('v.newGroupName');
+        let groups = component.get('v.groups');
+        let exists = false;
+        groups.forEach(function (group){
+            if(group.label == newGroupName){
+                exists = true;
+                return;
+            }
+        });
+
+        if(exists){
+            component.find('notifLib').showToast({
+                "title": "Info",
+                "message": "This group name already exists."
+            });
+        }
+        else{
+            component.getEvent('onAddGroup').setParams({scope:newGroupName}).fire();
+        }
     },
     
     onDragEnter : function(component, e, helper){
@@ -29,7 +47,7 @@
     },
     
     onDragLeave : function(component, e, helper){
-        if(e.target.nodeType == 1) {
+        if(e.target.nodeType == 1) {exists
             e.preventDefault();
             e.target.classList.remove("drag-enter");
         }

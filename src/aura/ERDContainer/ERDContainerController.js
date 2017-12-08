@@ -65,11 +65,27 @@
     onAddDiagram : function(component, event, helper){
         let diagrams = component.get('v.diagrams');
         let newDiagramName = component.get('v.newDiagramName');
-        let diagramName = helper.generateUniqueDiagramName(helper, diagrams, newDiagramName);
         let groups = [{label:'First Group', value:'First Group', entities:[]}];
-        diagrams.push({label:diagramName, value:diagramName, visible:true, groups:groups});
-        diagrams.sort(helper.compare);
-        component.set('v.diagrams', diagrams);
+
+        let exists = false;
+        diagrams.forEach(function (diagram){
+            if(diagram.label == newDiagramName){
+                exists = true;
+                return;
+            }
+        });
+
+        if(exists){
+            component.find('notifLib').showToast({
+                "title": "Info",
+                "message": "This diagram name already exists."
+            });
+        }
+        else{
+            diagrams.push({label:newDiagramName, value:newDiagramName, visible:true, groups:groups});
+            diagrams.sort(helper.compare);
+            component.set('v.diagrams', diagrams);
+        }
     },
 
     onRemoveDiagram : function(component, event, helper){
@@ -92,7 +108,7 @@
     /** Detail View functions **/
     onAddGroup : function(component, event, helper) {
         let selectedDiagram = component.get('v.selectedDiagram');
-        let groupName = helper.generateUniqueGroupName(helper, selectedDiagram.groups, event.getParam('scope'));
+        let groupName = event.getParam('scope');
         let group = {label:groupName, value:groupName, entities:[]};
         selectedDiagram.groups.push(group);
         selectedDiagram.groups.sort(helper.compare);
@@ -199,17 +215,28 @@
     },
 
     onEditGroupName : function(component, event, helper) {
-        let newGroup = event.getParam('scope');
+        let scope = event.getParam('scope');
         let selectedDiagram = component.get('v.selectedDiagram');
-        let groupName = helper.generateUniqueGroupName(helper, selectedDiagram.groups, newGroup.label);
+        let updateIndex = selectedDiagram.groups.findIndex((x) => x.value === scope.oldValue);
 
-        selectedDiagram.groups.forEach(function (group) {
-            if(group.value == newGroup.value){
-                group.label = group.value = groupName;
-                component.set('v.selectedDiagram', selectedDiagram);
+        let exists = false;
+        selectedDiagram.groups.forEach(function (group){
+            if(group.label == scope.newValue){
+                exists = true;
                 return;
             }
         });
+
+        if(exists){
+            component.find('notifLib').showToast({
+                "title": "Info",
+                "message": "This group name already exists."
+            });
+        }
+        else{
+            selectedDiagram.groups[updateIndex].label = selectedDiagram.groups[updateIndex].value = scope.newValue;
+            component.set('v.selectedDiagram', selectedDiagram);
+        }
     },
 
     onSaveDiagram : function(component, event, helper) {

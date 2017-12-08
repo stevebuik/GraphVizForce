@@ -8,11 +8,19 @@
 	},
 
 	onEditMode : function(component, event, helper) {
+	    component.set('v.newTitle', component.get('v.title'));
         component.set('v.isEditMode', true);
     },
 
-    onEditCompleted : function(component, event, helper) {
+    onBlur : function(component, event, helper) {
         component.set('v.isEditMode', false);
-        component.getEvent("onEditPanelTitle").setParams({scope:component.get('v.title')}).fire();
+        helper.handleTitleChange(component, event, helper);
+    },
+
+    onKeyUp : function(component, event, helper) {
+        if(event.keyCode == 13){
+        component.set('v.isEditMode', false);
+            helper.handleTitleChange(component, event, helper);
+        }
     },
 })
