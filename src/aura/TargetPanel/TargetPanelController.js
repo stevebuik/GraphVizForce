@@ -47,7 +47,7 @@
     },
     
     onDragLeave : function(component, e, helper){
-        if(e.target.nodeType == 1) {exists
+        if(e.target.nodeType == 1) {
             e.preventDefault();
             e.target.classList.remove("drag-enter");
         }

@@ -12,11 +12,21 @@
 
     initialiseObjects : function(component, event, helper){
         let allObjects = component.get('v.allObjects');
-        let diagram = component.get('v.selectedDiagram');
+        let selectedDiagram = component.get('v.selectedDiagram');
         let objects = [];
         allObjects.forEach(function (obj) {
-            let objectInGroup = helper.isObjectInGroup(obj, diagram.groups);
-            if(!objectInGroup){
+            let exists = false;
+            selectedDiagram.groups.forEach(function (group) {
+                group.entities.forEach(function (selectedObj){
+                    if(obj.value == selectedObj.value){
+                        console.log('found');
+                        exists = true;
+                        return;
+                    }
+                });
+                if(exists) return;
+            });
+            if(!exists){
                 objects.push(obj);
             }
         });
