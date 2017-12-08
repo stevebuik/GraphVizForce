@@ -9,6 +9,7 @@
     <aura:attribute name="showAddGroup" type="Boolean" default="false" />
     <aura:attribute name="newDiagramName" type="String" default="" />
     <aura:attribute name="searchTerm" type="String" default="" />
+    <aura:attribute name="displayAllObjects" type="Boolean" default="false" />
 
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
 
@@ -64,7 +65,7 @@
 
             <div class="{! join(' ', 'slds-grid slds-wrap', v.currentState == 'DETAIL' ? '' : 'slds-hide')}">
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-2">
-                    <tramn:DiagramConfigurator aura:id="diagramConfigurator" objects="{!v.objects}" selectedObject="{!v.selectedObject}" diagram="{!v.selectedDiagram}" />
+                    <tramn:DiagramConfigurator aura:id="diagramConfigurator" objects="{!v.objects}" selectedObject="{!v.selectedObject}" diagram="{!v.selectedDiagram}" displayAllObjects="{!v.displayAllObjects}" />
                 </div>
 
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-2 slds-p-around_xx-small">

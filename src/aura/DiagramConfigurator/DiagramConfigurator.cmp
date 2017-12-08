@@ -4,12 +4,11 @@
     <!--<aura:attribute name="groups" type="Object[]" />-->
     <aura:attribute name="diagram" type="Object" />
     <aura:attribute name="selectedObject" type="Object" />
-
-    <!--<aura:handler name="change" value="{!v.diagram}" action="{!c.handleDiagramChange}" />-->
+    <aura:attribute name="displayAllObjects" type="Boolean" />
 
     <div class="slds-grid slds-wrap">
         <div class="slds-col slds-size-1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-2 slds-p-around_xx-small">
-            <tramn:SourcePanel aura:id="sourcePanel" objects="{!v.objects}" />
+            <tramn:SourcePanel aura:id="sourcePanel" objects="{!v.objects}" displayAllObjects="{!v.displayAllObjects}" />
         </div>
         <div class="slds-col slds-size-1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-2 slds-p-around_xx-small">
             <tramn:TargetPanel aura:id="targetPanel" groups="{!v.diagram.groups}" selectedObject="{!v.selectedObject}" />

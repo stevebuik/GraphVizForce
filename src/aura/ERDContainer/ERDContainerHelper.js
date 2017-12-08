@@ -13,6 +13,7 @@
     initialiseObjects : function(component, event, helper){
         let allObjects = component.get('v.allObjects');
         let selectedDiagram = component.get('v.selectedDiagram');
+        let displayAllObjects = component.get('v.displayAllObjects');
         let objects = [];
         allObjects.forEach(function (obj) {
             let exists = false;
@@ -27,7 +28,8 @@
                 if(exists) return;
             });
             if(!exists){
-                objects.push(obj);
+                obj.visible = displayAllObjects;
+                objects.push(JSON.parse(JSON.stringify(obj)));
             }
         });
 

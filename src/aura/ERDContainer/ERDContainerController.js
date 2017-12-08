@@ -49,10 +49,10 @@
 
     gotoDiagramDetail : function(component, event, helper){
         component.set('v.currentState', 'DETAIL');
+        component.find('diagramConfigurator').find('sourcePanel').find('objectPanel').set('v.searchTerm', '');
         let diagram = event.getParam('scope');
         component.set('v.selectedDiagram', diagram);
         helper.initialiseObjects(component, event, helper);
-
         component.find('diagramConfigurator').find('targetPanel').set('v.currentState', 'GROUPS');
     },
 

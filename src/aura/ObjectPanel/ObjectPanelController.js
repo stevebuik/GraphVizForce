@@ -23,17 +23,7 @@
     },
 
     onToggleAllObjects : function(component, event, helper){
-        let displayAllObjects = !component.get('v.displayAllObjects');
-        component.set('v.displayAllObjects', displayAllObjects);
-        let objects = component.get('v.objects');
-        objects.forEach(function(object){
-            object.visible = displayAllObjects;
-        });
-        component.set('v.objects', objects);
-    },
-
-    handleObjectsChange : function(component, event, helper){
-        component.set('v.searchTerm', '');
+        helper.handleToggleObjects(component, event, helper);
     },
     
 })
