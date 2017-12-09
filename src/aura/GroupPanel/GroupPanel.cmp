@@ -1,5 +1,6 @@
 <aura:component >
     <aura:attribute name="group" type="Object" />
+    <aura:attribute name="showRemoveConfirm" type="Boolean" default="false" />
     
     <aura:registerEvent name="onRemoveGroup" type="tramn:actionEvent" />
     <aura:registerEvent name="onEditGroupName" type="tramn:actionEvent"/>
@@ -15,5 +16,12 @@
             </ul>
         </div>
     </tramn:panel>
+
+    <tramn:modal heading="Confirm" show="{!v.showRemoveConfirm}" showCancel="true">
+        <aura:set attribute="buttons">
+            <button class="slds-button slds-button_neutral" onclick="{!c.onConfirmRemoveGroup}">Yes</button>
+        </aura:set>
+        <p>Do you want to remove this group?</p>
+    </tramn:modal>
 
 </aura:component>

@@ -8,6 +8,7 @@
     <aura:attribute name="selectedObject" type="Object" />
     <aura:attribute name="showAddGroup" type="Boolean" default="false" />
     <aura:attribute name="newDiagramName" type="String" default="" />
+    <aura:attribute name="cloneDiagramName" type="String" default="" />
     <aura:attribute name="searchTerm" type="String" default="" />
     <aura:attribute name="displayAllObjects" type="Boolean" default="false" />
 
@@ -39,14 +40,19 @@
                 </aura:if>
             </aura:set>
             <aura:set attribute="rightSection">
+                <!--
                 <aura:if isTrue="{!v.currentState == 'LIST'}">
                     <div class="slds-grid slds-grid_vertical-align-end">
                         <lightning:input type="text" label="New Diagram Name" name="newDiagramName" class="slds-p-right_small" value="{!v.newDiagramName}" />
                         <lightning:button class="slds-button slds-button_neutral slds-align-bottom" label="Add" disabled="{!v.newDiagramName.length == 0}" onclick="{!c.onAddDiagram}" />
                     </div>
                 </aura:if>
+                -->
                 <aura:if isTrue="{!v.currentState == 'DETAIL'}">
-                    <lightning:button class="slds-button slds-button_neutral" label="Clone" onclick="{!c.onCloneDiagram}" />
+                    <div class="slds-grid slds-grid_vertical-align-end">
+                        <lightning:input type="text" label="New Diagram Name" name="cloneDiagramName" class="slds-p-right_small" value="{!v.cloneDiagramName}" />
+                        <lightning:button class="slds-button slds-button_neutral" label="Clone" disabled="{!v.cloneDiagramName.length == 0}" onclick="{!c.onCloneDiagram}" />
+                    </div>
                 </aura:if>
             </aura:set>
         </tramn:AppHeader>
@@ -61,6 +67,28 @@
                             </li>
                         </aura:if>
                     </aura:iteration>
+
+                    <li class="slds-p-around_small">
+                        <article class="slds-card" style="width:250px;max-height:250px;">
+                            <div class="slds-card__header slds-grid">
+                                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                    <div class="slds-media__body">
+                                        <h2>
+                                            <span class="slds-text-heading_small">New Diagram</span>
+                                        </h2>
+                                    </div>
+                                </header>
+                            </div>
+                            <div class="slds-card__body slds-card__body_inner">
+                                <lightning:input type="text" label="New Diagram Name" name="newDiagramName" class="slds-p-right_small" value="{!v.newDiagramName}" />
+                            </div>
+                            <footer class="slds-card__footer">
+                                <div class="slds-button-group" role="group">
+                                    <button class="slds-button slds-button_neutral" disabled="{!v.newDiagramName.length == 0}" onclick="{!c.onAddNewDiagram}">Add Diagram</button>
+                                </div>
+                            </footer>
+                        </article>
+                    </li>
                 </ul>
             </div>
 
@@ -86,6 +114,7 @@
                 </ul>
             </div>
         </tramn:modal>
+
     </div>
 
     <lightning:notificationsLibrary aura:id="notifLib"/>

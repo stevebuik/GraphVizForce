@@ -62,30 +62,8 @@
         component.set('v.selectedObject', obj);
     },
 
-    onAddDiagram : function(component, event, helper){
-        let diagrams = component.get('v.diagrams');
-        let newDiagramName = component.get('v.newDiagramName');
-        let groups = [{label:'First Group', value:'First Group', entities:[]}];
-
-        let exists = false;
-        diagrams.forEach(function (diagram){
-            if(diagram.label == newDiagramName){
-                exists = true;
-                return;
-            }
-        });
-
-        if(exists){
-            component.find('notifLib').showToast({
-                "title": "Info",
-                "message": "This diagram name already exists."
-            });
-        }
-        else{
-            diagrams.push({label:newDiagramName, value:newDiagramName, visible:true, groups:groups});
-            diagrams.sort(helper.compare);
-            component.set('v.diagrams', diagrams);
-        }
+    onAddNewDiagram : function(component, event, helper){
+        helper.handleAddDiagram(component, event, helper);
     },
 
     onRemoveDiagram : function(component, event, helper){

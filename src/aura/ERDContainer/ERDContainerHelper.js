@@ -95,37 +95,6 @@
         component.set('v.selectedDiagram', selectedDiagram);
     },
 
-    /*
-    generateUniqueGroupName : function(helper, groups, newGroupName){
-        let nameList = [];
-        groups.forEach(function(group){
-            nameList.push({label:group.label, value:group.value});
-        });
-        let newName = helper.generateUniqueName(helper, nameList, newGroupName);
-        return newName;
-    },
-
-    generateUniqueDiagramName : function(helper, diagrams, newDiagramName){
-         let nameList = [];
-         diagrams.forEach(function(diagram){
-             nameList.push({label:diagram.label, value:diagram.value});
-         });
-         let newName = helper.generateUniqueName(helper, nameList, newDiagramName);
-         return newName;
-     },
-
-    generateUniqueName : function(helper, nameList, targetName){
-        nameList.forEach(function(name){
-            // Go through each existing name, check if new name matches existing name
-            if(targetName == name.label){
-                if()
-                targetName = helper.generateUniqueName(helper, nameList, targetName + ' (1)');
-            }
-        });
-        return targetName;
-    },
-    */
-
     onSaveDiagram : function(component, event, helper) {
         let diagrams = component.get('v.diagrams');
         let selectedDiagram = component.get('v.selectedDiagram');
@@ -145,17 +114,59 @@
 
         let diagrams = component.get('v.diagrams');
         let selectedDiagram = component.get('v.selectedDiagram');
-        let diagramName = selectedDiagram.label + ' (1)';
-        let newDiagram = {label:diagramName, value:diagramName, visible:true, groups:selectedDiagram.groups};
-        diagrams.push(newDiagram);
-        diagrams.sort(helper.compare);
-        component.set('v.diagrams', diagrams);
-        component.set('v.selectedDiagram', newDiagram);
-        helper.initialiseObjects(component, event, helper);
+        let diagramName = component.get('v.cloneDiagramName');
 
-        component.find('notifLib').showToast({
-            "title": "Info",
-            "message": 'A new diagram ' + diagramName + ' has been cloned successfully.'
+        let exists = false;
+        diagrams.forEach(function (diagram){
+            if(diagram.label == diagramName){
+                exists = true;
+                return;
+            }
         });
+
+        if(exists){
+            component.find('notifLib').showToast({
+                "title": "Info",
+                "message": "This diagram name already exists."
+            });
+        }
+        else{
+            let newDiagram = {label:diagramName, value:diagramName, visible:true, groups:selectedDiagram.groups};
+            diagrams.push(newDiagram);
+            diagrams.sort(helper.compare);
+            component.set('v.diagrams', diagrams);
+            component.set('v.selectedDiagram', newDiagram);
+            helper.initialiseObjects(component, event, helper);
+            component.find('notifLib').showToast({
+                "title": "Info",
+                "message": 'A new diagram ' + diagramName + ' has been cloned successfully.'
+            });
+        }
     },
+
+    handleAddDiagram : function(component, event, helper) {
+        let diagrams = component.get('v.diagrams');
+        let newDiagramName = component.get('v.newDiagramName');
+        let groups = [{label:'First Group', value:'First Group', entities:[]}];
+
+        let exists = false;
+        diagrams.forEach(function (diagram){
+            if(diagram.label == newDiagramName){
+                exists = true;
+                return;
+            }
+        });
+
+        if(exists){
+            component.find('notifLib').showToast({
+                "title": "Info",
+                "message": "This diagram name already exists."
+            });
+        }
+        else{
+            diagrams.push({label:newDiagramName, value:newDiagramName, visible:true, groups:groups});
+            diagrams.sort(helper.compare);
+            component.set('v.diagrams', diagrams);
+        }
+    }
 })
