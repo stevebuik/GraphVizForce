@@ -65,7 +65,8 @@
         if(e.target.nodeType == 1) {
             e.preventDefault();
             e.target.classList.remove("drag-enter");
-			let value = JSON.parse(e.dataTransfer.getData("value"));
+			//let value = JSON.parse(e.dataTransfer.getData("value"));
+			let value = e.dataTransfer.getData('value');
             console.log('onDrop > value:', value);
             let dropTarget = helper.closest(e.target, '.dropTarget');
             let group = dropTarget.getAttribute('data-group');

@@ -22,6 +22,8 @@
     <aura:handler name="onRemoveObject" event="tramn:actionEvent" action="{!c.onTargetPanelRemoveObject}" />
     <aura:handler name="onObjectClicked" event="tramn:actionEvent" action="{!c.onObjectClicked}" />
 
+    <aura:handler name="change" value="{!v.selectedDiagram}" action="{!c.onDiagramChanged}" />
+
     <div style="background:white;">
 
         <tramn:AppHeader title="GraphVizForce" subTitle="A better schema builder">
@@ -44,7 +46,6 @@
                     </div>
                 </aura:if>
                 <aura:if isTrue="{!v.currentState == 'DETAIL'}">
-                    <lightning:button class="slds-button slds-button_neutral" label="Save" onclick="{!c.onSaveDiagram}" />
                     <lightning:button class="slds-button slds-button_neutral" label="Clone" onclick="{!c.onCloneDiagram}" />
                 </aura:if>
             </aura:set>

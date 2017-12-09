@@ -148,9 +148,11 @@
     },
 
     onDragObjectToGroup : function(component, event, helper){
+        let objects = component.get('v.objects');
         let scope = event.getParam('scope');
-        let objectToAdd = scope.object;
         let groupValue = scope.group;
+        let index = objects.findIndex((x) => x.value === scope.object);
+        let objectToAdd = objects[index];
         helper.addObjectToGroup(component, helper, objectToAdd, groupValue);
     },
 
@@ -239,7 +241,7 @@
         }
     },
 
-    onSaveDiagram : function(component, event, helper) {
+    onDiagramChanged : function(component, event, helper) {
         helper.onSaveDiagram(component, event, helper);
     },
 

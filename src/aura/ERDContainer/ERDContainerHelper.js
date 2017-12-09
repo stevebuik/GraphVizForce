@@ -152,6 +152,10 @@
         component.set('v.diagrams', diagrams);
         component.set('v.selectedDiagram', newDiagram);
         helper.initialiseObjects(component, event, helper);
-        alert('A new diagram ' + diagramName + ' has been cloned successfully.');
+
+        component.find('notifLib').showToast({
+            "title": "Info",
+            "message": 'A new diagram ' + diagramName + ' has been cloned successfully.'
+        });
     },
 })
