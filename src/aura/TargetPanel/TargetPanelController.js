@@ -7,9 +7,12 @@
     
     onBackToGroups : function(component, event, helper) {
         component.set('v.currentState', 'GROUPS');
-        window.showUserGuide = false;
-        localStorage.setItem('userGuideCompleted', true);
-        if(window.showUserGuide) $A.get("e.c:UserGuideEvent").setParams({scope:'step6'}).fire();
+        if(window.showUserGuide){
+            $A.get("e.c:UserGuideEvent").setParams({scope:'step6'}).fire();
+            window.showUserGuide = false;
+            localStorage.setItem('userGuideCompleted', true);
+        }
+
 	},
     
     onRemoveObject : function(component, event, helper){
