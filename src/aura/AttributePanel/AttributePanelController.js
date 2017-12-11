@@ -27,14 +27,14 @@
         let attribute = event.getParam('scope');
         attribute.selected = true;
         component.getEvent('onObjectAttributesUpdated').setParams({scope:attribute}).fire();
-        $A.get("e.c:UserGuideEvent").setParams({scope:'step5'}).fire();
+        if(window.showUserGuide) $A.get("e.c:UserGuideEvent").setParams({scope:'step5'}).fire();
 	},
     
     onRemoveClicked : function(component, event, helper) {
         let attribute = event.getParam('scope');
         attribute.selected = false;
         component.getEvent('onObjectAttributesUpdated').setParams({scope:attribute}).fire();
-        $A.get("e.c:UserGuideEvent").setParams({scope:'step5'}).fire();
+        if(window.showUserGuide) $A.get("e.c:UserGuideEvent").setParams({scope:'step5'}).fire();
 	},
     
     onSearchAvailable : function(component, event, helper) {

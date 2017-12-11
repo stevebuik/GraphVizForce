@@ -1,4 +1,8 @@
 ({
+    doInit : function(component, event, helper) {
+        component.set('v.showHelp1', window.showUserGuide);
+    },
+
     onAddObject : function(component, event, helper) {
         component.getEvent('onAddObject').setParams(event.getParams()).fire();
     },
@@ -12,8 +16,9 @@
             object.visible = objectFound;
         });
         component.set('v.objects', objects);
-        if(objectFound)
+        if(objectFound && window.showUserGuide){
             $A.get("e.c:UserGuideEvent").setParams({scope:'step2'}).fire();
+        }
     },
 
     handleUserGuideEvent : function(component, event, helper){

@@ -2,13 +2,14 @@
 	onPillLabelClicked : function(component, event, helper) {
 		component.getEvent('onObjectClicked').setParams(event.getParams()).fire();
         component.set('v.showHelp3', false);
-        $A.get("e.c:UserGuideEvent").setParams({scope:'step4'}).fire();
+        if(window.showUserGuide) $A.get("e.c:UserGuideEvent").setParams({scope:'step4'}).fire();
 	},
     
     onBackToGroups : function(component, event, helper) {
         component.set('v.currentState', 'GROUPS');
         window.showUserGuide = false;
-        $A.get("e.c:UserGuideEvent").setParams({scope:'step6'}).fire();
+        localStorage.setItem('userGuideCompleted', true);
+        if(window.showUserGuide) $A.get("e.c:UserGuideEvent").setParams({scope:'step6'}).fire();
 	},
     
     onRemoveObject : function(component, event, helper){
@@ -72,7 +73,6 @@
             let group = dropTarget.getAttribute('data-group');
             console.log('onDrop > group:', group);
             component.getEvent('onDragObjectToGroup').setParams({scope:{group:group, object:value}}).fire();
-            $A.get("e.c:UserGuideEvent").setParams({scope:'step3'}).fire();
         }
     },
     

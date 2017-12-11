@@ -3,7 +3,9 @@
  */
 ({
     doInit : function(component, event, helper){
-        window.showUserGuide = true;
+        let userGuideCompleted = localStorage.getItem('userGuideCompleted');
+        window.showUserGuide = !userGuideCompleted;
+        console.log('@@@@ showUserGuide:', showUserGuide);
 
         /* Setup all objects */
         let objectNames = ['Account', 'Site', 'Task', 'Contract', 'ContractContactRole', 'Event', 'OpportunityCompetitor', 'OpportunityContactRole', 'OpportunityLineItem', 'PartnerRole', 'Pricebook', 'Contact', 'Lead', 'Case', 'User', 'Opportunity', 'Order', 'Product', 'Asset', 'Solution', 'AccountContactRole', 'Activity', 'Campaign', 'CampaignMember', 'CaseContactRole', 'ContentVersion'];

@@ -3,15 +3,20 @@
  */
 ({
     doInit : function(component, event, helper){
-        //let diagramBody = document.getElementById('erdWeb');
-        //console.log('diagramBody', diagramBody);
-        //let diagram = Viz("digraph { a -> b; }");
-        //document.body.innerHTML += Viz("digraph { a -> b; }");
+
+
+
     },
 
     handleUserGuideEvent : function(component, event, helper){
+
         let step = event.getParam('scope');
-        let showPreview = component.get('v.showPreview');
-        component.set('v.showPreview', showPreview || step == 'step3');
+        if(step == 'step3'){
+            let format = 'svg';
+            let content = 'digraph  {a -> b}';
+            let erdMarkup = Viz(content, format);
+            document.getElementById("graph").innerHTML = erdMarkup;
+        }
+
     },
 })
