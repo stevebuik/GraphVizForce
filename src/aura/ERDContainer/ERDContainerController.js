@@ -198,12 +198,13 @@
 
     onEditGroupName : function(component, event, helper) {
         let scope = event.getParam('scope');
+        let newGroupName = scope.newValue;
         let selectedDiagram = component.get('v.selectedDiagram');
         let updateIndex = selectedDiagram.groups.findIndex((x) => x.value === scope.oldValue);
 
         let exists = false;
         selectedDiagram.groups.forEach(function (group){
-            if(group.label == scope.newValue){
+            if(group.label == newGroupName){
                 exists = true;
                 return;
             }
@@ -212,7 +213,7 @@
         if(exists){
             component.find('notifLib').showToast({
                 "title": "Info",
-                "message": "This group name already exists."
+                "message": 'This group name "'+ newGroupName +'" already exists.'
             });
         }
         else{

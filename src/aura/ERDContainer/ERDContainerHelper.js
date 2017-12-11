@@ -129,7 +129,7 @@
         if(exists){
             component.find('notifLib').showToast({
                 "title": "Info",
-                "message": "This diagram name already exists."
+                "message": 'This diagram name "'+ diagramName +'" already exists.'
             });
         }
         else{
@@ -162,7 +162,7 @@
         if(exists){
             component.find('notifLib').showToast({
                 "title": "Info",
-                "message": "This diagram name already exists."
+                "message": 'This diagram name "'+ newDiagramName +'" already exists.'
             });
         }
         else{
