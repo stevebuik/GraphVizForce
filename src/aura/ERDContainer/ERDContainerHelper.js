@@ -2,6 +2,70 @@
  * Created by guan on 30/11/17.
  */
 ({
+    loadSchema : function(component, event, helper){
+
+        // create a one-time use instance of the serverEcho action
+        // in the server-side controller
+        let action = component.get("c.loadSchema");
+
+        // Create a callback that is executed after
+        // the server-side action returns
+        action.setCallback(this, function(response) {
+            $A.util.toggleClass(component.find("mySpinner"), "slds-hide");
+            let state = response.getState();
+            if (state === "SUCCESS") {
+                // You would typically fire a event here to trigger
+                // client-side notification that the server-side
+                let returnValue = response.getReturnValue();
+                let result;
+                if(returnValue != null) result = JSON.parse(returnValue);
+                helper.inspectSchema(component, event, helper, result);
+                // action is complete
+            }
+            else if (state === "INCOMPLETE") {
+                // do something
+            }
+            else if (state === "ERROR") {
+                var errors = response.getError();
+                if (errors) {
+                    if (errors[0] && errors[0].message) {
+                        console.log("Error message: " +
+                                 errors[0].message);
+                    }
+                } else {
+                    console.log("Unknown error");
+                }
+            }
+        });
+
+        // optionally set storable, abortable, background flag here
+
+        // A client-side action could cause multiple events,
+        // which could trigger other events and
+        // other server-side action calls.
+        // $A.enqueueAction adds the server-side action to the queue.
+        $A.enqueueAction(action);
+
+    },
+
+    inspectSchema : function(component, event, helper, result){
+        let allObjects = [];
+        result.forEach(function (item){
+            let object = {label:item.label, value:item.apiName, isCustom:item.isCustom, visible:false};
+            let attributes = [];
+            if(!$A.util.isEmpty(item.fields)){
+                item.fields.forEach(function (fieldItem){
+                    attributes.push({label:fieldItem.label, value:fieldItem.apiName, type:fieldItem.type, isCustom:fieldItem.isCustom, isMDOrCascadeDelete:fieldItem.isMDOrCascadeDelete, references:fieldItem.referenceFieldAPINames, selected:false});
+                });
+                object.attributes = attributes;
+            }
+            allObjects.push(object);
+        });
+
+        allObjects.sort(helper.compare);
+        component.set('v.allObjects', allObjects);
+    },
+
     compare : function(a,b) {
         if (a.label < b.label)
             return -1;
@@ -141,7 +205,7 @@
             helper.initialiseObjects(component, event, helper);
             component.find('notifLib').showToast({
                 "title": "Info",
-                "message": 'A new diagram ' + diagramName + ' has been cloned successfully.'
+                "message": 'A new diagram "' + diagramName + '" has been cloned successfully.'
             });
         }
     },

@@ -1,4 +1,4 @@
-<aura:component implements="flexipage:availableForAllPageTypes, force:appHostable">
+<aura:component controller="GraphVizForceController" implements="flexipage:availableForAllPageTypes, force:appHostable">
     <aura:attribute name="currentState" type="String" default="LIST" description="Options: LIST, DETAIL" />
     <aura:attribute name="allObjects" type="Object[]" />
     <aura:attribute name="objects" type="Object[]" />
@@ -118,5 +118,7 @@
     </div>
 
     <lightning:notificationsLibrary aura:id="notifLib"/>
+
+    <lightning:spinner variant="brand" size="large" aura:id="mySpinner" />
 
 </aura:component>

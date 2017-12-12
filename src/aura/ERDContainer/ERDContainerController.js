@@ -3,11 +3,14 @@
  */
 ({
     doInit : function(component, event, helper){
+
+        // Get cookies and setup user guide
         let userGuideCompleted = localStorage.getItem('userGuideCompleted');
         window.showUserGuide = !userGuideCompleted;
-        console.log('@@@@ showUserGuide:', showUserGuide);
+        if(window.showUserGuide) component.find('diagramConfigurator').find('sourcePanel').find('objectPanel').set('v.showHelp1', true);
 
-        /* Setup all objects */
+        /* Start Setup Mock Data */
+        /*
         let objectNames = ['Account', 'Site', 'Task', 'Contract', 'ContractContactRole', 'Event', 'OpportunityCompetitor', 'OpportunityContactRole', 'OpportunityLineItem', 'PartnerRole', 'Pricebook', 'Contact', 'Lead', 'Case', 'User', 'Opportunity', 'Order', 'Product', 'Asset', 'Solution', 'AccountContactRole', 'Activity', 'Campaign', 'CampaignMember', 'CaseContactRole', 'ContentVersion'];
         let attributeArray = [{label:'Id', value:'Id', selected:true}, {label:'Name', value:'Name', selected:true}, {label:'Owner', value:'Owner', selected:true}, {label:'CreatedBy', value:'CreatedBy', selected:true}, {label:'Description', value:'Description', selected:false}, {label:'LastModifiedBy', value:'LastModifiedBy', selected:false}, {label:'Phone', value:'Phone', selected:false}, {label:'ShippingAddress', value:'ShippingAddress', selected:false}, {label:'Type', value:'Type', selected:false}, {label:'MobilePhone', value:'MobilePhone', selected:false}, {label:'Email', value:'Email', selected:false}, {label:'Website', value:'Website', selected:false}];
         for(var i=0;i<100;i++){
@@ -32,11 +35,14 @@
 
         objects.sort(helper.compare);
         component.set('v.allObjects', objects);
+        */
+        /* END Setup Mock Data */
 
-        /* Setup Diagram List */
         let groups = [{label:'First Group', value:'First Group', entities:[]}];
         let diagrams = [{label:'Sample Diagram', value:'Sample Diagram', visible:true, groups:groups}];
         component.set('v.diagrams', diagrams);
+
+        helper.loadSchema(component, event, helper);
     },
 
     /** List View Functions **/
