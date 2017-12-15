@@ -8,7 +8,7 @@
 	},
     
     onDragStart : function(component, event, helper) {
-        //event.dataTransfer.setData("value", JSON.stringify(component.get('v.value')));
-        event.dataTransfer.setData("value", component.get('v.value').value);
+        event.dataTransfer.setData("value", JSON.stringify(component.get('v.value')));
+        //event.dataTransfer.setData("value", component.get('v.value').value);
 	},
 })

@@ -39,10 +39,14 @@ public without sharing class GraphVizForceController {
                         // If the field is a reference field, get the list of reference field api names
                         List<Schema.sObjectType> parentSObjectTypes = fieldResult.getReferenceTo();
                         if(!parentSObjectTypes.isEmpty()){
-                            fieldWrapper.referenceFieldAPINames = new List<String>();
+                            fieldWrapper.referenceFields = new List<RelationshipWrapper>();
                             for(Schema.SObjectType parentSObjectType : parentSObjectTypes){
                                 Schema.DescribeSObjectResult parentSObjectResult = parentSObjectType.getDescribe();
-                                fieldWrapper.referenceFieldAPINames.add(parentSObjectResult.getName());
+                                RelationshipWrapper rWrapper = new RelationshipWrapper();
+                                rWrapper.parentLabel = parentSObjectResult.getLabel();
+                                rWrapper.parentAPIName = parentSObjectResult.getName();
+                                rWrapper.referenceFieldAPIName = fieldResult.getName();
+                                fieldWrapper.referenceFields.add(rWrapper);
                             }
                         }
 
@@ -69,6 +73,12 @@ public without sharing class GraphVizForceController {
         public String type;
         public Boolean isCustom;
         public Boolean isMDOrCascadeDelete;
-        public List<String> referenceFieldAPINames;
+        public List<RelationshipWrapper> referenceFields;
+    }
+
+    public class RelationshipWrapper{
+        public String parentLabel;
+        public String parentAPIName;
+        public String referenceFieldAPIName;
     }
 }

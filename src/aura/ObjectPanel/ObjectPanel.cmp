@@ -46,12 +46,11 @@
     <div style="max-height:100vh;overflow:scroll;">
         <ul class="flexList" role="listbox" aria-label="Selected Options:" aria-orientation="horizontal">
             <aura:iteration items="{!v.objects}" var="object">
-                <aura:if isTrue="{! object.visible}">
-                    <li role="presentation" class="slds-p-around_xx-small">
-                        <tramn:pill value="{!object}" iconName="add" draggable="true" onIconClicked="{!c.onAddObject}" />
-                    </li>
-                </aura:if>
+                <li role="presentation" class="{! join(' ', 'slds-p-around_xx-small', object.visible ? '' : 'slds-hide')}">
+                    <tramn:pill value="{!object}" iconName="add" draggable="true" onIconClicked="{!c.onAddObject}" />
+                </li>
             </aura:iteration>
         </ul>
     </div>
+
 </aura:component>

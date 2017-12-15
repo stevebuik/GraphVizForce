@@ -9,19 +9,15 @@
     <aura:registerEvent name="onLabelClicked" type="tramn:actionEvent" />
     
     <span class="slds-pill" role="option" tabindex="0" aria-selected="true" style="{!v.fullWidth ? 'width:100%;' : ''}" draggable="{!v.draggable}" ondragstart="{!c.onDragStart}">
-        <aura:if isTrue="{!v.iconPosition == 'left'}">
-        	<span class="slds-icon_container slds-pill__remove">
-                <lightning:buttonIcon iconName="{! 'utility:' + v.iconName}" alternativeText="Action" size="small" variant="bare" onclick="{!c.onIconClicked}"/>
-            </span>
-        </aura:if>
+        <span class="{! join(' ', 'slds-icon_container slds-pill__remove', v.iconPosition == 'left' ? '' : 'slds-hide')}">
+            <lightning:buttonIcon iconName="{! 'utility:' + v.iconName}" alternativeText="Action" size="small" variant="bare" onclick="{!c.onIconClicked}"/>
+        </span>
         <span class="slds-pill__label slds-p-horizontal_xx-small slds-truncate" title="{!v.value.label}">
             <button class="slds-button slds-truncate" onclick="{!c.onLabelClicked}">{!v.value.label}</button>
         </span>
-        <aura:if isTrue="{!v.iconPosition == 'right'}">
-        	<span class="slds-icon_container slds-pill__remove">
-                <lightning:buttonIcon iconName="{! 'utility:' + v.iconName}" alternativeText="Action" size="small" variant="bare" onclick="{!c.onIconClicked}"/>
-            </span>
-        </aura:if>
+        <span class="{! join(' ', 'slds-icon_container slds-pill__remove', v.iconPosition == 'right' ? '' : 'slds-hide')}">
+            <lightning:buttonIcon iconName="{! 'utility:' + v.iconName}" alternativeText="Action" size="small" variant="bare" onclick="{!c.onIconClicked}"/>
+        </span>
     </span>
     
 </aura:component>

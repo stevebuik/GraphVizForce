@@ -11,6 +11,7 @@
     <aura:attribute name="cloneDiagramName" type="String" default="" />
     <aura:attribute name="searchTerm" type="String" default="" />
     <aura:attribute name="displayAllObjects" type="Boolean" default="false" />
+    <aura:attribute name="isShowDiagramConfigurator" type="Boolean" default="true" />
 
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
 
@@ -22,6 +23,7 @@
     <aura:handler name="onEditGroupName" event="tramn:actionEvent" action="{!c.onEditGroupName}" />
     <aura:handler name="onRemoveObject" event="tramn:actionEvent" action="{!c.onTargetPanelRemoveObject}" />
     <aura:handler name="onObjectClicked" event="tramn:actionEvent" action="{!c.onObjectClicked}" />
+    <aura:handler name="onTogglePreview" event="tramn:actionEvent" action="{!c.onTogglePreview}" />
 
     <aura:handler name="change" value="{!v.selectedDiagram}" action="{!c.onDiagramChanged}" />
 
@@ -93,12 +95,12 @@
             </div>
 
             <div class="{! join(' ', 'slds-grid slds-wrap', v.currentState == 'DETAIL' ? '' : 'slds-hide')}">
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-2">
+                <div class="{!join(' ', 'slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-2', v.isShowDiagramConfigurator ? '' : 'slds-hide')}">
                     <tramn:DiagramConfigurator aura:id="diagramConfigurator" objects="{!v.objects}" selectedObject="{!v.selectedObject}" diagram="{!v.selectedDiagram}" displayAllObjects="{!v.displayAllObjects}" />
                 </div>
 
-                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-large-size_1-of-2 slds-p-around_xx-small">
-                    <tramn:DiagramViewer />
+                <div class="{!join(' ', 'slds-col slds-size_1-of-1 slds-medium-size_1-of-1 slds-p-around_xx-small', v.isShowDiagramConfigurator ? 'slds-large-size_1-of-2' : 'slds-large-size_1-of-1')}">
+                    <tramn:DiagramViewer aura:id="diagramViewer" selectedDiagram="{!v.selectedDiagram}" allObjects="{!v.allObjects}" />
                 </div>
             </div>
         </div>

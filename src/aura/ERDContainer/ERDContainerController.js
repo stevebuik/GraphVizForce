@@ -135,10 +135,11 @@
 
     onDragObjectToGroup : function(component, event, helper){
         let objects = component.get('v.objects');
+        let selectedDiagram = component.get('v.selectedDiagram');
         let scope = event.getParam('scope');
         let groupValue = scope.group;
-        let index = objects.findIndex((x) => x.value === scope.object);
-        let objectToAdd = objects[index];
+        let objectToAdd = JSON.parse(scope.object);
+
         helper.addObjectToGroup(component, helper, objectToAdd, groupValue);
     },
 
@@ -150,18 +151,26 @@
         let selectedDiagram = component.get('v.selectedDiagram');
         let objects = component.get('v.objects');
 
+        let groupIndex = -1;
+        let objectIndex = -1;
+        let objectToRemove;
         selectedDiagram.groups.forEach(function (group) {
             group.entities.forEach(function (targetObject) {
                 if(targetObject.value == obj.value){
-                    let index = group.entities.findIndex((x) => x.value === targetObject.value);
-                    group.entities.splice(index, 1);
-                    objects.push(targetObject);
-                    objects.sort(helper.compare);
-                    component.set('v.selectedDiagram', selectedDiagram);
-                    component.set('v.objects', objects);
+                    objectIndex = group.entities.findIndex((x) => x.value === targetObject.value);
+                    groupIndex = selectedDiagram.groups.findIndex((x) => x.value === group.value);
+                    objectToRemove = targetObject;
                     return;
                 }
             });
+            if(groupIndex != -1 && objectIndex != -1){
+                selectedDiagram.groups[groupIndex].entities.splice(objectIndex, 1);
+                objects.push(objectToRemove);
+                objects.sort(helper.compare);
+                component.set('v.selectedDiagram', selectedDiagram);
+                component.set('v.objects', objects);
+                return;
+            }
         });
     },
 
@@ -230,9 +239,15 @@
 
     onDiagramChanged : function(component, event, helper) {
         helper.onSaveDiagram(component, event, helper);
+        component.find('diagramViewer').renderDiagram(component, event, helper);
     },
 
     onCloneDiagram : function(component, event, helper) {
         helper.onCloneDiagram(component, event, helper);
+    },
+
+    onTogglePreview : function(component, event, helper){
+        let isExpanded = event.getParam('scope');
+        component.set('v.isShowDiagramConfigurator', !isExpanded);
     },
 })

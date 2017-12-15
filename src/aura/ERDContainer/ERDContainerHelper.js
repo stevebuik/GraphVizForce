@@ -55,7 +55,7 @@
             let attributes = [];
             if(!$A.util.isEmpty(item.fields)){
                 item.fields.forEach(function (fieldItem){
-                    attributes.push({label:fieldItem.label, value:fieldItem.apiName, type:fieldItem.type, isCustom:fieldItem.isCustom, isMDOrCascadeDelete:fieldItem.isMDOrCascadeDelete, references:fieldItem.referenceFieldAPINames, selected:false});
+                    attributes.push({label:fieldItem.label, value:fieldItem.apiName, type:fieldItem.type, isCustom:fieldItem.isCustom, isMDOrCascadeDelete:fieldItem.isMDOrCascadeDelete, references:fieldItem.referenceFields, selected:false});
                 });
                 object.attributes = attributes;
             }

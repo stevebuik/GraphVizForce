@@ -19,9 +19,7 @@
                     {!v.body}
                 </div>
                 <footer class="slds-modal__footer">
-                    <aura:if isTrue="{!v.showCancel}">
-                    	<button class="slds-button slds-button_neutral" onclick="{!c.close}">Cancel</button>
-                    </aura:if>
+                    <button class="{! join(' ', 'slds-button slds-button_neutral', v.showCancel ? '' : 'slds-hide')}" onclick="{!c.close}">Cancel</button>
                     {!v.buttons}
                 </footer>
             </div>
